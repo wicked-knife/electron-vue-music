@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{counter}}
+    {{msg}}
   </div>
 </template>
 
@@ -8,13 +8,12 @@
 export default {
   data(){
     return {
-      counter: 0
+      msg:'hello world'
     }
-  },
-  created(){
-    setInterval(() => {
-      this.counter++
-    }, 1000)
   }
 }
 </script>
+
+<style lang="scss">
+
+</style>
