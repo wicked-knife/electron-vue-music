@@ -1,6 +1,7 @@
 {
 	"name": "electron-vue-music",
 	"version": "1.0.0",
+	"main": "main.js",
 	"description": "",
 	"sideEffects": [
 		"@babel/polyfill",
@@ -14,14 +15,15 @@
 		"build": "webpack --config webpack.prod.js",
 		"analyse": "webpack --config webpack.prod.js --env.analyse",
 		"electron": "electron ./main.js",
+		"electron:build": "electron-builder",
 		"demo": "npm run dev && npm run electron"
-  },
-  "build": {
-    "productName": "electron-vue-music",
-    "directories": {
-      "output": "build"
-    }
-  },
+	},
+	"build": {
+		"productName": "electron-vue-music",
+		"directories": {
+			"output": "build"
+		}
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/wicked-knife/electron-vue-music.git"
@@ -35,7 +37,7 @@
 	"homepage": "https://github.com/wicked-knife/electron-vue-music#readme",
 	"dependencies": {
 		"@babel/polyfill": "^7.4.4",
-		"electron": "^7.0.0",
+		"express": "^4.17.1",
 		"vue": "^2.6.10",
 		"webpack-bundle-analyzer": "^3.4.1",
 		"webpack-cli": "^3.3.6"
@@ -51,6 +53,7 @@
 		"clean-webpack-plugin": "^3.0.0",
 		"core-js": "^3.1.4",
 		"css-loader": "^3.1.0",
+		"electron": "^7.0.0",
 		"electron-builder": "^22.1.0",
 		"eslint": "^6.1.0",
 		"eslint-config-standard": "^13.0.1",
