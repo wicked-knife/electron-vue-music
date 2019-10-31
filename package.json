@@ -1,5 +1,5 @@
 {
-	"name": "webpack-seed",
+	"name": "electron-vue-music",
 	"version": "1.0.0",
 	"description": "",
 	"sideEffects": [
@@ -12,21 +12,30 @@
 		"bundle": "webpack --config webpack.dev.js",
 		"dev": "webpack-dev-server --config webpack.dev.js",
 		"build": "webpack --config webpack.prod.js",
-		"analyse": "webpack --config webpack.prod.js --env.analyse"
-	},
+		"analyse": "webpack --config webpack.prod.js --env.analyse",
+		"electron": "electron ./main.js",
+		"demo": "npm run dev && npm run electron"
+  },
+  "build": {
+    "productName": "electron-vue-music",
+    "directories": {
+      "output": "build"
+    }
+  },
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/wicked-knife/webpack-seed.git"
+		"url": "git+https://github.com/wicked-knife/electron-vue-music.git"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/wicked-knife/webpack-seed/issues"
+		"url": "https://github.com/wicked-knife/electron-vue-music/issues"
 	},
-	"homepage": "https://github.com/wicked-knife/webpack-seed#readme",
+	"homepage": "https://github.com/wicked-knife/electron-vue-music#readme",
 	"dependencies": {
 		"@babel/polyfill": "^7.4.4",
+		"electron": "^7.0.0",
 		"vue": "^2.6.10",
 		"webpack-bundle-analyzer": "^3.4.1",
 		"webpack-cli": "^3.3.6"
@@ -42,6 +51,7 @@
 		"clean-webpack-plugin": "^3.0.0",
 		"core-js": "^3.1.4",
 		"css-loader": "^3.1.0",
+		"electron-builder": "^22.1.0",
 		"eslint": "^6.1.0",
 		"eslint-config-standard": "^13.0.1",
 		"eslint-loader": "^2.2.1",
@@ -58,8 +68,8 @@
 		"optimize-css-assets-webpack-plugin": "^5.0.3",
 		"postcss-loader": "^3.0.0",
 		"postcss-scss": "^2.0.0",
-		"prop-types": "^15.7.2",
 		"progress-bar-webpack-plugin": "^1.12.1",
+		"prop-types": "^15.7.2",
 		"sass-loader": "^7.1.0",
 		"style-loader": "^0.23.1",
 		"terser-webpack-plugin": "^1.4.1",

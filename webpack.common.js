@@ -1,5 +1,5 @@
 
-const { HTMLWebpackPlugins, entry } = require('./_build/genMultiEntry.js')
+const { HTMLWebpackPlugins, entry } = require('./.build/genEntries.js')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const path = require('path')
 module.exports = {

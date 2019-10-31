@@ -10,7 +10,7 @@ const devConf = {
   },
   devServer: {
     contentBase: 'dist',
-    open: true,
+    open: false,
     hot: true,
     overlay: true,
     proxy: {
