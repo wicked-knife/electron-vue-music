@@ -1,0 +1,87 @@
+{
+	"name": "webpack-seed",
+	"version": "1.0.0",
+	"description": "",
+	"sideEffects": [
+		"@babel/polyfill",
+		"*.css",
+		"*.scss",
+		"*.vue"
+	],
+	"scripts": {
+		"bundle": "webpack --config webpack.dev.js",
+		"dev": "webpack-dev-server --config webpack.dev.js",
+		"build": "webpack --config webpack.prod.js",
+		"analyse": "webpack --config webpack.prod.js --env.analyse"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/wicked-knife/webpack-seed.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/wicked-knife/webpack-seed/issues"
+	},
+	"homepage": "https://github.com/wicked-knife/webpack-seed#readme",
+	"dependencies": {
+		"@babel/polyfill": "^7.4.4",
+		"react": "^16.8.6",
+		"react-dom": "^16.8.6",
+		"vue": "^2.6.10",
+		"webpack-bundle-analyzer": "^3.4.1",
+		"webpack-cli": "^3.3.6"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.5.5",
+		"@babel/plugin-proposal-class-properties": "^7.5.5",
+		"@babel/plugin-syntax-dynamic-import": "^7.2.0",
+		"@babel/preset-env": "^7.5.5",
+		"@babel/preset-react": "^7.0.0",
+		"@types/react": "^16.9.2",
+		"autoprefixer": "^9.6.1",
+		"babel-eslint": "^10.0.2",
+		"babel-loader": "^8.0.6",
+		"clean-webpack-plugin": "^3.0.0",
+		"core-js": "^3.1.4",
+		"css-loader": "^3.1.0",
+		"eslint": "^6.1.0",
+		"eslint-config-standard": "^13.0.1",
+		"eslint-loader": "^2.2.1",
+		"eslint-plugin-import": "^2.18.2",
+		"eslint-plugin-node": "^9.1.0",
+		"eslint-plugin-promise": "^4.2.1",
+		"eslint-plugin-react": "^7.14.3",
+		"eslint-plugin-standard": "^4.0.0",
+		"eslint-plugin-vue": "^5.2.3",
+		"file-loader": "^4.1.0",
+		"html-loader": "^0.5.5",
+		"html-webpack-plugin": "^4.0.0-beta.8",
+		"mini-css-extract-plugin": "^0.8.0",
+		"node-sass": "^4.12.0",
+		"optimize-css-assets-webpack-plugin": "^5.0.3",
+		"postcss-loader": "^3.0.0",
+		"postcss-scss": "^2.0.0",
+		"progress-bar-webpack-plugin": "^1.12.1",
+		"prop-types": "^15.7.2",
+		"sass-loader": "^7.1.0",
+		"style-loader": "^0.23.1",
+		"terser-webpack-plugin": "^1.4.1",
+		"ts-loader": "^6.0.4",
+		"tslint": "^5.18.0",
+		"tslint-config-prettier": "^1.18.0",
+		"tslint-config-standard": "^8.0.1",
+		"typescript": "^3.5.3",
+		"url-loader": "^2.1.0",
+		"vue-loader": "^15.7.1",
+		"vue-template-compiler": "^2.6.10",
+		"webpack": "^4.38.0",
+		"webpack-dev-server": "^3.7.2",
+		"webpack-merge": "^4.2.1"
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions"
+	]
+}
