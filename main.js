@@ -9,7 +9,7 @@ app.on('ready', () => {
     }
   })
 
-  process.env.NODE_ENV === 'development' ? mainWindow.loadURL('http://localhost:8080/') : mainWindow.loadFile('dist/index.html')
+  process.env.NODE_ENV === 'development' ? mainWindow.loadURL('http://localhost:8080/') : mainWindow.loadURL('http://localhost:3000/')
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

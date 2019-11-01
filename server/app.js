@@ -39,7 +39,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(cache('2 minutes', ((req, res) => res.statusCode === 200)))
 
 // static
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(process.env.NODE_ENV === 'development' ? path.join(__dirname, 'public') : path.join(__dirname, '../dist')))
 
 // router
 const special = {
