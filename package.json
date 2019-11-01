@@ -34,7 +34,10 @@
 	"homepage": "https://github.com/wicked-knife/electron-vue-music#readme",
 	"dependencies": {
 		"@babel/polyfill": "^7.4.4",
+		"apicache": "^1.5.2",
 		"express": "^4.17.1",
+		"pac-proxy-agent": "^3.0.1",
+		"request": "^2.88.0",
 		"vue": "^2.6.10",
 		"webpack-bundle-analyzer": "^3.4.1",
 		"webpack-cli": "^3.3.6"

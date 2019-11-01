@@ -1,12 +1,6 @@
   
 const { app, BrowserWindow} = require('electron')
-const express = require('express')
-const server = express()
-
-server.listen(3000, function () {
-  console.log('Express server listening on port 3000.')
-})
-
+require('./server/app')
 
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
