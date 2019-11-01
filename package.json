@@ -11,12 +11,9 @@
 	],
 	"scripts": {
 		"bundle": "webpack --config webpack.dev.js",
-		"dev": "webpack-dev-server --config webpack.dev.js",
-		"build": "webpack --config webpack.prod.js",
-		"analyse": "webpack --config webpack.prod.js --env.analyse",
-		"electron": "electron ./main.js",
-		"electron:build": "electron-builder",
-		"demo": "npm run dev && npm run electron"
+		"dev": "node .build/dev.js",
+		"build": "webpack --config webpack.prod.js && electron-builder",
+		"analyse": "webpack --config webpack.prod.js --env.analyse"
 	},
 	"build": {
 		"productName": "electron-vue-music",
@@ -68,6 +65,7 @@
 		"html-webpack-plugin": "^4.0.0-beta.8",
 		"mini-css-extract-plugin": "^0.8.0",
 		"node-sass": "^4.12.0",
+		"npm-run-all": "^4.1.5",
 		"optimize-css-assets-webpack-plugin": "^5.0.3",
 		"postcss-loader": "^3.0.0",
 		"postcss-scss": "^2.0.0",

@@ -9,7 +9,6 @@ function startDevServer(){
     const compiler = webpack(devConf)
     const devServer = new WebpackDevServer(compiler, devConf.devServer)
     devServer.listen(8080, 'localhost', () => {
-      console.log("Starting server on http://localhost:8080")
       resolve()
     })
   })
@@ -17,11 +16,16 @@ function startDevServer(){
 
 
 function startElectron(){
-  const electronProcess = spawn(electron, ['./main.js'])
+  const electronProcess = spawn(electron, ['.'], {
+    env: {
+      NODE_ENV: 'development'
+    }
+  })
   electronProcess.stdout.on('data', data => {
     console.log(data.toString())
   })
   electronProcess.on('close', () => {
+    console.log('dev process exit')
    process.exit()
   })
 }
