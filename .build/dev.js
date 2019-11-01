@@ -31,6 +31,4 @@ function startElectron(){
 }
 
 
-startDevServer().then(() => {
-  startElectron()
-})
+startDevServer().then(startElectron)
