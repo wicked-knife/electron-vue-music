@@ -1,6 +1,6 @@
 import VueRouter from 'vue-router'
-import Foo from '@/views/foo.vue'
-import Bar from '@/views/bar.vue'
+import Foo from '@/renderer/views/foo.vue'
+import Bar from '@/renderer/views/bar.vue'
 const routes = [
   { path: '/foo', component: Foo },
   { path: '/bar', component: Bar }

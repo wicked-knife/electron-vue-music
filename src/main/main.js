@@ -1,5 +1,5 @@
 const { app, BrowserWindow } = require('electron')
-require('./server/app')
+require('../../server/app')
 
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
@@ -21,4 +21,5 @@ app.on('ready', () => {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
+
 })
