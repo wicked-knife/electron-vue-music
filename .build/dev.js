@@ -16,7 +16,7 @@ function startDevServer(){
 
 
 function startElectron(){
-  const electronProcess = spawn(electron, ['.'], {
+  const electronProcess = spawn(electron, ['.', '--disable-gpu'], {
     env: {
       NODE_ENV: 'development'
     }
