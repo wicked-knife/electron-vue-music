@@ -19,7 +19,7 @@ module.exports = env => {
     module: {
       rules: [
         {
-          test: /(?<!\.module)\.(scss|css)$/,
+          test: /\.sass$/,
           use: [
             MiniCssExtractPlugin.loader,
             {
@@ -28,23 +28,31 @@ module.exports = env => {
                 importLoaders: 2
               }
             },
-            'sass-loader',
-            'postcss-loader'
+            'postcss-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                implementation: require('sass'),
+                sassOptions: {
+                  fiber: require('fibers'),
+                  indentedSyntax: true // optional
+                }
+              }
+            }
           ]
         },
         {
-          test: /(?<=\.module)\.(scss|css)$/,
+          test: /\.s?css$/,
           use: [
             MiniCssExtractPlugin.loader,
             {
               loader: 'css-loader',
               options: {
-                importLoaders: 2,
-                modules: true
+                importLoaders: 2
               }
             },
-            'sass-loader',
-            'postcss-loader'
+            'postcss-loader',
+            'sass-loader'
           ]
         }
       ]

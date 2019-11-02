@@ -19,7 +19,7 @@ const devConf = {
   module: {
     rules: [
       {
-        test: /(?<!\.module)\.(scss|css)$/,
+        test: /\.sass$/,
         use: [
           'style-loader',
           {
@@ -28,23 +28,31 @@ const devConf = {
               importLoaders: 2
             }
           },
-          'sass-loader',
-          'postcss-loader'
+          'postcss-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass'),
+              sassOptions: {
+                fiber: require('fibers'),
+                indentedSyntax: true // optional
+              }
+            }
+          },
         ]
       },
       {
-        test: /(?<=\.module)\.(scss|css)$/,
+        test: /\.s?css$/,
         use: [
           'style-loader',
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 2,
-              modules: true
+              importLoaders: 2
             }
           },
-          'sass-loader',
-          'postcss-loader'
+          'postcss-loader',
+          'sass-loader'
         ]
       }
     ]

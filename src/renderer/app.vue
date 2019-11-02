@@ -1,16 +1,21 @@
 <template>
-  <div>
+  <v-app>
+    <div class="test">asldad</div>
     <router-link to="/foo">Go to Foo</router-link>
     <router-link to="/bar">Go to Bar</router-link>
     <router-view></router-view>
-  </div>
+  </v-app>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
+import {VApp} from 'vuetify/lib'
 export default {
   data() {
     return {}
+  },
+  components: {
+    VApp
   },
   mounted() {
     axios
@@ -25,5 +30,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.test{
+  transform: translateX(10px)
+}
 </style>

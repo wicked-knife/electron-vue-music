@@ -2,6 +2,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const path = require('path')
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 module.exports = {
   entry: {
     index: path.resolve(__dirname, 'src/renderer/index.js')
@@ -79,6 +80,7 @@ module.exports = {
       minify: false
 
     }),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new VuetifyLoaderPlugin()
   ]
 }
