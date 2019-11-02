@@ -1,12 +1,9 @@
 
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { HTMLWebpackPlugins, entry } = require('./.build/genEntries.js')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const path = require('path')
-const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 module.exports = {
-  entry: {
-    index: path.resolve(__dirname, 'src/renderer/index.js')
-  },
+  entry: entry,
   output: {
     chunkFilename: 'js/[name]_[contenthash:5].js'
   },
@@ -73,14 +70,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'src/renderer/index.html'),
-      filename: 'index.html',
-      chunks: ['index'],
-      minify: false
-
-    }),
-    new VueLoaderPlugin(),
-    new VuetifyLoaderPlugin()
+    ...HTMLWebpackPlugins,
+    new VueLoaderPlugin()
   ]
 }
