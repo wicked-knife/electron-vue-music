@@ -21,7 +21,7 @@ module.exports = env => {
         {
           test: /\.sass$/,
           use: [
-            'style-loader',
+            MiniCssExtractPlugin.loader,
             {
               loader: 'css-loader',
               options: {
