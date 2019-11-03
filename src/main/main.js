@@ -4,8 +4,8 @@ require('../../server/app')
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
     frame: false,
-    width: 1000,
-    height: 618,
+    width: 1200,
+    height: 741,
     useContentSize: true,
     webPreferences: {
       nodeIntegration: true,
