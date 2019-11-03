@@ -1,16 +1,22 @@
 <template>
-  <div>
+  <v-app>
+    <v-btn>Click!</v-btn>
     <router-link to="/foo">Go to Foo</router-link>
     <router-link to="/bar">Go to Bar</router-link>
     <router-view></router-view>
-  </div>
+  </v-app>
 </template>
 
 <script>
 import axios from 'axios'
+import {VApp, VBtn} from 'vuetify/lib'
 export default {
   data() {
     return {}
+  },
+  components: {
+    VApp,
+    VBtn
   },
   mounted() {
     axios

@@ -19,6 +19,29 @@ module.exports = env => {
     module: {
       rules: [
         {
+          test: /\.sass$/,
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 2
+              }
+            },
+            'postcss-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                implementation: require('sass'),
+                sassOptions: {
+                  fiber: require('fibers'),
+                  indentedSyntax: true // optional
+                },
+              }
+            }
+          ]
+        },
+        {
           test: /\.s?css$/,
           use: [
             MiniCssExtractPlugin.loader,
