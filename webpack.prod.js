@@ -52,7 +52,14 @@ module.exports = env => {
               }
             },
             'postcss-loader',
-            'sass-loader'
+            {
+              loader: 'sass-loader',
+              options: {
+                prependData: `
+                  @import "@/scss/variable.scss";
+                `
+              }
+            }
           ]
         }
       ]
