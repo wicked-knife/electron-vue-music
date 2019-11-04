@@ -1,35 +1,36 @@
 <template>
     <v-app-bar app clipped-left height="52px" flat class="app-top-bar">
-        <v-row>
-          <div class="logo-wrapper">
+        <v-row class="drag">
+          <div class="logo-wrapper ml-3">
             <img src="./logo.png" class="logo">
           </div>
           <v-col>
             <v-row>
-            <div class="route-control mr-4">
+            <div class="route-control mr-4 ml-n4 no-drag">
               <i class="iconfont icon-return grey--text"></i>
               <i class="iconfont icon-enter grey--text"></i>
             </div>
-            <BaseInput placeholder='搜索音乐、视频、歌词、电台'/>
+            <BaseInput placeholder='搜索音乐、视频、歌词、电台' class="no-drag"/>
             </v-row>
           </v-col>
-          <div class="user-wrapper grey--text">
+          <div class="user-wrapper grey--text no-drag">
             <v-avatar width="26" height="26">
               <img src="http://p2.music.126.net/d5sAsDQf4yqq5bID-rDKXg==/2892815093234572.jpg?param=30y30" alt="">
             </v-avatar>
             <span class="username mr-2">、他们为何离去</span>
             <i class="iconfont icon-sort-down"></i>
           </div>
-          <div class="tool-group grey--text mr-4">
+          <div class="tool-group grey--text mr-4 no-drag">
             <i class="iconfont icon-skin"></i>
             <i class="iconfont icon-mail"></i>
             <i class="iconfont icon-setup"></i>
           </div>
-          <div class="window-btn-group grey--text mr-2">
+          <div class="window-btn-group grey--text mr-2 no-drag">
             <i class="iconfont icon-small-screen"></i>
             <i class="iconfont icon-minimize" @click="minimizeWindow"></i>
-            <i class="iconfont icon-maximize"></i>
-            <i class="iconfont icon-close"></i>
+            <i class="iconfont icon-maximize" @click="maximizeWindow" v-show="!windowMaximized"></i>
+            <i class="iconfont icon-unmaxisize" @click="restoreWindow" v-show="windowMaximized"></i>
+            <i class="iconfont icon-close" @click="closeWindow"></i>
           </div>
         </v-row>
     </v-app-bar>
@@ -40,6 +41,9 @@ import baseLayoutMixin from '@/mixins/baseLayout.js'
 import { VAppBar, VAvatar } from 'vuetify/lib'
 import BaseInput from '@/base/input/base-input.vue'
 const {ipcRenderer} = require('electron')
+
+
+
 export default {
   mixins: [baseLayoutMixin],
   components: {
@@ -47,11 +51,32 @@ export default {
     VAvatar,
     BaseInput
   },
+  data(){
+    return {
+      windowMaximized: false
+    }
+  },
   methods: {
     minimizeWindow(){
-      console.log('minimize')
       ipcRenderer.send('window:minimize')
+    },
+    maximizeWindow(){
+      ipcRenderer.send('window:maximize')
+    },
+    restoreWindow(){
+      ipcRenderer.send('window:restore')
+    },
+    closeWindow(){
+      ipcRenderer.send('window:close')
     }
+  },
+  beforeCreate(){
+    ipcRenderer.on('window:maximized', () => {
+      this.windowMaximized = true
+    })
+    ipcRenderer.on('window:restored', () => {
+      this.windowMaximized = false
+    })
   }
 } 
 </script>
@@ -79,7 +104,7 @@ export default {
   }
   .route-control{
     position: relative;
-    border: 1px solid #000;
+    border: 1px solid #181818;
     display: flex;
     border-radius: 3px;
     height: 24px;
@@ -94,7 +119,7 @@ export default {
       top: 0;
       left: 50%;
       width: 1px;
-      background-color: #000;
+      background-color: #181818;
     }
     i{
       cursor: pointer;
@@ -148,5 +173,11 @@ export default {
       }
     }
   }
+}
+.drag{
+  -webkit-app-region: drag
+}
+.no-drag{
+  -webkit-app-region: no-drag;
 }
 </style>

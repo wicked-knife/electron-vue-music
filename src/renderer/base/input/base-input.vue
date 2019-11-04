@@ -31,6 +31,8 @@ export default {
   background-color: $bg-dark;
   padding-left: 8px;
   border-radius: 12px;
+  display: flex;
+  align-items: center;
   input{
     width: calc(100% - 36px);
     outline: none;
