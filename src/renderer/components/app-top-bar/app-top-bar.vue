@@ -1,10 +1,10 @@
 <template>
     <v-app-bar app clipped-left height="52px" flat class="app-top-bar">
-      <v-container>
         <v-row>
-          title
+          <v-col cols="2">
+            <img src="./logo.png" class="logo">
+          </v-col>
         </v-row>
-      </v-container>
     </v-app-bar>
 </template>
 
@@ -31,6 +31,9 @@ export default {
     bottom: 0px;
     left: 0px;
     background-image: linear-gradient(to right, #670404 , $theme-color, #670404);
+  }
+  .logo{
+    cursor: pointer;
   }
 }
 </style>

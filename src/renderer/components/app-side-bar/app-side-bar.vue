@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer app permanent clipped class="app-side-bar">
+    <v-navigation-drawer app permanent clipped class="app-side-bar" width="200px">
       <v-list>
         <v-list-item-group>
           <v-list-item>
