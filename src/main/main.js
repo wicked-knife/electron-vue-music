@@ -3,7 +3,7 @@ require('../../server/app')
 
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
-    frame: false,
+    frame: true, // for dev
     minWidth: 1200,
     minHeight: 741,
     width: 1200,

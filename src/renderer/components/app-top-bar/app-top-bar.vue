@@ -4,19 +4,49 @@
           <div class="logo-wrapper">
             <img src="./logo.png" class="logo">
           </div>
+          <v-col>
+            <v-row>
+            <div class="route-control mr-4">
+              <i class="iconfont icon-return grey--text"></i>
+              <i class="iconfont icon-enter grey--text"></i>
+            </div>
+            <BaseInput placeholder='搜索音乐、视频、歌词、电台'/>
+            </v-row>
+          </v-col>
+          <div class="user-wrapper grey--text">
+            <v-avatar width="26" height="26">
+              <img src="http://p2.music.126.net/d5sAsDQf4yqq5bID-rDKXg==/2892815093234572.jpg?param=30y30" alt="">
+            </v-avatar>
+            <span class="username mr-2">、他们为何离去</span>
+            <i class="iconfont icon-sort-down"></i>
+          </div>
+          <div class="tool-group grey--text mr-4">
+            <i class="iconfont icon-skin"></i>
+            <i class="iconfont icon-mail"></i>
+            <i class="iconfont icon-setup"></i>
+          </div>
+          <div class="window-btn-group grey--text mr-2">
+            <i class="iconfont icon-small-screen"></i>
+            <i class="iconfont icon-minimize"></i>
+            <i class="iconfont icon-maximize"></i>
+            <i class="iconfont icon-close"></i>
+          </div>
         </v-row>
     </v-app-bar>
 </template>
 
 <script>
 import baseLayoutMixin from '@/mixins/baseLayout.js'
-import { VAppBar } from 'vuetify/lib'
+import { VAppBar, VAvatar } from 'vuetify/lib'
+import BaseInput from '@/base/input/base-input.vue'
 export default {
   mixins: [baseLayoutMixin],
   components: {
-    VAppBar
+    VAppBar,
+    VAvatar,
+    BaseInput
   }
-}
+} 
 </script>
 
 <style lang="scss" scoped>
@@ -38,6 +68,77 @@ export default {
     align-items: center;
     .logo{
       cursor: pointer;
+    }
+  }
+  .route-control{
+    position: relative;
+    border: 1px solid #000;
+    display: flex;
+    border-radius: 3px;
+    height: 24px;
+    width: 54px;
+    align-items: center;
+    justify-content: space-around;
+    box-sizing: border-box;
+    &::before{
+      content: '';
+      position: absolute;
+      height: 100%;
+      top: 0;
+      left: 50%;
+      width: 1px;
+      background-color: #000;
+    }
+    i{
+      cursor: pointer;
+      &:hover{
+        color: #fff !important;
+      }
+    }
+  }
+  .user-wrapper{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    &:hover{
+      .username,i{
+        color: #fff;
+      }
+    }
+    .username{
+      width: 80px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-size: 13px;
+    }
+    i{
+      font-size: 12px;
+    }
+  }
+  .tool-group{
+    display: flex;
+    align-items: center;
+    border-right: 1px solid $bg-dark;
+    i{
+      font-size: 20px;
+      cursor: pointer;
+      margin: 0 10px;
+      &:hover{
+        color: #fff;
+      }
+    }
+  }
+  .window-btn-group{
+    display: flex;
+    align-items: center;
+    i{
+      font-size: 20px;
+      cursor: pointer;
+      margin: 0 3px;
+      &:hover{
+        color: #fff;
+      }
     }
   }
 }
