@@ -27,7 +27,7 @@
           </div>
           <div class="window-btn-group grey--text mr-2">
             <i class="iconfont icon-small-screen"></i>
-            <i class="iconfont icon-minimize"></i>
+            <i class="iconfont icon-minimize" @click="minimizeWindow"></i>
             <i class="iconfont icon-maximize"></i>
             <i class="iconfont icon-close"></i>
           </div>
@@ -39,12 +39,19 @@
 import baseLayoutMixin from '@/mixins/baseLayout.js'
 import { VAppBar, VAvatar } from 'vuetify/lib'
 import BaseInput from '@/base/input/base-input.vue'
+const {ipcRenderer} = require('electron')
 export default {
   mixins: [baseLayoutMixin],
   components: {
     VAppBar,
     VAvatar,
     BaseInput
+  },
+  methods: {
+    minimizeWindow(){
+      console.log('minimize')
+      ipcRenderer.send('window:minimize')
+    }
   }
 } 
 </script>

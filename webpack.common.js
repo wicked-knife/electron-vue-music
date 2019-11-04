@@ -15,6 +15,7 @@ module.exports = {
       '@': path.resolve(__dirname, 'src/renderer')
     }
   },
+  target: 'electron-renderer',
   optimization: {
     splitChunks: {
       chunks: 'all'
