@@ -1,7 +1,7 @@
 <template>
     <v-app-bar app clipped-left height="52px" flat class="app-top-bar">
         <v-row class="drag">
-          <div class="logo-wrapper ml-3">
+          <div class="logo-wrapper ml-3 no-drag">
             <img src="./logo.png" class="logo">
           </div>
           <v-col>
