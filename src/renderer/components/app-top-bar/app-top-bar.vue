@@ -40,9 +40,8 @@
 import baseLayoutMixin from '@/mixins/baseLayout.js'
 import { VAppBar, VAvatar } from 'vuetify/lib'
 import BaseInput from '@/base/input/base-input.vue'
+import {mapGetters, mapMutations} from 'vuex'
 const {ipcRenderer} = require('electron')
-
-
 
 export default {
   mixins: [baseLayoutMixin],
@@ -53,10 +52,12 @@ export default {
   },
   data(){
     return {
-      windowMaximized: false
     }
   },
   methods: {
+    ...mapMutations('window', {
+      setWindowMaximized: 'setWindowMaximized'
+    }),
     minimizeWindow(){
       ipcRenderer.send('window:minimize')
     },
@@ -70,12 +71,17 @@ export default {
       ipcRenderer.send('window:close')
     }
   },
+  computed: {
+    ...mapGetters('window',{
+      windowMaximized: 'maximized'
+    })
+  },
   beforeCreate(){
     ipcRenderer.on('window:maximized', () => {
-      this.windowMaximized = true
+      this.setWindowMaximized(true)
     })
     ipcRenderer.on('window:restored', () => {
-      this.windowMaximized = false
+      this.setWindowMaximized(false)
     })
   }
 } 

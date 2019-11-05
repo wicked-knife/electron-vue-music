@@ -28,14 +28,14 @@ export default {
     AppSideBar
   },
   mounted() {
-    axios
-      .get('http://localhost:3000/search?keywords=海阔天空')
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    // axios
+    //   .get('http://localhost:3000/search?keywords=海阔天空')
+    //   .then(res => {
+    //     console.log(res)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
   }
 }
 </script>

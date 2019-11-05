@@ -29,21 +29,23 @@ app.on('ready', () => {
     mainWindow.minimize()
   })
   // 最大化窗口
-  ipcMain.on('window:maximize', ev => {
+  ipcMain.on('window:maximize', () => {
     mainWindow.maximize()
-    if(mainWindow.isMaximized()) {
-      ev.sender.send('window:maximized')
-    }
   })
   // 从最大化窗口恢复
-  ipcMain.on('window:restore', ev => {
+  ipcMain.on('window:restore', () => {
     mainWindow.restore()
-    if(!mainWindow.isMaximized()) {
-      ev.sender.send('window:restored')
-    }
   })
   // 关闭窗口
   ipcMain.on('window:close', () => {
     mainWindow.close()
+  })
+  // 当从最大化窗口退出时触发
+  mainWindow.on('unmaximize', ev => {
+    ev.sender.send('window:restored')
+  })
+  // 当窗口最大化时
+  mainWindow.on('maximize', ev => {
+    ev.sender.send('window:maximized')
   })
 })
