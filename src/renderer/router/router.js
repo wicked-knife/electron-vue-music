@@ -1,8 +1,8 @@
 import VueRouter from 'vue-router'
 import Index from '@/views/index/index.vue'
-import Bar from '@/views/bar.vue'
 import RecommendIndex from '@/views/index/recommend/index.vue'
 import RecommendSongList from '@/views/index/recommend/song-list.vue'
+import PersonalFM from '@/views/personalFM/personalFM.vue'
 const routes = [
   {
     path: '/',
@@ -19,7 +19,7 @@ const routes = [
       }
     ]
   },
-  { path: '/bar', component: Bar }
+  { path: '/personalFM', component: PersonalFM }
 ]
 
 export default new VueRouter({

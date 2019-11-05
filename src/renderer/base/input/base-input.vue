@@ -38,7 +38,7 @@ export default {
     outline: none;
     font-size: 13px;
     &::placeholder{
-      color: #b1b1b1;
+      color: #6b6b6b;
     }
   }
   i{

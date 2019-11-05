@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pt-0">
+  <v-container class="pt-0" fluid>
     <v-row>
       <v-tabs background-color="transparent" centered height='42px' class="tabs" center-active>
         <v-tab to='/recommend'>个性推荐</v-tab>
@@ -10,7 +10,9 @@
         <v-tab to='/foobar'>最新音乐</v-tab>
       </v-tabs>
     </v-row>
-    <router-view></router-view>
+    <keep-alive>
+     <router-view></router-view>
+    </keep-alive>
   </v-container>
 </template>
 

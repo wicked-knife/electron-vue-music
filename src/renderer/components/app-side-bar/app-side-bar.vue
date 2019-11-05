@@ -8,8 +8,8 @@
           <v-list-item to="/recommend" active-class="route-active" class="nav-item" >
             <i class="iconfont icon-music mr-2"></i> 发现音乐
           </v-list-item>
-          <v-list-item to='/bar' active-class="route-active" class="nav-item" >
-            Go to Bar
+          <v-list-item to='/personalFM' active-class="route-active" class="nav-item" >
+            <i class="iconfont icon-FM mr-2"></i> 私人FM
           </v-list-item>
         </v-list-item-group>
       </v-list>
