@@ -202,14 +202,13 @@ export default {
       height: 100%;
       transition: 0.4s all ease-out,
         0.35s filter cubic-bezier(0.32, 0.04, 0.87, 0.65);
-      background-color: #fff;
       background-repeat: no-repeat;
       background-position: center;
       background-size: inherit;
       transform: translate3d(-50%, 0, -80px) scale3d(0.9, 0.9, 1);
       transform-origin: center bottom;
       z-index: 1;
-      filter: brightness(0.3);
+      filter: brightness(0.5);
       &.active {
         transform: translate3d(-50%, 0, 0);
         filter: brightness(1);
