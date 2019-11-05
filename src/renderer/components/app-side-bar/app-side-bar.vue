@@ -5,10 +5,10 @@
           推荐
         </v-subheader>
         <v-list-item-group >
-          <v-list-item to="/" exact-active-class="route-active" class="nav-item" >
+          <v-list-item to="/recommend" active-class="route-active" class="nav-item" >
             <i class="iconfont icon-music mr-2"></i> 发现音乐
           </v-list-item>
-          <v-list-item to='/bar' exact-active-class="route-active" class="nav-item" >
+          <v-list-item to='/bar' active-class="route-active" class="nav-item" >
             Go to Bar
           </v-list-item>
         </v-list-item-group>

@@ -3,9 +3,7 @@
     <AppSideBar />
     <AppTopBar />
     <v-content class="app-content">
-      <v-container fluid>
-        <router-view></router-view>
-      </v-container>
+      <router-view></router-view>
     </v-content>
   </v-app>
 </template>
