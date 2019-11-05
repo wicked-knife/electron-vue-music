@@ -1,12 +1,15 @@
 <template>
     <v-navigation-drawer app permanent clipped class="app-side-bar" width="200px">
-      <v-list>
-        <v-list-item-group>
-          <v-list-item>
-            <router-link to="/foo">Go to Foo</router-link>
+      <v-list class="mt-n2">
+        <v-subheader dark class="subheader grey--text text--darken-1">
+          推荐
+        </v-subheader>
+        <v-list-item-group >
+          <v-list-item to="/" exact-active-class="route-active" class="nav-item" >
+            <i class="iconfont icon-music mr-2"></i> 发现音乐
           </v-list-item>
-          <v-list-item>
-            <router-link to="/bar">Go to Bar</router-link>
+          <v-list-item to='/bar' exact-active-class="route-active" class="nav-item" >
+            Go to Bar
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -16,11 +19,12 @@
 
 <script>
 import baseListMixin from '@/mixins/baseList.js'
-import { VNavigationDrawer} from 'vuetify/lib'
+import { VNavigationDrawer, VSubheader} from 'vuetify/lib'
 export default {
   mixins: [baseListMixin],
   components: {
-    VNavigationDrawer
+    VNavigationDrawer,
+    VSubheader
   }
 }
 </script>
@@ -28,5 +32,25 @@ export default {
 <style lang="scss" scoped>
 .app-side-bar{
   background-color: #191b1f;
+}
+.route-active{
+  &::after{
+    position: absolute;
+    content: '';
+    display: block;
+    width: 3px;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: $theme-color;
+  }
+}
+.nav-item{
+  min-height: 32px;
+  font-size: 13px;
+}
+.subheader{
+  font-size: 13px;
+  height: 32px;
 }
 </style>
