@@ -1,21 +1,31 @@
 <template>
-  <div class="slider-container" ref='slider'
-       :style="sliderStyle"
-       @mouseover="pause()"
-       @mouseout="play()">
-    <div class="slider-content" :class="mask ? 'mask' : ''">
-      <div class="slider" v-for="(item, index) in list"
+  <div
+    class="slider-container"
+    :style="sliderStyle"
+    @mouseover="pause()"
+    @mouseout="play()"
+    v-if="list.length"
+  >
+    <div ref="content" class="slider-content" :class="mask ? 'mask' : ''">
+      <div
+        ref="slider"
+        class="slider"
+        v-for="(item, index) in list"
         :key="index"
         :class="setClass(index)"
-        @click="onClick(index)" :style="setBGImg(item.imageUrl)">
+        @click="onClick(index,item)">
+        <img :src="item.imageUrl" alt="" :style="{height: sliderStyle.height}">
       </div>
-      <i  class="iconfont icon-return" @click="prev()"></i>
-      <i  class="iconfont icon-enter" @click="next()"></i>
+      <i  v-show="arrow" class="iconfont icon-return" @click="prev()"></i>
+      <i  v-show="arrow" class="iconfont icon-enter" @click="next()"></i>
     </div>
     <div class="dots" v-if="dots">
-      <span v-for="(item, index) in list" :key="index"
+      <span
+        v-for="(item, index) in list"
+        :key="index"
         :style="setActiveDot(index)"
-        @mouseover="currentIndex = index"></span>
+        @mouseover="currentIndex = index"
+      ></span>
     </div>
   </div>
 </template>
@@ -27,25 +37,25 @@ export default {
       currentIndex: 0,
       sliderDomList: [],
       timer: null
-    };
+    }
   },
   props: {
     list: {
-      required: true,
       type: Array,
       default() {
-        return [];
+        return []
       }
     },
     width: {
       type: Number
     },
     height: {
-      type: Number
+      type: Number,
+      default: 200
     },
     imgType: {
       type: String,
-      default: "percentage"
+      default: 'percentage'
     },
     autoPlay: {
       type: Boolean,
@@ -57,191 +67,208 @@ export default {
     },
     interval: {
       type: Number,
-      default: 4000
+      default: 6000
     },
     dots: {
       type: Boolean,
       default: true
     },
+    arrow: {
+      type: Boolean,
+      default: true
+    },
     color: {
       type: String,
-      default: "rgb(248, 85, 85)"
+      default: '#7f8082'
     }
   },
   computed: {
     sliderStyle() {
       return {
-        width: this.width ? this.width + "px" : "100%",
-        height: this.height ? this.height + "px" : "100%",
-        perspective: this.width + "px",
+        width: this.width ? this.width + 'px' : '100%',
+        height: this.height === 0 ? '240px' : this.height + 'px',
+        perspective: this.width + 'px',
         backgroundSize:
-          this.imgType == "percentage" ? "100% 100%" : this.imgType
-      };
+          this.imgType == 'percentage' ? '100% 100%' : this.imgType
+      }
+    },
+    sliderHeight() {
+      let h =
+        document.querySelector('.slider-container') &&
+        document.querySelector('.slider-container').getBoundingClientRect()
+          .height
+      return `${h * 0.37}px`
     }
   },
   mounted() {
-    this.sliderDomList = this.$refs.slider.querySelectorAll("div.slider");
-    this.play();
+    this.play()
+    this.$nextTick(() => {
+      this.sliderDomList = this.$refs.slider
+    })
   },
   methods: {
     setClass(i) {
       let next =
-        this.currentIndex === this.list.length - 1 ? 0 : this.currentIndex + 1;
+        this.currentIndex === this.list.length - 1 ? 0 : this.currentIndex + 1
       let prev =
-        this.currentIndex === 0 ? this.list.length - 1 : this.currentIndex - 1;
+        this.currentIndex === 0 ? this.list.length - 1 : this.currentIndex - 1
       switch (i) {
-        case this.currentIndex:
-          return "active";
-        case next:
-          return "next";
-        case prev:
-          return "prev";
-        default:
-          return "";
+      case this.currentIndex:
+        return 'active'
+      case next:
+        return 'next'
+      case prev:
+        return 'prev'
+      default:
+        return ''
       }
     },
     setBGImg(src) {
       return {
         backgroundImage: `url(${src})`
-      };
+      }
     },
     setActiveDot(index) {
       return index === this.currentIndex
         ? {
-            backgroundColor: this.color
-          }
+          backgroundColor: this.color
+        }
         : {
-            backgroundColor: "#ccc"
-          };
+          backgroundColor: '#2e3033'
+        }
     },
     play() {
-      this.pause();
+      this.pause()
       if (this.autoPlay) {
         this.timer = setInterval(() => {
-          this.next();
-        }, this.interval);
+          this.next()
+        }, this.interval)
       }
     },
     pause() {
-      clearInterval(this.timer);
+      clearInterval(this.timer)
     },
     next() {
-      this.currentIndex = ++this.currentIndex % this.list.length;
+      this.currentIndex = ++this.currentIndex % this.list.length
     },
     prev() {
       this.currentIndex =
-        this.currentIndex === 0 ? this.list.length - 1 : this.currentIndex - 1;
+        this.currentIndex === 0 ? this.list.length - 1 : this.currentIndex - 1
     },
-    onClick(i) {
+    onClick(i, item) {
       if (i === this.currentIndex) {
-        this.$emit("sliderClick", i);
+        this.$emit('sliderClick', i, item)
       } else {
-        let currentClickClassName = this.sliderDomList[i].className.split(
-          " "
-        )[1];
-        console.log(currentClickClassName);
-        if (currentClickClassName === "next") {
-          this.next();
+        if (!this.sliderDomList) {
+          this.sliderDomList = this.$refs.slider
+        }
+        let currentClickClassName = this.sliderDomList[i].classList[1]
+        if (currentClickClassName === 'next') {
+          this.next()
         } else {
-          this.prev();
+          this.prev()
         }
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
-.slider-container{
+.slider-container {
+  box-sizing: content-box;
   width: 100%;
   height: 100%;
   text-align: center;
-  padding: 10px 0;
+  padding-bottom: 20px;
+  margin: auto;
   position: relative;
-  .slider-content{
+  .slider-content {
     position: relative;
     width: 100%;
-    height: calc(100% - 20px);
+    height: 100%;
     left: 0%;
     top: 0%;
     margin: 0px;
     padding: 0px;
     background-size: inherit;
+    perspective: 1000px;
     .slider {
       position: absolute;
       margin: 0;
       padding: 0;
       top: 0;
       left: 50%;
-      width: 65%;
       height: 100%;
-      transition: 500ms all ease-in-out;
+      transition: 0.4s all ease-out,
+        0.35s filter cubic-bezier(0.32, 0.04, 0.87, 0.65);
       background-color: #fff;
       background-repeat: no-repeat;
       background-position: center;
       background-size: inherit;
-      transform: translate3d(-50%,0,-80px);
+      transform: translate3d(-50%, 0, -80px) scale3d(0.9, 0.9, 1);
+      transform-origin: center bottom;
       z-index: 1;
-      &::before{
-        position: absolute;
-        content: "";
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        background-color: rgba(0, 0, 0, 0);
-        transition-delay: 100ms!important;
-        transition: all 500ms;
-        cursor: pointer;
-      }
-      &.active{
+      filter: brightness(0.3);
+      &.active {
         transform: translate3d(-50%, 0, 0);
+        filter: brightness(1);
         z-index: 20;
       }
-      &.prev{
-        transform: translate3d(-75%, 0, -100px);
-        z-index: 19;
+      &.prev {
+        left: 0;
+        transform: translate3d(0, 0, 0) scale3d(0.9, 0.9, 1);
+        z-index: 18;
       }
-      &.next{
-        transform: translate3d(-25%, 0, -100px);
+      &.next {
+        right: 0;
+        left: auto;
+        transform: translate3d(0, 0, 0) scale3d(0.9, 0.9, 1);
         z-index: 18;
       }
     }
-    i{
-      position: absolute;
-      top: 40%;
-      font-size: 22px;
-      color: rgba(255, 255, 255, 0.5);
-      text-shadow: 0 0 24px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-      z-index: 21;
-      &:first-child{
-        left: 0;
-      }
-      &:last-child{
-        right: 0;
-      }
-    &:hover{
-      i{
-        color: rgba(255, 255, 255, 0.8);
-        display: block;
-      }
-    }
-    &.mask{
-      .slider{
-        &.prev, &.next{
-          &:before{
-            background-color: rgba(0, 0, 0, 0.50);
+    &.mask {
+      .slider {
+        &.prev,
+        &.next {
+          &:before {
+            background-color: rgba(0, 0, 0, 0.5);
           }
         }
       }
     }
+    i {
+      display: none;
+      position: absolute;
+      top: 55%;
+      transform: translateY(-50%);
+      font-size: 30px;
+      color: rgba(255, 255, 255, 0.5);
+      z-index: 21;
+      cursor: pointer;
+      &.icon-return {
+        left: 20px;
+      }
+      &.icon-enter {
+        right: 20px;
+      }
+      &.mask .slider &.prev,
+      &.next &:before {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+    }
+    &:hover i {
+      padding: 7px;
+      border-radius: 50%;
+      color: rgba(255, 255, 255, 0.8);
+      display: block;
     }
   }
+
   .dots {
     width: 100%;
     height: 20px;
-    span{
+    span {
       display: inline-block;
       width: 20px;
       height: 2px;

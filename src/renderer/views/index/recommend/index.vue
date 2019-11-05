@@ -1,26 +1,27 @@
 <template>
-  <div>
-    <swiper :list='list' :height='270'>
-
+  <v-container fluid class='mt-2'>
+    <swiper :list='banners'>
     </swiper>
-  </div>
+  </v-container>
 </template>
 
 <script>
 import swiper from '@/base/swiper/swiper.vue'
 import {getBanner} from '@/API/recommend/banner.js'
+import baseLayoutMixins from '@/mixins/baseLayout.js'
 export default {
+  mixins: [baseLayoutMixins],
   components: {
     swiper
   },
   data(){
     return {
-      list: []
+      banners: []
     }
   },
   created(){
     getBanner().then(data => {
-      this.list = data.data.banners
+      this.banners = data.data.banners.map(i => ({...i, src: i.imageUrl}))
     })
   }
 }
