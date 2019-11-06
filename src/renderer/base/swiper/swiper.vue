@@ -15,6 +15,9 @@
         :class="setClass(index)"
         @click="onClick(index,item)">
         <img :src="item.imageUrl" alt="" :style="{height: sliderStyle.height}">
+        <div :class="['tag', item.titleColor]">
+          {{item.typeTitle ? item.typeTitle : ''}}
+        </div>
       </div>
       <i  v-show="arrow" class="iconfont icon-return" @click="prev()"></i>
       <i  v-show="arrow" class="iconfont icon-enter" @click="next()"></i>
@@ -202,13 +205,10 @@ export default {
       height: 100%;
       transition: 0.4s all ease-out,
         0.35s filter cubic-bezier(0.32, 0.04, 0.87, 0.65);
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: inherit;
       transform: translate3d(-50%, 0, -80px) scale3d(0.9, 0.9, 1);
       transform-origin: center bottom;
       z-index: 1;
-      filter: brightness(0.5);
+      filter: brightness(0.7);
       &.active {
         transform: translate3d(-50%, 0, 0);
         filter: brightness(1);
@@ -224,6 +224,21 @@ export default {
         left: auto;
         transform: translate3d(0, 0, 0) scale3d(0.9, 0.9, 1);
         z-index: 18;
+      }
+      .tag{
+        position: absolute;
+        font-size: 12px;
+        right: -4px;
+        bottom: 10px;
+        padding-left: 6px;
+        padding-right: 3px;
+        border-radius: 18px 0 0 18px;
+        &.red{
+          background-color: #cc4a4a;
+        }
+        &.blue{
+          background-color: #4a79cc;
+        }
       }
     }
     &.mask {
