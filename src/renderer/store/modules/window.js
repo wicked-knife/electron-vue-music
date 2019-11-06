@@ -1,5 +1,5 @@
 const state = {
-  maximized: false
+  maximized: false // 主应用窗口是否最大化
 }
 
 const getters = {

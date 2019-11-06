@@ -29,11 +29,6 @@ export default {
     return {
 
     }
-  },
-  methods: {
-    test(v){
-      console.log(v)
-    }
   }
 }
 </script>

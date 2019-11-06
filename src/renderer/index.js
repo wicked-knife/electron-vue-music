@@ -6,10 +6,12 @@ import router from '@/router/router.js'
 import Vuetify from 'vuetify/lib'
 import store from '@/store/index'
 import '@/scss/global.scss'
+import registerAlert from '@/base/alert/alert.js'
 
 Vue.use(VueRouter)
 Vue.use(Vuetify)
 Vue.use(Vuex)
+Vue.use(registerAlert)
 
 new Vue({
   el: '#app',
