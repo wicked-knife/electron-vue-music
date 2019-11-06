@@ -205,7 +205,7 @@ export default {
       height: 100%;
       transition: 0.4s all ease-out,
         0.35s filter cubic-bezier(0.32, 0.04, 0.87, 0.65);
-      transform: translate3d(-50%, 0, -80px) scale3d(0.9, 0.9, 1);
+      transform: translate3d(-50%, 0, -80px) scale3d(0.95, 0.95, 1);
       transform-origin: center bottom;
       z-index: 1;
       filter: brightness(0.7);
@@ -215,14 +215,14 @@ export default {
         z-index: 20;
       }
       &.prev {
-        left: -25px;
-        transform: translate3d(0, 0, 0) scale3d(0.9, 0.9, 1);
+        left: -12px;
+        transform: translate3d(0, 0, 0) scale3d(0.95, 0.95, 1);
         z-index: 18;
       }
       &.next {
-        right: -25px;
+        right: -12px;
         left: auto;
-        transform: translate3d(0, 0, 0) scale3d(0.9, 0.9, 1);
+        transform: translate3d(0, 0, 0) scale3d(0.95, 0.95, 1);
         z-index: 18;
       }
       .tag{

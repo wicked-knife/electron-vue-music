@@ -2,8 +2,10 @@
   <v-app>
     <AppSideBar />
     <AppTopBar />
-    <v-content class="app-content" id="app-content">
-      <router-view></router-view>
+    <v-content class="app-content">
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
     </v-content>
   </v-app>
 </template>
