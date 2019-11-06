@@ -215,12 +215,12 @@ export default {
         z-index: 20;
       }
       &.prev {
-        left: 0;
+        left: -25px;
         transform: translate3d(0, 0, 0) scale3d(0.9, 0.9, 1);
         z-index: 18;
       }
       &.next {
-        right: 0;
+        right: -25px;
         left: auto;
         transform: translate3d(0, 0, 0) scale3d(0.9, 0.9, 1);
         z-index: 18;

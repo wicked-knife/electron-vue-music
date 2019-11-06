@@ -1,17 +1,22 @@
 <template>
-  <v-container fluid class="mt-2 container">
-    <swiper :list="banners"></swiper>
+  <v-container fluid class="mt-2 container-1040">
+    <v-row>
+      <swiper :list="banners" />
+    </v-row>
+    <BaseTitle text='推荐歌单' to="/recommend"></BaseTitle>
   </v-container>
 </template>
 
 <script>
-import swiper from '@/base/swiper/swiper.vue';
-import { getBanner } from '@/API/recommend/banner.js';
-import baseLayoutMixins from '@/mixins/baseLayout.js';
+import swiper from '@/base/swiper/swiper.vue'
+import BaseTitle from '@/base/title/base-title.vue'
+import { getBanner } from '@/API/recommend/banner.js'
+import baseLayoutMixins from '@/mixins/baseLayout.js'
 export default {
   mixins: [baseLayoutMixins],
   components: {
-    swiper
+    swiper,
+    BaseTitle
   },
   data() {
     return {
@@ -27,7 +32,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  max-width: 1040px;
-}
+
 </style>
