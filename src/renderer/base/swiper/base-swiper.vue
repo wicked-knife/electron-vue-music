@@ -67,16 +67,16 @@ export default {
 <style lang="scss" scoped>
 .swiper-container {
   width: 100%;
-  height: 270px;
+  height: 220px;
   .swiper-wrapper {
     position: relative;
-    height: 250px;
+    height: 200px;
     .swiper-box {
       position: absolute;
-      height: 250px;
+      height: 200px;
       bottom: 0;
       left: 50%;
-      transform: translate3d(-50%, 6.25px, 0) scale3d(0.95, 0.95, 1);
+      transform: translate3d(-50%, 5px, 0) scale3d(0.95, 0.95, 1);
       visibility: hidden;
       transition: all 0.6s ease;
       filter: brightness(0.6);
@@ -84,20 +84,19 @@ export default {
       will-change: transform;
       &.prev {
         left: 0;
-        transform: translate3d(-16.875px, 6.25px, 0) scale3d(0.95, 0.95, 1);
+        transform: translate3d(-13.5px, 5px, 0) scale3d(0.95, 0.95, 1);
         visibility: visible;
       }
       &.active {
         left: 50%;
-        transform: translate3d(-50%, 0, 0) scale3d(1, 1, 1);
+        transform: translate3d(-50%, 0px, 0) scale3d(1, 1, 1);
         visibility: visible;
         z-index: 3;
         filter: brightness(1);
       }
       &.next {
-        left: auto;
-        right: 0;
-        transform: translate3d(16.875px, 6.25px, 0) scale3d(0.95, 0.95, 1);
+        left: calc(100% - 526.5px);
+        transform: translate3d(0, 5px, 0) scale3d(0.95, 0.95, 1);
         visibility: visible;
       }
       .tag{
@@ -145,8 +144,8 @@ export default {
   margin-top: 12px;
   .dot {
     margin: 3px;
-    width: 22px;
-    height: 4px;
+    width: 18px;
+    height: 2px;
     background-color: #2e3033;
     cursor: pointer;
     &.active {
