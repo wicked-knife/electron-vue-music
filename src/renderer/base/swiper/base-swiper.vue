@@ -1,237 +1,113 @@
 <template>
-  <div
-    class="slider-container"
-    :style="sliderStyle"
-    @mouseover="pause()"
-    @mouseout="play()"
-    v-if="list.length"
-  >
-    <div ref="content" class="slider-content" :class="mask ? 'mask' : ''">
-      <div
-        ref="slider"
-        class="slider"
-        v-for="(item, index) in list"
-        :key="index"
-        :class="setClass(index)"
-        @click="onClick(index,item)">
-        <img :src="item.imageUrl" alt="" :style="{height: sliderStyle.height}">
-        <div :class="['tag', item.titleColor]">
-          {{item.typeTitle ? item.typeTitle : ''}}
-        </div>
+  <div class="swiper-container" @mouseleave="arrowVisiable = false" @mouseenter="arrowVisiable = true">
+    <div class="swiper-wrapper">
+      <div v-for="(i, index) in list"  :class="['swiper-box', _setClassName(index)]" :key="i.imageUrl">
+        <img :src="i.imageUrl" class="swiper-img" draggable="false">
+        <span :class="['tag', i.titleColor]">{{i.typeTitle}}</span>
       </div>
-      <i  v-show="arrow" class="iconfont icon-return" @click="prev()"></i>
-      <i  v-show="arrow" class="iconfont icon-enter" @click="next()"></i>
+      <i class="iconfont icon-return" @click="prev" v-show="arrowVisiable"></i>
+      <i class="iconfont icon-enter" @click="next" v-show="arrowVisiable"></i>
     </div>
-    <div class="dots" v-if="dots">
-      <span
-        v-for="(item, index) in list"
-        :key="index"
-        :style="setActiveDot(index)"
-        @mouseover="currentIndex = index"
-      ></span>
+    <div class="dots">
+      <span v-for="(i, index) in list" :key="i.imageUrl" :class="['dot', currentIndex === index ? 'active' : '']" @mouseenter="currentIndex = index"></span>
     </div>
   </div>
 </template>
 
 <script>
+let timer = null
 export default {
-  data() {
-    return {
-      currentIndex: 0,
-      sliderDomList: [],
-      timer: null
-    }
-  },
   props: {
     list: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    width: {
-      type: Number
-    },
-    height: {
-      type: Number,
-      default: 200
-    },
-    imgType: {
-      type: String,
-      default: 'percentage'
-    },
-    autoPlay: {
-      type: Boolean,
-      default: true
-    },
-    mask: {
-      type: Boolean,
-      default: true
-    },
-    interval: {
-      type: Number,
-      default: 6000
-    },
-    dots: {
-      type: Boolean,
-      default: true
-    },
-    arrow: {
-      type: Boolean,
-      default: true
-    },
-    color: {
-      type: String,
-      default: '#7f8082'
+      type: Array
     }
   },
-  computed: {
-    sliderStyle() {
-      return {
-        width: this.width ? this.width + 'px' : '100%',
-        height: this.height === 0 ? '240px' : this.height + 'px',
-        perspective: this.width + 'px',
-        backgroundSize:
-          this.imgType == 'percentage' ? '100% 100%' : this.imgType
-      }
-    },
-    sliderHeight() {
-      let h =
-        document.querySelector('.slider-container') &&
-        document.querySelector('.slider-container').getBoundingClientRect()
-          .height
-      return `${h * 0.37}px`
+  data(){
+    return {
+      currentIndex: 0,
+      arrowVisiable: false
     }
   },
-  mounted() {
-    this.play()
-    this.$nextTick(() => {
-      this.sliderDomList = this.$refs.slider
-    })
-  },
-  methods: {
-    setClass(i) {
-      let next =
-        this.currentIndex === this.list.length - 1 ? 0 : this.currentIndex + 1
-      let prev =
-        this.currentIndex === 0 ? this.list.length - 1 : this.currentIndex - 1
-      switch (i) {
-      case this.currentIndex:
+  methods:{
+    _setClassName(index){
+      if(index === this.currentIndex) {
         return 'active'
-      case next:
-        return 'next'
-      case prev:
+      }
+      if(index === this.currentIndex - 1 || (index === this.list.length - 1 && this.currentIndex === 0)) {
         return 'prev'
-      default:
-        return ''
+      }
+      if(index === this.currentIndex + 1 || (index === 0 && this.currentIndex === this.list.length - 1)) {
+        return 'next'
       }
     },
-    setBGImg(src) {
-      return {
-        backgroundImage: `url(${src})`
-      }
+    prev(){
+      this.currentIndex === 0 ? (this.currentIndex = this.list.length - 1) : this.currentIndex--  
     },
-    setActiveDot(index) {
-      return index === this.currentIndex
-        ? {
-          backgroundColor: this.color
-        }
-        : {
-          backgroundColor: '#2e3033'
-        }
-    },
-    play() {
-      this.pause()
-      if (this.autoPlay) {
-        this.timer = setInterval(() => {
-          this.next()
-        }, this.interval)
-      }
-    },
-    pause() {
-      clearInterval(this.timer)
-    },
-    next() {
-      this.currentIndex = ++this.currentIndex % this.list.length
-    },
-    prev() {
-      this.currentIndex =
-        this.currentIndex === 0 ? this.list.length - 1 : this.currentIndex - 1
-    },
-    onClick(i, item) {
-      if (i === this.currentIndex) {
-        this.$emit('sliderClick', i, item)
-      } else {
-        if (!this.sliderDomList) {
-          this.sliderDomList = this.$refs.slider
-        }
-        let currentClickClassName = this.sliderDomList[i].classList[1]
-        if (currentClickClassName === 'next') {
-          this.next()
+    next(){
+      this.currentIndex === this.list.length - 1 ? (this.currentIndex = 0) : this.currentIndex++
+    }
+  },
+  watch: {
+    arrowVisiable:{
+      handler(newVal){
+        if(!newVal) {
+          timer = setInterval(() => {
+            this.next()
+          }, 6000)
         } else {
-          this.prev()
+          clearInterval(timer)
         }
-      }
+      },
+      immediate: true
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.slider-container {
-  box-sizing: content-box;
+.swiper-container {
   width: 100%;
-  height: 100%;
-  text-align: center;
-  padding-bottom: 20px;
-  margin: auto;
-  position: relative;
-  .slider-content {
+  height: 270px;
+  .swiper-wrapper {
     position: relative;
-    width: 100%;
-    height: 100%;
-    left: 0%;
-    top: 0%;
-    margin: 0px;
-    padding: 0px;
-    background-size: inherit;
-    perspective: 1000px;
-    .slider {
+    height: 250px;
+    .swiper-box {
       position: absolute;
-      margin: 0;
-      padding: 0;
-      top: 0;
+      height: 250px;
+      bottom: 0;
       left: 50%;
-      height: 100%;
-      transition: 0.4s all ease-out,
-        0.35s filter cubic-bezier(0.32, 0.04, 0.87, 0.65);
-      transform: translate3d(-50%, 0, -80px) scale3d(0.95, 0.95, 1);
-      transform-origin: center bottom;
-      z-index: 1;
-      filter: brightness(0.7);
-      &.active {
-        transform: translate3d(-50%, 0, 0);
-        filter: brightness(1);
-        z-index: 20;
-      }
+      transform: translate3d(-50%, 6.25px, 0) scale3d(0.95, 0.95, 1);
+      visibility: hidden;
+      transition: all 0.6s ease;
+      filter: brightness(0.6);
+      cursor: pointer;
+      will-change: transform;
       &.prev {
-        left: -12px;
-        transform: translate3d(0, 0, 0) scale3d(0.95, 0.95, 1);
-        z-index: 18;
+        left: 0;
+        transform: translate3d(-16.875px, 6.25px, 0) scale3d(0.95, 0.95, 1);
+        visibility: visible;
+      }
+      &.active {
+        left: 50%;
+        transform: translate3d(-50%, 0, 0) scale3d(1, 1, 1);
+        visibility: visible;
+        z-index: 3;
+        filter: brightness(1);
       }
       &.next {
-        right: -12px;
         left: auto;
-        transform: translate3d(0, 0, 0) scale3d(0.95, 0.95, 1);
-        z-index: 18;
+        right: 0;
+        transform: translate3d(16.875px, 6.25px, 0) scale3d(0.95, 0.95, 1);
+        visibility: visible;
       }
       .tag{
         position: absolute;
+        bottom: 12px;
+        right: -2px;
+        padding-left: 8px;
+        padding-right: 6px;
+        color: #fff;
         font-size: 12px;
-        right: -4px;
-        bottom: 10px;
-        padding-left: 6px;
-        padding-right: 3px;
         border-radius: 18px 0 0 18px;
         &.red{
           background-color: #cc4a4a !important;
@@ -241,53 +117,40 @@ export default {
         }
       }
     }
-    &.mask {
-      .slider {
-        &.prev,
-        &.next {
-          &:before {
-            background-color: rgba(0, 0, 0, 0.5);
-          }
-        }
-      }
+    .swiper-img {
+      height: 100%;
     }
-    i {
-      display: none;
+    .iconfont {
       position: absolute;
-      top: 55%;
+      top: 50%;
       transform: translateY(-50%);
       font-size: 30px;
-      color: rgba(255, 255, 255, 0.5);
-      z-index: 21;
       cursor: pointer;
-      &.icon-return {
-        left: 0px;
-      }
-      &.icon-enter {
-        right: 0px;
-      }
-      &.mask .slider &.prev,
-      &.next &:before {
-        background-color: rgba(0, 0, 0, 0.5);
+      color: #b1b1b1;
+      &:hover{
+        color: #fff;
       }
     }
-    &:hover i {
-      padding: 7px;
-      border-radius: 50%;
-      color: rgba(255, 255, 255, 0.8);
-      display: block;
+    .icon-return {
+      left: 10px;
+    }
+    .icon-enter {
+      right: 10px;
     }
   }
-
-  .dots {
-    width: 100%;
-    height: 20px;
-    span {
-      display: inline-block;
-      width: 20px;
-      height: 2px;
-      margin: 1px 3px;
-      cursor: pointer;
+}
+.dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  .dot {
+    margin: 3px;
+    width: 22px;
+    height: 4px;
+    background-color: #2e3033;
+    cursor: pointer;
+    &.active {
+      background-color: #7f8082;
     }
   }
 }

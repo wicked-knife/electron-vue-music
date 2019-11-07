@@ -4,6 +4,7 @@
       <img
         :src="songList.picUrl"
         class="cover"
+        draggable="false"
       />
       <div class="desc" v-if="songList.alg === 'featured'">{{songList.copywriter}}</div>
       <div class="play-count">
