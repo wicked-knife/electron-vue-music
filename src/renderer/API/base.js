@@ -5,7 +5,7 @@ axios.defaults.baseURL = 'http://localhost:3000'
 
 axios.interceptors.response.use(response => {
   if(response.data.code === 200) {
-    return response
+    return response.data
   }
 }, err => {
   Vue.prototype.$alert('网络错误')

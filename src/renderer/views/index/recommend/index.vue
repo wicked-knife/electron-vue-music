@@ -4,10 +4,10 @@
       <base-swiper :list="banners" />
     </v-row>
     <base-title text='推荐歌单' to="/recommend/song-list" />
-    <v-row class="d-flex">
-      <base-song-list-cover v-for="i in 3" :key='i'/>
+    <v-row class="d-flex justify-space-between">
+      <base-song-list-cover v-for="songList in recommendSongList" :key="songList.id" width="18.46%"
+      :song-list="songList"/>
     </v-row>
-    <button @click="test">alert</button>
   </v-container>
 </template>
 
@@ -27,21 +27,17 @@ export default {
   },
   data() {
     return {
-      banners: []
+      banners: [],
+      recommendSongList: []
     }
   },
   created() {
     getBanner().then(data => {
-      this.banners = data.data.banners.map(i => ({ ...i, src: i.imageUrl }))
+      this.banners = data.banners.map(i => ({ ...i, src: i.imageUrl }))
     })
     getRecommendSongList(10).then(data => {
-      console.log(data)
+      this.recommendSongList = data.result
     })
-  },
-  methods:{
-    test(){
-      this.$alert({text: 'hello world'})
-    }
   }
 }
 </script>

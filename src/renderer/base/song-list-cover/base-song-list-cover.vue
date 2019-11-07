@@ -1,52 +1,89 @@
 <template>
-  <div class="wrapper">
-    <div class="img-wrapper">
-      <img src="https://p2.music.126.net/Rh8JO50ZbU8NVYK9h-G8YQ==/109951164221820704.jpg" class="cover">
-      <div class="desc">编辑推荐：优雅从容，享受生活。</div>
+  <div class="wrapper" :style="{width}">
+    <div :class="['img-wrapper', songList.alg === 'featured' ? '__active-hover' : '']">
+      <img
+        :src="songList.picUrl"
+        class="cover"
+      />
+      <div class="desc" v-if="songList.alg === 'featured'">{{songList.copywriter}}</div>
+      <div class="play-count">
+        <i class="iconfont icon-earphone"></i> {{_playCount}}
+      </div>
       <i class="iconfont icon-play_fill"></i>
     </div>
-    <div class="name">
-      法语爵士|红酒与玫瑰浪漫邂逅
-    </div>
+    <div class="name">{{songList.name}}</div>
   </div>
 </template>
 
 <script>
 export default {
-  
+  props: {
+    width: {
+      type: String,
+      default: '150px'
+    },
+    songList: {
+      type: Object,
+      required: true
+    }
+  },
+  computed:{
+    _playCount(){
+      return this.songList.playCount < 100000 ? this.songList.playCount : Math.floor(this.songList.playCount / 10000) + '万'
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.wrapper{
+.wrapper {
   display: flex;
   flex-direction: column;
-  width: 20%;
   overflow: hidden;
-  .img-wrapper{
+  margin-bottom: 36px;
+  .img-wrapper {
     position: relative;
     cursor: pointer;
     margin-block: 8px;
-    &:hover{
-      .desc{
+    &:hover {
+      .desc {
         transform: translateY(0);
       }
-      .icon-play_fill{
+      .icon-play_fill {
         opacity: 1;
       }
     }
-    .desc{
+    .desc {
       position: absolute;
       top: 0;
       left: 0;
-      color:#fff;
+      color: #fff;
       font-size: 12px;
-      background-color: rgba(0,0,0,0.44);
+      background-color: rgba(0, 0, 0, 0.44);
       padding: 4px 8px;
       transform: translateY(-100%);
       transition: transform 0.3s ease;
     }
-    .icon-play_fill{
+    .play-count {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: #fff;
+      font-size: 12px;
+      background-image: linear-gradient(to right, rgba(0,0,0,0) 30%, rgba(0, 0, 0, 0.44) 70%);
+      padding: 2px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      opacity: 1;
+      transition:  opacity ease 0.3s;
+      .icon-earphone{
+        font-size: 11px;
+        margin-right: 4px;
+      }
+    }
+    .icon-play_fill {
       position: absolute;
       font-size: 16px;
       right: 8px;
@@ -54,21 +91,28 @@ export default {
       width: 27px;
       height: 27px;
       border-radius: 50%;
-      background-color: rgba(0,0,0,0.7);
+      background-color: rgba(0, 0, 0, 0.7);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: rgba(255,255,255,0.9);
-      border: 1px solid rgba(255,255,255,0.7);
+      color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       opacity: 0;
       transition: opacity ease 0.3s;
     }
   }
-  .cover{
+  .cover {
     width: 100%;
   }
-  .name{
+  .name {
     font-size: 12px;
+  }
+}
+.__active-hover{
+  &:hover{
+    .play-count{
+      opacity: 0;
+    }
   }
 }
 </style>
