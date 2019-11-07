@@ -2,8 +2,8 @@
   <v-container class="pt-0" fluid>
     <v-row>
       <v-tabs background-color="transparent" centered height='42px' class="tabs" center-active>
-        <v-tab to='/recommend'>个性推荐</v-tab>
-        <v-tab to='/recommend/song-list'>歌单</v-tab>
+        <v-tab to='/main/recommend/index'>个性推荐</v-tab>
+        <v-tab to='/main/recommend/song-list'>歌单</v-tab>
         <v-tab to='/bar'>主播电台</v-tab>
         <v-tab to='/foofoo'>排行榜</v-tab>
         <v-tab to='/barbar'>最新歌手</v-tab>

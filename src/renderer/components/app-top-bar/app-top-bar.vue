@@ -1,9 +1,9 @@
 <template>
     <v-app-bar app clipped-left height="52px" flat class="app-top-bar">
         <v-row class="drag">
-          <div class="logo-wrapper ml-3 no-drag">
+          <router-link class="logo-wrapper ml-3 no-drag" to='/main/recommend/index' tag='div'>
             <img src="./logo.png" class="logo">
-          </div>
+          </router-link>
           <v-col>
             <v-row>
             <div class="route-control mr-4 ml-n4 no-drag">
@@ -13,7 +13,7 @@
             <BaseInput placeholder='搜索音乐、视频、歌词、电台' class="no-drag"/>
             </v-row>
           </v-col>
-          <div class="user-wrapper grey--text no-drag">
+          <div class="user-wrapper grey--text no-drag" @click="login">
             <v-avatar width="26" height="26">
               <img src="http://p2.music.126.net/d5sAsDQf4yqq5bID-rDKXg==/2892815093234572.jpg?param=30y30" alt="">
             </v-avatar>
@@ -59,16 +59,19 @@ export default {
       setWindowMaximized: 'setWindowMaximized'
     }),
     minimizeWindow(){
-      ipcRenderer.send('window:minimize')
+      ipcRenderer.send('mainWindow:minimize')
     },
     maximizeWindow(){
-      ipcRenderer.send('window:maximize')
+      ipcRenderer.send('mainWindow:maximize')
     },
     restoreWindow(){
-      ipcRenderer.send('window:restore')
+      ipcRenderer.send('mainWindow:restore')
     },
     closeWindow(){
-      ipcRenderer.send('window:close')
+      ipcRenderer.send('mainWindow:close')
+    },
+    login(){
+      ipcRenderer.send('loginWindow:show')
     }
   },
   computed: {
@@ -77,10 +80,10 @@ export default {
     })
   },
   beforeCreate(){
-    ipcRenderer.on('window:maximized', () => {
+    ipcRenderer.on('mainWindow:maximized', () => {
       this.setWindowMaximized(true)
     })
-    ipcRenderer.on('window:restored', () => {
+    ipcRenderer.on('mainWindow:restored', () => {
       this.setWindowMaximized(false)
     })
   }
