@@ -3,7 +3,7 @@
     <AppSideBar />
     <AppTopBar />
     <v-content class="app-content">
-      <v-container fluid>
+      <v-container fluid class='pl-0 pr-0'>
         <router-view></router-view>
       </v-container>
     </v-content>

@@ -234,10 +234,10 @@ export default {
         padding-right: 3px;
         border-radius: 18px 0 0 18px;
         &.red{
-          background-color: #cc4a4a;
+          background-color: #cc4a4a !important;
         }
         &.blue{
-          background-color: #4a79cc;
+          background-color: #4a79cc !important;
         }
       }
     }
@@ -261,10 +261,10 @@ export default {
       z-index: 21;
       cursor: pointer;
       &.icon-return {
-        left: 20px;
+        left: 0px;
       }
       &.icon-enter {
-        right: 20px;
+        right: 0px;
       }
       &.mask .slider &.prev,
       &.next &:before {

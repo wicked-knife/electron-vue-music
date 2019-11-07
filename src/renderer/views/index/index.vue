@@ -11,7 +11,9 @@
       </v-tabs>
     </v-row>
     <keep-alive>
-     <router-view></router-view>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
     </keep-alive>
   </v-container>
 </template>

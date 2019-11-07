@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="mt-2 container-1040">
+  <v-container fluid class="container-1040">
     <v-row>
       <swiper :list="banners" />
     </v-row>
