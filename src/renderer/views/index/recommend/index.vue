@@ -1,24 +1,29 @@
 <template>
   <v-container fluid class="container-1040">
     <v-row>
-      <swiper :list="banners" />
+      <base-swiper :list="banners" />
     </v-row>
-    <BaseTitle text='推荐歌单' to="/recommend/song-list"></BaseTitle>
+    <base-title text='推荐歌单' to="/recommend/song-list" />
+    <v-row class="d-flex">
+      <base-song-list-cover v-for="i in 3" :key='i'/>
+    </v-row>
     <button @click="test">alert</button>
   </v-container>
 </template>
 
 <script>
-import swiper from '@/base/swiper/swiper.vue'
+import BaseSwiper from '@/base/swiper/base-swiper.vue'
 import BaseTitle from '@/base/title/base-title.vue'
+import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
 import { getBanner } from '@/API/recommend/banner.js'
 import { getRecommendSongList } from '@/API/recommend/songList.js'
 import baseLayoutMixins from '@/mixins/baseLayout.js'
 export default {
   mixins: [baseLayoutMixins],
   components: {
-    swiper,
-    BaseTitle
+    BaseSwiper,
+    BaseTitle,
+    BaseSongListCover
   },
   data() {
     return {

@@ -1,6 +1,8 @@
 @import '../iconfont/iconfont.css';
 @import './overwrite.css';
-html {   overflow-y: auto; 
+
+// hide global scroll bar
+html {   overflow-y: hidden; 
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
@@ -8,6 +10,25 @@ html {   overflow-y: auto;
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Opera and Firefox */
+}
+
+.beautify-scrollbar{
+  // 滚动条整体部分
+  &::-webkit-scrollbar{
+    background-color: rgba(0,0,0,0);
+    opacity: 0;
+    width: 8px;
+  }
+  //滚动条的轨道（里面装有Thumb）
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  //滚动条里面的小方块，能向上向下移动（或向左向右移动）
+  &::-webkit-scrollbar-thumb {
+    background-color: #2c2e32;
+    width: 8px;
+    border-radius: 8px;
+  } 
 }
 
 .container-1040{
