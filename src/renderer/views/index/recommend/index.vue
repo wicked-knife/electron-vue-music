@@ -15,8 +15,7 @@
 import BaseSwiper from '@/base/swiper/base-swiper.vue'
 import BaseTitle from '@/base/title/base-title.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
-import { getBanner } from '@/API/recommend/banner.js'
-import { getRecommendSongList } from '@/API/recommend/songList.js'
+import { getBanner, getRecommendSongList } from '@/API/recommend.js'
 import baseLayoutMixins from '@/mixins/baseLayout.js'
 export default {
   mixins: [baseLayoutMixins],
