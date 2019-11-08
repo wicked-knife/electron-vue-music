@@ -17,7 +17,7 @@ export const loginByCellphone = (phoneNumber, password) => axios.get('/login/cel
 
 更新 : 此接口已经可以正常使用(2018.07.03)
 
-必选参数 : email: 163 网易邮箱
+必选参数 : email: 邮箱
 password: 密码
 
 接口地址 : /login
@@ -32,7 +32,7 @@ password: 密码
 调用登录接口的速度比调用其他接口慢 , 因为登录过程调用了加密算法
 */
 
-export const loginByEmail = (email, password) => axios.get('/login/cellphone', {params: {email: email, password}})
+export const loginByEmail = (email, password) => axios.get('/login', {params: {email: email, password}})
 
 /*
 刷新登录

@@ -13,7 +13,11 @@
             <BaseInput placeholder='搜索音乐、视频、歌词、电台' class="no-drag"/>
             </v-row>
           </v-col>
-          <div class="user-wrapper grey--text no-drag" @click="login">
+          <div class="login-wrapper grey--text no-drag" v-if="!loginState" @click="login">
+            <i class="iconfont icon-user"></i>
+            <span class="tip ml-2 mr-2">请登录</span>
+          </div>
+          <div class="user-wrapper grey--text no-drag"  v-if="loginState">
             <v-avatar width="26" height="26">
               <img src="http://p2.music.126.net/d5sAsDQf4yqq5bID-rDKXg==/2892815093234572.jpg?param=30y30" alt="">
             </v-avatar>
@@ -41,6 +45,7 @@ import { VAppBar, VAvatar } from 'vuetify/lib'
 import BaseInput from '@/base/input/base-input.vue'
 import {mapGetters, mapMutations} from 'vuex'
 const {ipcRenderer} = require('electron')
+// import {getLoginStatus, refreshLogin} from '@/API/login.js'
 
 export default {
   components: {
@@ -55,6 +60,9 @@ export default {
   methods: {
     ...mapMutations('window', {
       setWindowMaximized: 'setWindowMaximized'
+    }),
+    ...mapMutations('user', {
+      setLoginState: 'setLoginState'
     }),
     minimizeWindow(){
       ipcRenderer.send('mainWindow:minimize')
@@ -75,6 +83,9 @@ export default {
   computed: {
     ...mapGetters('window',{
       windowMaximized: 'maximized'
+    }),
+    ...mapGetters('user', {
+      loginState: 'loginState'
     })
   },
   beforeCreate(){
@@ -83,6 +94,14 @@ export default {
     })
     ipcRenderer.on('mainWindow:restored', () => {
       this.setWindowMaximized(false)
+    })
+    ipcRenderer.on('loginWindow:loginSuccess', () => {
+      //TODO: 登录成功逻辑，登录成功后会服务器会setCookie
+      // 此时要刷新应用
+      // this.setLoginState(true)
+      // this.$alert({text:'登录成功', color: 'success'})
+      // refreshLogin().then(res => console.log(res))
+      // getLoginStatus().then(res => console.log(res))
     })
   }
 } 
@@ -135,12 +154,12 @@ export default {
       }
     }
   }
-  .user-wrapper{
+  .user-wrapper,.login-wrapper{
     display: flex;
     align-items: center;
     cursor: pointer;
     &:hover{
-      .username,i{
+      .username,.tip,.icon-user{
         color: #fff;
       }
     }
@@ -151,8 +170,15 @@ export default {
       overflow: hidden;
       font-size: 13px;
     }
-    i{
+    .tip{
+      width: 40px;
+      font-size: 13px;
+    }
+    .icon-sort-down{
       font-size: 12px;
+    }
+    .icon-user{
+      font-size: 20px;
     }
   }
   .tool-group{

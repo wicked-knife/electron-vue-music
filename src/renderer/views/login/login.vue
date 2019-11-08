@@ -4,13 +4,13 @@
       <i class="iconfont icon-close grey--text" @click="closeWindow"></i>
     </v-app-bar>
     <v-content v-model="valid" class="pt-12 login-content mt-4">
-      <v-form>
+      <v-form ref='form'>
         <v-container fluid class="login-container">
           <v-row no-gutters v-if="loginType === 'phonenumber'" >
-            <v-col cols="3" align-self="center" justify-self="center" class="grey--text">
-              <i class="iconfont icon-phone"></i> +86
+            <v-col cols="2" align-self="center"  class="grey--text text-center">
+              <i class="iconfont icon-phone"></i>
             </v-col>
-            <v-col cols="9">
+            <v-col cols="10">
               <v-text-field
                 v-model="phonenumber"
                 :counter="11"
@@ -21,23 +21,23 @@
             </v-col>
           </v-row>
           <v-row no-gutters v-if="loginType === 'email'" >
-            <v-col cols="3" align-self="center" justify-self="center" class="grey--text">
-              <i class="iconfont icon-mail"></i> @163
+            <v-col cols="2" align-self="center"  class="grey--text text-center">
+              <i class="iconfont icon-mail"></i>
             </v-col>
-            <v-col cols="9">
+            <v-col cols="10">
               <v-text-field v-model="email" label="邮箱" required :rules="emailRules"></v-text-field>
             </v-col>
           </v-row>
           <v-row no-gutters class="mt-4">
-            <v-col cols="3" align-self="center" justify-self="center" class="grey--text">
+            <v-col cols="2" align-self="center"  class="grey--text text-center">
               <i class="iconfont icon-password"></i>
             </v-col>
-            <v-col cols="9">
+            <v-col cols="10">
               <v-text-field v-model="password" label="密码" required :rules="passwordRules" type="password"></v-text-field>
             </v-col>
           </v-row>
 
-          <v-btn large block class="mt-12 mb-12" color="rgb(199,46,46)">登录</v-btn>
+          <v-btn large block class="mt-12 mb-12" color="rgb(199,46,46)" @click="login">登录</v-btn>
 
           <v-row no-gutters align="center" class="mb-6">
             <v-col cols="4.5">
@@ -76,6 +76,8 @@ import {
   VAppBar
 } from 'vuetify/lib'
 import {ipcRenderer} from 'electron'
+import {loginByEmail, loginByCellphone} from '@/API/login.js'
+import {isObject} from '@/common/utils.js'
 export default {
   components: {
     VApp,
@@ -115,6 +117,41 @@ export default {
   methods: {
     closeWindow(){
       ipcRenderer.send('loginWindow:close')
+    },
+    login(){
+      if(this.$refs.form.validate()) {
+        if(this.loginType === 'phonenumber') {
+          return loginByCellphone(this.phonenumber, this.password).then(res => {
+            // TODO: 改下密码，重新测试
+            if(res.code === 502) {
+              return this.$alert({text:'密码错误', color: 'red'})
+            }
+          }).catch(err => {
+            if(isObject(err)) {
+              return this.$alert({text:err.message, color: 'red'})
+            } else {
+              return this.$alert({text: '账号不存在', color: 'red'})
+            }
+          })
+        }
+        if(this.loginType === 'email') {
+          return loginByEmail(this.email, this.password).then(res => {
+            if(res.code === 200) {
+              if(res.bindings.length === 0) {
+                return this.$alert({text: '账号未绑定手机号码，请前往官网绑定。', color: 'red'})
+              }
+              // ipcRenderer.send('loginWindow:loginSuccess')
+              // ipcRenderer.send('loginWindow:close')
+            }
+          }).catch((err) => {
+            if(isObject(err)) {
+              return this.$alert({text:err.message, color: 'red'})
+            } else {
+              return this.$alert({text: '账号不存在', color: 'red'})
+            }
+          })
+        }
+      }
     }
   }
 }
