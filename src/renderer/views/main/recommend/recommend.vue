@@ -20,9 +20,7 @@
 
 <script>
 import { VTabs, VTab } from 'vuetify/lib'
-import baseLayoutMixin from '@/mixins/baseLayout.js'
 export default {
-  mixins: [baseLayoutMixin],
   components: {
     VTabs,
     VTab

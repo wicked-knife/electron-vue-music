@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <AppSideBar />
-    <AppTopBar />
+    <app-side-bar />
+    <app-top-bar />
     <v-content class="app-content">
       <v-container fluid class='pl-0 pr-0 __fix-viewport beautify-scrollbar'>
         <keep-alive>
@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import baseLayoutMixins from '@/mixins/baseLayout.js'
 import AppTopBar from '@/components/app-top-bar/app-top-bar'
 import AppSideBar from '@/components/app-side-bar/app-side-bar'
 import {VApp, VContent, VFooter} from 'vuetify/lib'
@@ -24,7 +23,6 @@ export default {
   data() {
     return {}
   },
-  mixins: [baseLayoutMixins],
   components: {
     VApp,
     AppTopBar,

@@ -18,10 +18,8 @@
 
 
 <script>
-import baseListMixin from '@/mixins/baseList.js'
 import { VNavigationDrawer, VSubheader} from 'vuetify/lib'
 export default {
-  mixins: [baseListMixin],
   components: {
     VNavigationDrawer,
     VSubheader

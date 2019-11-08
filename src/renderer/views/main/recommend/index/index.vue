@@ -3,7 +3,7 @@
     <v-row>
       <base-swiper :list="banners" />
     </v-row>
-    <base-title text='推荐歌单' to="/recommend/song-list" />
+    <base-title text='推荐歌单' to="/main/recommend/song-list" />
     <v-row class="d-flex justify-space-between">
       <base-song-list-cover v-for="songList in recommendSongList" :key="songList.id" width="18.46%"
       :song-list="songList"/>
@@ -16,9 +16,7 @@ import BaseSwiper from '@/base/swiper/base-swiper.vue'
 import BaseTitle from '@/base/title/base-title.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
 import { getBanner, getRecommendSongList } from '@/API/recommend.js'
-import baseLayoutMixins from '@/mixins/baseLayout.js'
 export default {
-  mixins: [baseLayoutMixins],
   components: {
     BaseSwiper,
     BaseTitle,

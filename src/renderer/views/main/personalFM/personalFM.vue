@@ -6,9 +6,7 @@
 </template>
 
 <script>
-import baseLayout from '@/mixins/baseLayout.js'
 export default {
-  mixins: [baseLayout]
 }
 </script>
 

@@ -7,11 +7,20 @@ import Vuetify from 'vuetify/lib'
 import store from '@/store/index'
 import '@/scss/global.scss'
 import registerAlert from '@/base/alert/alert.js'
+import {VContainer, VRow, VCol, VList, VListItemGroup, VListItem} from 'vuetify/lib'
 
 Vue.use(VueRouter)
 Vue.use(Vuetify)
 Vue.use(Vuex)
 Vue.use(registerAlert)
+
+// 常用组件注册为全局组件
+Vue.component('v-container', VContainer)
+Vue.component('v-row', VRow)
+Vue.component('v-col', VCol)
+Vue.component('v-list', VList)
+Vue.component('v-list-item-group', VListItemGroup)
+Vue.component('v-list-item', VListItem)
 
 new Vue({
   el: '#app',

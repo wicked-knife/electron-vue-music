@@ -37,14 +37,12 @@
 </template>
 
 <script>
-import baseLayoutMixin from '@/mixins/baseLayout.js'
 import { VAppBar, VAvatar } from 'vuetify/lib'
 import BaseInput from '@/base/input/base-input.vue'
 import {mapGetters, mapMutations} from 'vuex'
 const {ipcRenderer} = require('electron')
 
 export default {
-  mixins: [baseLayoutMixin],
   components: {
     VAppBar,
     VAvatar,
