@@ -19,12 +19,7 @@
 </template>
 
 <script>
-import { VTabs, VTab } from 'vuetify/lib'
 export default {
-  components: {
-    VTabs,
-    VTab
-  },
   data(){
     return {
 

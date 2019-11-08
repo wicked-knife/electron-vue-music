@@ -1,6 +1,6 @@
 const {BrowserWindow} = require('electron')
 
-function createLoginWindow (){
+function createLoginWindow (parent){
   let loginWindow = new BrowserWindow({
     show:false,
     frame: false,
@@ -9,6 +9,9 @@ function createLoginWindow (){
     width: 350,
     height: 530,
     useContentSize: true,
+    resizable:false,
+    movable:false,
+    parent,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false

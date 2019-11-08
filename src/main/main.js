@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron')
 const createLoginWindow = require('./loginWindow.js')
 require('../../server/app')
 
-function registerMainWindowEvents (mainWindow) {
+function registerMainWindowEvents(mainWindow) {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
@@ -33,8 +33,19 @@ function registerMainWindowEvents (mainWindow) {
   })
 }
 
-function registerLoginWindowEvens () {
-  ipcMain.on('loginWindow:show', createLoginWindow)
+function registerLoginWindowEvens(mainWindow) {
+  let loginWindow = null
+  ipcMain.on('loginWindow:show', () => {
+    loginWindow = createLoginWindow(mainWindow)
+    loginWindow.on('close', () => {
+      loginWindow = null
+    })
+  })
+  ipcMain.on('loginWindow:close', () => {
+    loginWindow.close()
+  })
+
+
 }
 
 app.on('ready', () => {
@@ -55,10 +66,10 @@ app.on('ready', () => {
   //开发环境下打开本地的webpack-dev-server,
   //生产环境下则打开express的静态服务
 
-  process.env.NODE_ENV === 'development' ? mainWindow.loadURL('http://localhost:8080/') : mainWindow.loadURL('http://localhost:3000/')
+  process.env.NODE_ENV === 'development'
+    ? mainWindow.loadURL('http://localhost:8080/')
+    : mainWindow.loadURL('http://localhost:3000/')
 
   registerMainWindowEvents(mainWindow)
-  registerLoginWindowEvens()
-
-
+  registerLoginWindowEvens(mainWindow)
 })

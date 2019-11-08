@@ -7,7 +7,7 @@ import Vuetify from 'vuetify/lib'
 import store from '@/store/index'
 import '@/scss/global.scss'
 import registerAlert from '@/base/alert/alert.js'
-import {VContainer, VRow, VCol, VList, VListItemGroup, VListItem} from 'vuetify/lib'
+import {VContainer, VRow, VCol, VList, VListItemGroup, VListItem, VTabs, VTab, VBtn} from 'vuetify/lib'
 
 Vue.use(VueRouter)
 Vue.use(Vuetify)
@@ -21,6 +21,9 @@ Vue.component('v-col', VCol)
 Vue.component('v-list', VList)
 Vue.component('v-list-item-group', VListItemGroup)
 Vue.component('v-list-item', VListItem)
+Vue.component('v-tabs', VTabs)
+Vue.component('v-tab', VTab)
+Vue.component('v-btn', VBtn)
 
 new Vue({
   el: '#app',
