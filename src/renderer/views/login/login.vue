@@ -77,7 +77,7 @@ import {
 import {ipcRenderer} from 'electron'
 import {loginByEmail, loginByCellphone} from '@/API/login.js'
 import {isObject, emailValidReg, phoneNumberValidReg} from '@/common/utils.js'
-import {persistUserInfo} from '@/store/persist.js'
+import {persistUserInfo} from '@/store/persist/userInfo.js'
 export default {
   components: {
     VApp,

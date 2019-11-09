@@ -1,8 +1,8 @@
-import Store from 'electron-store'
+import store from './base'
 
-const store = new Store()
-const USER_INFO = 'USER_INFO'
+const USER_INFO = 'USER_INFO' // 用户信息
 
+// 存储用户信息（登陆成功时）
 export const persistUserInfo = (userInfo) => {
   store.set(USER_INFO, userInfo)
 }

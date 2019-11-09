@@ -33,7 +33,8 @@
                   <v-col>
                     <span class="subtitle-1 white--text">{{userInfo.nickname}}</span>
                   </v-col>
-                  <v-btn class="mr-3 grey--text" width="66" height="28" depressed outlined><i class="iconfont icon-coin mr-1"></i> 签到</v-btn>
+                  <v-btn class="mr-3 grey--text" width="66" height="28" depressed outlined @click="handleDailySign" :disabled="dailySigned"><i class="iconfont icon-coin mr-1" v-if='!dailySigned'></i>
+                  {{dailySigned ? '已' : ''}}签到</v-btn>
                 </v-row>
                 <v-row>
                   <v-col class="text-center d-flex flex-md-column">
@@ -78,8 +79,9 @@ import BaseInput from '@/base/input/base-input.vue'
 import BaseAttachedDialog from '@/base/attached-dialog/base-attached-dialog.vue'
 import { mapGetters, mapMutations } from 'vuex'
 const { ipcRenderer } = require('electron')
-import { getPersistUserInfo } from '@/store/persist.js'
-import {logout} from '@/API/login.js'
+import { getPersistUserInfo } from '@/store/persist/userInfo.js'
+import { logout } from '@/API/login.js'
+import { dailySign } from '@/API/user.js'
 
 export default {
   components: {
@@ -100,7 +102,8 @@ export default {
     ...mapMutations('user', {
       setLoginState: 'setLoginState',
       setUserInfo: 'setUserInfo',
-      clearUserInfo: 'clearUserInfo'
+      clearUserInfo: 'clearUserInfo',
+      dailySign: 'dailySign'
     }),
     minimizeWindow() {
       ipcRenderer.send('mainWindow:minimize')
@@ -117,15 +120,23 @@ export default {
     login() {
       ipcRenderer.send('loginWindow:show')
     },
-    logout(){
+    logout() {
       logout().then(res => {
-        if(res.code === 200) {
+        if (res.code === 200) {
           this.clearUserInfo()
           this.setLoginState(false)
-          this.$alert({text: '注销成功', color: 'success'})
+          this.$alert({ text: '注销成功', color: 'success' })
         }
       })
-      
+    },
+    handleDailySign(){
+      dailySign().then(() => {
+        this.$alert({text: '签到成功', color: 'success'})
+        this.dailySign()
+      }).catch(() => {
+        this.$alert({text: '重复签到', color: 'red'})
+        this.dailySign()
+      })
     }
   },
   computed: {
@@ -134,7 +145,8 @@ export default {
     }),
     ...mapGetters('user', {
       loginState: 'loginState',
-      userInfo: 'userInfo'
+      userInfo: 'userInfo',
+      dailySigned: 'dailySigned'
     })
   },
   beforeCreate() {
