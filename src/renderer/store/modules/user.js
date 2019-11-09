@@ -17,16 +17,28 @@ const getters = {
 const mutations = {
   setLoginState: (state, loginState) => state.loginState = loginState,
   setUserInfo: (state, userInfo) => state.userInfo = userInfo,
-  // 清除用户状态（注销登录时用，本地存储的用户信息及签到信息也一并清除）
-  clearUserInfo: state => {
-    state.userInfo = null
-    clearPersistUserInfo()
-    clearPersistDailySign()
-  },
   // 用户的上一次签到信息保存在本地，签到时更新新的签到信息到本地
   dailySign: state => {
     state.dailySigned = true
     persistDailySign()
+  },
+  clearDailySign: state => state.dailySigned = false
+}
+
+const actions = {
+  logout: ({commit}) => {
+    // 清除用户状态（注销登录时用，本地存储的用户信息及签到信息也一并清除）
+    commit('setLoginState', false)
+    commit('setUserInfo', null)
+    clearPersistUserInfo()
+    clearPersistDailySign()
+  },
+  login: ({commit}, userInfo) => {
+    commit('setLoginState', true)
+    commit('setUserInfo', userInfo)
+
+    // 登录时将签到信息也一并清除
+    commit('clearDailySign')
   }
 }
 
@@ -34,5 +46,6 @@ export default {
   namespaced: true,
   state,
   getters,
-  mutations
+  mutations,
+  actions
 }

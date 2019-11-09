@@ -13,7 +13,7 @@
             <BaseInput placeholder='搜索音乐、视频、歌词、电台' class="no-drag"/>
             </v-row>
           </v-col>
-          <div class="login-wrapper grey--text no-drag mr-4" v-if="!loginState" @click="login">
+          <div class="login-wrapper grey--text no-drag mr-4" v-if="!loginState" @click="showLoginWindow">
             <i class="iconfont icon-user"></i>
             <span class="tip ml-2 mr-2">请登录</span>
           </div>
@@ -51,7 +51,7 @@
                   </v-col>
                 </v-row>
               </v-container>
-              <v-btn block height="40" color='rgb(45,47,51)' tile @click="logout">
+              <v-btn block height="40" color='rgb(45,47,51)' tile @click="handleLogout">
                 <i class="iconfont icon-logout grey--text text--darken-1 mr-2"></i> <span class="caption">注销登录</span>
               </v-btn>
             </div>
@@ -77,7 +77,7 @@
 import { VAppBar, VAvatar } from 'vuetify/lib'
 import BaseInput from '@/base/input/base-input.vue'
 import BaseAttachedDialog from '@/base/attached-dialog/base-attached-dialog.vue'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 const { ipcRenderer } = require('electron')
 import { getPersistUserInfo } from '@/store/persist/userInfo.js'
 import { logout } from '@/API/login.js'
@@ -100,10 +100,11 @@ export default {
       setWindowMaximized: 'setWindowMaximized'
     }),
     ...mapMutations('user', {
-      setLoginState: 'setLoginState',
-      setUserInfo: 'setUserInfo',
-      clearUserInfo: 'clearUserInfo',
       dailySign: 'dailySign'
+    }),
+    ...mapActions('user', {
+      login: 'login',
+      logout: 'logout'
     }),
     minimizeWindow() {
       ipcRenderer.send('mainWindow:minimize')
@@ -117,14 +118,13 @@ export default {
     closeWindow() {
       ipcRenderer.send('mainWindow:close')
     },
-    login() {
+    showLoginWindow() {
       ipcRenderer.send('loginWindow:show')
     },
-    logout() {
+    handleLogout() {
       logout().then(res => {
         if (res.code === 200) {
-          this.clearUserInfo()
-          this.setLoginState(false)
+          this.logout()
           this.$alert({ text: '注销成功', color: 'success' })
         }
       })
@@ -158,8 +158,7 @@ export default {
     })
     ipcRenderer.on('loginWindow:loginSuccess', () => {
       //登录成功逻辑，登录成功后会服务器会setCookie
-      this.setUserInfo(getPersistUserInfo())
-      this.setLoginState(true)
+      this.login(getPersistUserInfo())
       this.$alert({ text: '登录成功', color: 'success' })
     })
   }
