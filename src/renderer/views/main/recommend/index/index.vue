@@ -17,6 +17,8 @@ import BaseTitle from '@/base/title/base-title.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
 import { getBanner, getRecommendSongList } from '@/API/recommend.js'
 export default {
+  // 声明一个name，为了让keep-alive有条件地进行缓存
+  name: 'recommend-index',
   components: {
     BaseSwiper,
     BaseTitle,
@@ -35,7 +37,8 @@ export default {
     getRecommendSongList(10).then(data => {
       this.recommendSongList = data.result
     })
-  }
+    console.log('index')
+  },
 }
 </script>
 

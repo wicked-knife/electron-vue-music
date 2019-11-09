@@ -10,29 +10,28 @@
         <v-tab to='/foobar'>最新音乐</v-tab>
       </v-tabs>
     </v-row>
-    <keep-alive>
-      <v-container fluid>
+
+    <v-container fluid>
+      <keep-alive :include="['recommend-index']">
         <router-view></router-view>
-      </v-container>
-    </keep-alive>
+      </keep-alive>
+    </v-container>
   </v-container>
 </template>
 
 <script>
 export default {
-  data(){
-    return {
-
-    }
+  data() {
+    return {}
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.tabs{
+.tabs {
   border-bottom: 1px solid #202226;
 }
-.active{
+.active {
   background-color: red;
 }
 </style>

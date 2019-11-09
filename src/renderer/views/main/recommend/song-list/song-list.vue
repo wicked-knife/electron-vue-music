@@ -10,6 +10,9 @@
 
 <script>
 export default {
+  created(){
+    console.log('song-list')
+  }
 }
 </script>
 
