@@ -13,15 +13,15 @@
             <BaseInput placeholder='搜索音乐、视频、歌词、电台' class="no-drag"/>
             </v-row>
           </v-col>
-          <div class="login-wrapper grey--text no-drag" v-if="!loginState" @click="login">
+          <div class="login-wrapper grey--text no-drag mr-4" v-if="!loginState" @click="login">
             <i class="iconfont icon-user"></i>
             <span class="tip ml-2 mr-2">请登录</span>
           </div>
-          <div class="user-wrapper grey--text no-drag"  v-if="loginState">
+          <div class="user-wrapper grey--text no-drag mr-4"  v-if="loginState">
             <v-avatar width="26" height="26">
-              <img src="http://p2.music.126.net/d5sAsDQf4yqq5bID-rDKXg==/2892815093234572.jpg?param=30y30" alt="">
+              <img :src="userInfo.avatarUrl" >
             </v-avatar>
-            <span class="username mr-2">、他们为何离去</span>
+            <span class="username mr-2">{{userInfo.nickname}}</span>
             <i class="iconfont icon-sort-down"></i>
           </div>
           <div class="tool-group grey--text mr-4 no-drag">
@@ -45,7 +45,7 @@ import { VAppBar, VAvatar } from 'vuetify/lib'
 import BaseInput from '@/base/input/base-input.vue'
 import {mapGetters, mapMutations} from 'vuex'
 const {ipcRenderer} = require('electron')
-// import {getLoginStatus, refreshLogin} from '@/API/login.js'
+import {getPersistUserInfo} from '@/store/persist.js'
 
 export default {
   components: {
@@ -62,7 +62,8 @@ export default {
       setWindowMaximized: 'setWindowMaximized'
     }),
     ...mapMutations('user', {
-      setLoginState: 'setLoginState'
+      setLoginState: 'setLoginState',
+      setUserInfo: 'setUserInfo'
     }),
     minimizeWindow(){
       ipcRenderer.send('mainWindow:minimize')
@@ -85,7 +86,8 @@ export default {
       windowMaximized: 'maximized'
     }),
     ...mapGetters('user', {
-      loginState: 'loginState'
+      loginState: 'loginState',
+      userInfo: 'userInfo'
     })
   },
   beforeCreate(){
@@ -96,12 +98,10 @@ export default {
       this.setWindowMaximized(false)
     })
     ipcRenderer.on('loginWindow:loginSuccess', () => {
-      //TODO: 登录成功逻辑，登录成功后会服务器会setCookie
-      // 此时要刷新应用
-      // this.setLoginState(true)
-      // this.$alert({text:'登录成功', color: 'success'})
-      // refreshLogin().then(res => console.log(res))
-      // getLoginStatus().then(res => console.log(res))
+      //登录成功逻辑，登录成功后会服务器会setCookie
+      this.setUserInfo(getPersistUserInfo())
+      this.setLoginState(true)
+      this.$alert({text:'登录成功', color: 'success'})
     })
   }
 } 
@@ -164,7 +164,7 @@ export default {
       }
     }
     .username{
-      width: 80px;
+      max-width: 80px;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;

@@ -77,7 +77,8 @@ import {
 } from 'vuetify/lib'
 import {ipcRenderer} from 'electron'
 import {loginByEmail, loginByCellphone} from '@/API/login.js'
-import {isObject} from '@/common/utils.js'
+import {isObject, emailValidReg, phoneNumberValidReg} from '@/common/utils.js'
+import {persistUserInfo} from '@/store/persist.js'
 export default {
   components: {
     VApp,
@@ -96,17 +97,11 @@ export default {
       password: '',
       phonenumberRules: [
         v => !!v || '请输入电话号码',
-        v =>
-          /^(?:\+?86)?1(?:3\d{3}|5[^4\D]\d{2}|8\d{3}|7(?:[35678]\d{2}|4(?:0\d|1[0-2]|9\d))|9[189]\d{2}|66\d{2})\d{6}$/.test(
-            v
-          ) || '电话号码不合法'
+        v => phoneNumberValidReg.test(v) || '电话号码不合法'
       ],
       emailRules: [
         v => !!v || '请输入邮箱',
-        v =>
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-            v
-          ) || '邮箱不合法'
+        v => emailValidReg.test(v) || '邮箱不合法'
       ],
       passwordRules: [
         v => !!v || '请输入密码',
@@ -122,7 +117,16 @@ export default {
       if(this.$refs.form.validate()) {
         if(this.loginType === 'phonenumber') {
           return loginByCellphone(this.phonenumber, this.password).then(res => {
-            // TODO: 改下密码，重新测试
+            if(res.loginType === 1) {
+              // 登录成功
+              persistUserInfo(res.profile)
+              ipcRenderer.send('loginWindow:loginSuccess')
+              ipcRenderer.send('loginWindow:close')
+              return
+            }
+            if(res.loginType === 0) {
+              return this.$alert({text: '账号未绑定手机号码，请前往官网绑定。', color: 'red'})
+            }
             if(res.code === 502) {
               return this.$alert({text:'密码错误', color: 'red'})
             }
@@ -137,11 +141,16 @@ export default {
         if(this.loginType === 'email') {
           return loginByEmail(this.email, this.password).then(res => {
             if(res.code === 200) {
-              if(res.bindings.length === 0) {
+              if(res.loginType === 1) {
+                // 登录成功
+                persistUserInfo(res.profile)
+                ipcRenderer.send('loginWindow:loginSuccess')
+                ipcRenderer.send('loginWindow:close')
+                return
+              }
+              if(res.loginType === 0) {
                 return this.$alert({text: '账号未绑定手机号码，请前往官网绑定。', color: 'red'})
               }
-              // ipcRenderer.send('loginWindow:loginSuccess')
-              // ipcRenderer.send('loginWindow:close')
             }
           }).catch((err) => {
             if(isObject(err)) {
