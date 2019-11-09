@@ -72,7 +72,6 @@ import {
   VContent,
   VForm,
   VTextField,
-  VDivider,
   VAppBar
 } from 'vuetify/lib'
 import {ipcRenderer} from 'electron'
@@ -85,7 +84,6 @@ export default {
     VContent,
     VForm,
     VTextField,
-    VDivider,
     VAppBar
   },
   data() {

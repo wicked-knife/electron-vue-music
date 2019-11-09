@@ -1,5 +1,6 @@
 @import '../iconfont/iconfont.css';
 @import './overwrite.css';
+@import './variable.scss';
 
 // hide global scroll bar
 html {   overflow-y: hidden; 
@@ -33,4 +34,14 @@ html {   overflow-y: hidden;
 
 .container-1040{
   max-width: 1040px;
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.border-t{
+  border-top: 1px solid $border-color;
+}
+.border-b{
+  border-bottom: 1px solid $border-color;
 }

@@ -8,3 +8,5 @@ export const persistUserInfo = (userInfo) => {
 }
 
 export const getPersistUserInfo = () => store.get(USER_INFO)
+
+export const clearPersistUserInfo = () => store.clear(USER_INFO)

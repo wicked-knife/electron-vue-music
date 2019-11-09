@@ -17,12 +17,44 @@
             <i class="iconfont icon-user"></i>
             <span class="tip ml-2 mr-2">请登录</span>
           </div>
-          <div class="user-wrapper grey--text no-drag mr-4"  v-if="loginState">
-            <v-avatar width="26" height="26">
+          <div class="user-wrapper grey--text no-drag mr-4"  v-if="loginState" @click="userInfoVisiable = !userInfoVisiable">
+            <v-avatar width="26" height="26" class="avatar">
               <img :src="userInfo.avatarUrl" >
             </v-avatar>
             <span class="username mr-2">{{userInfo.nickname}}</span>
             <i class="iconfont icon-sort-down"></i>
+            <base-attached-dialog position='bottom' :value='userInfoVisiable'>
+            <div class="info-wrapper">
+              <v-container fluid class="mt-2 border-b">
+                <v-row align="center">
+                  <v-avatar width="42" height="42" class="ml-3 mr-3">
+                    <img :src="userInfo.avatarUrl" >
+                  </v-avatar>
+                  <v-col>
+                    <span class="subtitle-1 white--text">{{userInfo.nickname}}</span>
+                  </v-col>
+                  <v-btn class="mr-3 grey--text" width="66" height="28" depressed outlined><i class="iconfont icon-coin mr-1"></i> 签到</v-btn>
+                </v-row>
+                <v-row>
+                  <v-col class="text-center d-flex flex-md-column">
+                    <span class="white--text font-weight-bold">666</span>
+                    <span class="caption">动态</span>
+                  </v-col>
+                  <v-col class="text-center d-flex flex-md-column">
+                    <span class="white--text font-weight-bold">777</span>
+                    <span class="caption">关注</span>
+                  </v-col>
+                  <v-col class="text-center d-flex flex-md-column">
+                    <span class="white--text font-weight-bold">888</span>
+                    <span class="caption">粉丝</span>
+                  </v-col>
+                </v-row>
+              </v-container>
+              <v-btn block height="40" color='rgb(45,47,51)' tile @click="logout">
+                <i class="iconfont icon-logout grey--text text--darken-1 mr-2"></i> <span class="caption">注销登录</span>
+              </v-btn>
+            </div>
+            </base-attached-dialog>
           </div>
           <div class="tool-group grey--text mr-4 no-drag">
             <i class="iconfont icon-skin"></i>
@@ -43,18 +75,22 @@
 <script>
 import { VAppBar, VAvatar } from 'vuetify/lib'
 import BaseInput from '@/base/input/base-input.vue'
-import {mapGetters, mapMutations} from 'vuex'
-const {ipcRenderer} = require('electron')
-import {getPersistUserInfo} from '@/store/persist.js'
+import BaseAttachedDialog from '@/base/attached-dialog/base-attached-dialog.vue'
+import { mapGetters, mapMutations } from 'vuex'
+const { ipcRenderer } = require('electron')
+import { getPersistUserInfo } from '@/store/persist.js'
+import {logout} from '@/API/login.js'
 
 export default {
   components: {
     VAppBar,
     VAvatar,
-    BaseInput
+    BaseInput,
+    BaseAttachedDialog
   },
-  data(){
+  data() {
     return {
+      userInfoVisiable: false
     }
   },
   methods: {
@@ -63,26 +99,37 @@ export default {
     }),
     ...mapMutations('user', {
       setLoginState: 'setLoginState',
-      setUserInfo: 'setUserInfo'
+      setUserInfo: 'setUserInfo',
+      clearUserInfo: 'clearUserInfo'
     }),
-    minimizeWindow(){
+    minimizeWindow() {
       ipcRenderer.send('mainWindow:minimize')
     },
-    maximizeWindow(){
+    maximizeWindow() {
       ipcRenderer.send('mainWindow:maximize')
     },
-    restoreWindow(){
+    restoreWindow() {
       ipcRenderer.send('mainWindow:restore')
     },
-    closeWindow(){
+    closeWindow() {
       ipcRenderer.send('mainWindow:close')
     },
-    login(){
+    login() {
       ipcRenderer.send('loginWindow:show')
+    },
+    logout(){
+      logout().then(res => {
+        if(res.code === 200) {
+          this.clearUserInfo()
+          this.setLoginState(false)
+          this.$alert({text: '注销成功', color: 'success'})
+        }
+      })
+      
     }
   },
   computed: {
-    ...mapGetters('window',{
+    ...mapGetters('window', {
       windowMaximized: 'maximized'
     }),
     ...mapGetters('user', {
@@ -90,7 +137,7 @@ export default {
       userInfo: 'userInfo'
     })
   },
-  beforeCreate(){
+  beforeCreate() {
     ipcRenderer.on('mainWindow:maximized', () => {
       this.setWindowMaximized(true)
     })
@@ -101,34 +148,35 @@ export default {
       //登录成功逻辑，登录成功后会服务器会setCookie
       this.setUserInfo(getPersistUserInfo())
       this.setLoginState(true)
-      this.$alert({text:'登录成功', color: 'success'})
+      this.$alert({ text: '登录成功', color: 'success' })
     })
   }
-} 
+}
 </script>
 
 <style lang="scss" scoped>
-.app-top-bar{
+.app-top-bar {
   background-color: #222225;
-  &::after{
-    content: '';
+  &::after {
+    content: "";
     display: block;
     position: absolute;
     width: 100%;
     height: 2.5px;
     bottom: 0px;
     left: 0px;
-    background-image: linear-gradient(to right, #670404 , $theme-color, #670404);
+    background-image: linear-gradient(to right, #670404, $theme-color, #670404);
+    z-index: -1;
   }
-  .logo-wrapper{
+  .logo-wrapper {
     width: 200px;
     display: flex;
     align-items: center;
-    .logo{
+    .logo {
       cursor: pointer;
     }
   }
-  .route-control{
+  .route-control {
     position: relative;
     border: 1px solid #181818;
     display: flex;
@@ -138,8 +186,8 @@ export default {
     align-items: center;
     justify-content: space-around;
     box-sizing: border-box;
-    &::before{
-      content: '';
+    &::before {
+      content: "";
       position: absolute;
       height: 100%;
       top: 0;
@@ -147,70 +195,80 @@ export default {
       width: 1px;
       background-color: #181818;
     }
-    i{
+    i {
       cursor: pointer;
-      &:hover{
+      &:hover {
         color: #fff !important;
       }
     }
   }
-  .user-wrapper,.login-wrapper{
+  .user-wrapper,
+  .login-wrapper {
     display: flex;
     align-items: center;
-    cursor: pointer;
-    &:hover{
-      .username,.tip,.icon-user{
-        color: #fff;
-      }
-    }
-    .username{
+    .username {
       max-width: 80px;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
       font-size: 13px;
+      cursor: pointer;
     }
-    .tip{
+    .avatar {
+      cursor: pointer;
+    }
+    .tip {
       width: 40px;
       font-size: 13px;
+      cursor: pointer;
+      &:hover {
+        color: #fff;
+      }
     }
-    .icon-sort-down{
+    .icon-sort-down {
       font-size: 12px;
     }
-    .icon-user{
+    .icon-user {
       font-size: 20px;
+      cursor: pointer;
+      &:hover {
+        color: #fff;
+      }
+    }
+    .info-wrapper {
+      min-width: 275px;
     }
   }
-  .tool-group{
+  .tool-group {
     display: flex;
     align-items: center;
     border-right: 1px solid $bg-dark;
-    i{
+    i {
       font-size: 20px;
       cursor: pointer;
       margin: 0 10px;
-      &:hover{
+      &:hover {
         color: #fff;
       }
     }
   }
-  .window-btn-group{
+  .window-btn-group {
     display: flex;
     align-items: center;
-    i{
+    i {
       font-size: 20px;
       cursor: pointer;
       margin: 0 3px;
-      &:hover{
+      &:hover {
         color: #fff;
       }
     }
   }
 }
-.drag{
-  -webkit-app-region: drag
+.drag {
+  -webkit-app-region: drag;
 }
-.no-drag{
+.no-drag {
   -webkit-app-region: no-drag;
 }
 </style>

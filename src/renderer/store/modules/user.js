@@ -1,9 +1,10 @@
-import {getPersistUserInfo} from '../persist.js'
+import {getPersistUserInfo, clearPersistUserInfo} from '../persist.js'
 
 
 const state = {
   loginState: !!getPersistUserInfo(),
-  userInfo: getPersistUserInfo()
+  userInfo: getPersistUserInfo(),
+  dailySigned: false
 }
 
 const getters = {
@@ -13,7 +14,11 @@ const getters = {
 
 const mutations = {
   setLoginState: (state, loginState) => state.loginState = loginState,
-  setUserInfo: (state, userInfo) => state.userInfo = userInfo
+  setUserInfo: (state, userInfo) => state.userInfo = userInfo,
+  clearUserInfo: state => {
+    state.userInfo = null
+    clearPersistUserInfo()
+  }
 }
 
 export default {
