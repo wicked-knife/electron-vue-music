@@ -1,9 +1,13 @@
 import {getPersistUserInfo, clearPersistUserInfo} from '../persist/userInfo.js'
 import {getPersistDailySign, persistDailySign, clearPersistDailySign} from '../persist/dailySign.js'
+import Cookies from 'js-cookie'
 
+function checkLoginState(){
+  return Cookies.get('MUSIC_U') && Cookies.get('__csrf')
+}
 
 const state = {
-  loginState: !!getPersistUserInfo(), // 用户当前登录状态
+  loginState: checkLoginState(), // 用户当前登录状态
   userInfo: getPersistUserInfo(), // 用户信息
   dailySigned: getPersistDailySign() ? getPersistDailySign() === (new Date()).toDateString() ? true : false : false
 }
