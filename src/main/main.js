@@ -36,6 +36,7 @@ function registerMainWindowEvents(mainWindow) {
 function registerLoginWindowEvens(mainWindow) {
   let loginWindow = null
   ipcMain.on('loginWindow:show', () => {
+    if(loginWindow) return
     loginWindow = createLoginWindow(mainWindow)
     loginWindow.on('close', () => {
       loginWindow = null
