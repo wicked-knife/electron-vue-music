@@ -119,7 +119,6 @@ export default {
               // 登录成功
               persistUserInfo(res.profile)
               ipcRenderer.send('loginWindow:loginSuccess')
-              ipcRenderer.send('loginWindow:close')
               return
             }
             if(res.loginType === 0) {
@@ -143,7 +142,6 @@ export default {
                 // 登录成功
                 persistUserInfo(res.profile)
                 ipcRenderer.send('loginWindow:loginSuccess')
-                ipcRenderer.send('loginWindow:close')
                 return
               }
               if(res.loginType === 0) {

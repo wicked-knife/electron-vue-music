@@ -1,13 +1,10 @@
 import {getPersistUserInfo, clearPersistUserInfo} from '../persist/userInfo.js'
 import {getPersistDailySign, persistDailySign, clearPersistDailySign} from '../persist/dailySign.js'
-import Cookies from 'js-cookie'
+const { cookies } = require('electron').remote.session.defaultSession
 
-function checkLoginState(){
-  return Cookies.get('MUSIC_U') && Cookies.get('__csrf')
-}
 
 const state = {
-  loginState: checkLoginState(), // 用户当前登录状态
+  loginState: false, // 用户当前登录状态
   userInfo: getPersistUserInfo(), // 用户信息
   dailySigned: getPersistDailySign() ? getPersistDailySign() === (new Date()).toDateString() ? true : false : false
 }
@@ -43,6 +40,19 @@ const actions = {
 
     // 登录时将签到信息也一并清除
     commit('clearDailySign')
+  },
+  // 检查登录状态，通过检查cookie来判断登录状态
+  // 每次应用启动时都要检查
+  checkLoginState: () => {
+    return new Promise(resolve => {
+      Promise.all([cookies.get({name: 'MUSIC_U'}), cookies.get({name: '__csrf'})]).then(cookieList => {
+        return cookieList.every(l => l.length !== 0)
+      }).then(loginState => {
+        // commit('setLoginState', loginState)
+        resolve(loginState)
+      })
+    })
+
   }
 }
 

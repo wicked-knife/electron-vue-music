@@ -43,13 +43,11 @@ function registerLoginWindowEvens(mainWindow) {
     })
   })
 
-  ipcMain.on('loginWindow:close', () => {
-    loginWindow.close()
-  })
-
   ipcMain.on('loginWindow:loginSuccess', () => {
     // 将消息告诉主窗口，所以用主窗口发送事件
+    // 登录成功后关闭登录窗口
     mainWindow.send('loginWindow:loginSuccess')
+    loginWindow.close()
   })
 
 
