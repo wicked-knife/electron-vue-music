@@ -1,12 +1,12 @@
 <template>
   <div class="wrapper" :style="{width}">
-    <div :class="['img-wrapper', songList.alg === 'featured' ? '__active-hover' : '']">
+    <div :class="['img-wrapper', songList.copywriter.length > 4 ? '__active-hover' : '']">
       <img
         :src="songList.picUrl"
         class="cover"
         draggable="false"
       />
-      <div class="desc" v-if="songList.alg === 'featured'">{{songList.copywriter}}</div>
+      <div class="desc" v-if="songList.copywriter.length > 4">{{songList.copywriter}}</div>
       <div class="play-count">
         <i class="iconfont icon-earphone"></i> {{_playCount}}
       </div>
@@ -30,7 +30,8 @@ export default {
   },
   computed:{
     _playCount(){
-      return this.songList.playCount < 100000 ? this.songList.playCount : Math.floor(this.songList.playCount / 10000) + '万'
+      let _count = this.songList.playCount || this.songList.playcount
+      return _count < 100000 ? _count : Math.floor(_count / 10000) + '万'
     }
   }
 }

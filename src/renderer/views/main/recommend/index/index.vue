@@ -15,7 +15,8 @@
 import BaseSwiper from '@/base/swiper/base-swiper.vue'
 import BaseTitle from '@/base/title/base-title.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
-import { getBanner, getRecommendSongList } from '@/API/recommend.js'
+import { getBanner, getRecommendSongListWithLogin, getRecommendSongListWithoutLogin } from '@/API/recommend.js'
+import {mapGetters} from 'vuex'
 export default {
   // 声明一个name，为了让keep-alive有条件地进行缓存
   name: 'recommend-index',
@@ -23,6 +24,11 @@ export default {
     BaseSwiper,
     BaseTitle,
     BaseSongListCover
+  },
+  computed:{
+    ...mapGetters('user', {
+      loginState: 'loginState'
+    })
   },
   data() {
     return {
@@ -34,10 +40,13 @@ export default {
     getBanner().then(data => {
       this.banners = data.banners.map(i => ({ ...i, src: i.imageUrl }))
     })
-    getRecommendSongList(10).then(data => {
-      this.recommendSongList = data.result
-    })
-    console.log('index')
+    this.loginState ? 
+      getRecommendSongListWithLogin().then(data => {
+        this.recommendSongList = data.recommend
+      }) :
+      getRecommendSongListWithoutLogin(10).then(data => {
+        this.recommendSongList = data.result
+      })
   },
 }
 </script>

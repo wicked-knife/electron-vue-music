@@ -32,4 +32,7 @@ export const getBanner = () => axios.get('/banner?type=0')
 
 调用例子 : /personalized?limit=1
 */
-export const getRecommendSongList = (limit = 30) => axios.get('personalized', {params: {limit: limit}})
+export const getRecommendSongListWithoutLogin = (limit = 30) => axios.get('/personalized', {params: {limit: limit}})
+
+
+export const getRecommendSongListWithLogin = () => axios.get('/recommend/resource')

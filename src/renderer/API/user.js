@@ -11,4 +11,4 @@ import axios from './base.js'
 **接口地址 :** `/daily_signin`
 */
 
-export const dailySign = () => axios.get('daily_signin', {params: {type: 1}})
+export const dailySign = () => axios.get('/daily_signin', {params: {type: 1}})

@@ -39,15 +39,15 @@
                 </v-row>
                 <v-row>
                   <v-col class="text-center d-flex flex-md-column">
-                    <span class="white--text font-weight-bold">666</span>
+                    <span class="white--text font-weight-bold">{{userInfo.eventCount}}</span>
                     <span class="caption">动态</span>
                   </v-col>
                   <v-col class="text-center d-flex flex-md-column">
-                    <span class="white--text font-weight-bold">777</span>
+                    <span class="white--text font-weight-bold">{{userInfo.follows}}</span>
                     <span class="caption">关注</span>
                   </v-col>
                   <v-col class="text-center d-flex flex-md-column">
-                    <span class="white--text font-weight-bold">888</span>
+                    <span class="white--text font-weight-bold">{{userInfo.followeds}}</span>
                     <span class="caption">粉丝</span>
                   </v-col>
                 </v-row>
