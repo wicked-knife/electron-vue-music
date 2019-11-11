@@ -46,7 +46,6 @@ export default {
   .img-wrapper {
     position: relative;
     cursor: pointer;
-    margin-block: 8px;
     &:hover {
       .desc {
         transform: translateY(0);
@@ -107,7 +106,7 @@ export default {
     width: 100%;
   }
   .name {
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 .__active-hover{
