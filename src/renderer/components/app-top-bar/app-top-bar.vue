@@ -31,9 +31,10 @@
                     <img :src="userInfo.avatarUrl" >
                   </v-avatar>
                   <v-col>
-                    <span class="subtitle-1 white--text">{{userInfo.nickname}}</span>
+                    <span class="subtitle-2 grey--text text--lighten-2">{{userInfo.nickname}}</span>
                   </v-col>
-                  <v-btn class="mr-3 grey--text" width="66" height="28" depressed outlined @click="handleDailySign" :disabled="dailySigned"><i class="iconfont icon-coin mr-1" v-if='!dailySigned'></i>
+                  <v-btn class="mr-3 grey--text caption" width="60" height="22" depressed outlined @click="handleDailySign" :disabled="dailySigned">
+                    <i class="iconfont icon-coin mr-1" v-if='!dailySigned'></i>
                   {{dailySigned ? '已' : ''}}签到</v-btn>
                 </v-row>
                 <v-row>
