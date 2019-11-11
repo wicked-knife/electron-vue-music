@@ -53,6 +53,14 @@ function registerLoginWindowEvens(mainWindow) {
 
 }
 
+function installDevExtension(){
+  const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer')
+
+  installExtension(VUEJS_DEVTOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log('An error occurred: ', err))
+}
+
 app.on('ready', () => {
   const mainWindow = new BrowserWindow({
     show: false,
@@ -77,4 +85,6 @@ app.on('ready', () => {
 
   registerMainWindowEvents(mainWindow)
   registerLoginWindowEvens(mainWindow)
+
+  process.env.NODE_ENV === 'development' && installDevExtension()
 })
