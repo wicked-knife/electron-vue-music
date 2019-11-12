@@ -23,6 +23,11 @@
         :song-list="songList"
       />
     </v-row>
+    <base-title text="独家放送"  to='/main/personalizedContent'/>
+    <v-row class="d-flex justify-space-between" v-if="personalizedContent.length">
+      <base-personalized-content-cover v-for="content in personalizedContent" :key="content.videoId"
+      width="32.21%" :personalized-content="content"/>
+    </v-row>
   </v-container>
 </template>
 
@@ -30,11 +35,14 @@
 import BaseSwiper from '@/base/swiper/base-swiper.vue'
 import BaseTitle from '@/base/title/base-title.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
+import BasePersonalizedContentCover from '@/base/personalized-content-cover/base-personalized-content-cover.vue'
 import dayjs from '@/common/day.js'
+
 import {
   getBanner,
   getRecommendSongListWithLogin,
-  getRecommendSongListWithoutLogin
+  getRecommendSongListWithoutLogin,
+  getPersonalizedContent
 } from '@/API/recommend.js'
 import { mapGetters } from 'vuex'
 export default {
@@ -43,7 +51,8 @@ export default {
   components: {
     BaseSwiper,
     BaseTitle,
-    BaseSongListCover
+    BaseSongListCover,
+    BasePersonalizedContentCover
   },
   computed: {
     ...mapGetters('user', {
@@ -53,13 +62,13 @@ export default {
   data() {
     return {
       banners: [],
-      recommendSongList: [],
+      recommendSongList: [], //推荐歌单
       day: dayjs().format('dddd'),
-      date: dayjs().format('D')
+      date: dayjs().format('D'),
+      personalizedContent: [] // 独家放送
     }
   },
   created() {
-    console.log()
     getBanner().then(data => {
       this.banners = data.banners.map(i => ({ ...i, src: i.imageUrl }))
     })
@@ -70,6 +79,7 @@ export default {
       : getRecommendSongListWithoutLogin(10).then(data => {
         this.recommendSongList = data.result.slice(0, 9)
       })
+    getPersonalizedContent().then(data => this.personalizedContent = data.result)
   }
 }
 </script>

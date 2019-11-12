@@ -35,4 +35,26 @@ export const getBanner = () => axios.get('/banner?type=0')
 export const getRecommendSongListWithoutLogin = (limit = 30) => axios.get('/personalized', {params: {limit: limit}})
 
 
+/*
+### 获取每日推荐歌单
+
+说明 : 调用此接口 , 可获得每日推荐歌单 ( 需要登录 )
+
+**接口地址 :** `/recommend/resource`
+
+**调用例子 :** `/recommend/resource`
+*/
+
+
 export const getRecommendSongListWithLogin = () => axios.get('/recommend/resource')
+
+
+/*
+### 独家放送
+
+说明 : 调用此接口 , 可获取独家放送
+
+**接口地址 :** `/personalized/privatecontent`
+*/
+
+export const getPersonalizedContent = () => axios.get('/personalized/privatecontent')
