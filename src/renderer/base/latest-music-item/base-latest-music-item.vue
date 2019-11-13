@@ -1,14 +1,15 @@
 <template>
-  <div class="wrapper">
-    <span class="index caption grey--text text--darken-1 mr-5">{{_index}}</span>
+  <div :class="['wrapper', stripe ? 'stripe' : '']">
+    <span class="index subtitle-3 grey--text text--darken-1 mr-5">{{_index}}</span>
     <div class="cover-wrapper mr-3">
       <img :src="music.album.picUrl" class="cover" />
       <i class="iconfont icon-play_fill"></i>
     </div>
     <div class="name-wrapper">
-      <span class="subtitle-2">{{music.name}}</span>
-      <div class="caption grey--text text--darken-1">
-        {{music.artists[0].name}}
+      <span class="subtitle-2 name">{{music.name}}</span>
+      <div class="d-flex align-center">
+        <span class="caption artist">{{music.artists[0].name}}</span>
+        <i class="iconfont icon-mv ml-1" v-if="music.mvid"></i>
       </div>
     </div>
   </div>
@@ -29,6 +30,10 @@ export default {
     index: {
       type: Number,
       required: true
+    },
+    stripe:{
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -43,7 +48,13 @@ export default {
 .wrapper {
   display: flex;
   align-items: center;
-  padding: 10px 26px 10px 12px;
+  padding: 10px 10px 10px 12px;
+  &:hover{
+    background-color: rgb(35,37,41) !important;
+  }
+  &.stripe{
+    background-color: rgb(26,28,32);
+  }
 }
 .cover-wrapper {
   position: relative;
@@ -78,5 +89,24 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  .name{
+    width: 26.20vw;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .artist{
+    color: #757575;
+    &:hover{
+      color: #fff;
+    }
+  }
+  .icon-mv{
+    color: $theme-color;
+    cursor: pointer;
+    &:hover{
+      filter: brightness(1.3);
+    }
+  }
 }
 </style>

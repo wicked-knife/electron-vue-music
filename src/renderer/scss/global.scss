@@ -39,11 +39,18 @@ html {   overflow-y: hidden;
   cursor: pointer;
 }
 
+.subtitle-3{
+  font-size: 12px;
+}
+
 .border-t{
   border-top: 1px solid $border-color;
 }
 .border-b{
   border-bottom: 1px solid $border-color;
+}
+.border-r{
+  border-right: 1px solid $border-color;
 }
 .border-a{
   border: 1px solid $border-color;

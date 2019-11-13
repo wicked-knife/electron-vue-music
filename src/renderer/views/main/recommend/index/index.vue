@@ -30,11 +30,11 @@
     </v-row>
     <base-title text="最新音乐"  to='/main/recommend/latest-music'/>
     <v-row class="border-a">
-      <v-col class="pa-0">
-        <BaseLatestMusicItem v-for="(music, index) in latestMusic.slice(0, 5)" :key="music.id" :music='music' :index='index + 1'></BaseLatestMusicItem>
+      <v-col class="pa-0 border-r" cols="6">
+        <BaseLatestMusicItem v-for="(music, index) in latestMusic.slice(0, 5)" :key="music.id" :music='music' :index='index + 1' :stripe="index % 2 === 1"/>
       </v-col>
-      <v-col class="pa-0">
-        <BaseLatestMusicItem v-for="(music, index) in latestMusic.slice(5, 10)" :key="music.id" :music='music' :index='index + 6'></BaseLatestMusicItem>
+      <v-col class="pa-0" cols="6">
+        <BaseLatestMusicItem v-for="(music, index) in latestMusic.slice(5, 10)" :key="music.id" :music='music' :index='index + 6' :stripe="index % 2 === 1"/>
       </v-col>
     </v-row>
   </v-container>
@@ -95,6 +95,7 @@ export default {
     getPersonalizedContent().then(data => this.personalizedContent = data.result)
     getLatestMusic().then(data => {
       this.latestMusic = data.data.filter(m => m.album.type === 'EP/Single').slice(0, 10)
+      console.log(this.latestMusic)
     })
   }
 }
