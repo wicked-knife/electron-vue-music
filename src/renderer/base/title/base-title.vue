@@ -1,6 +1,6 @@
 <template>
   <v-row class="d-flex justify-space-between align-center __title pb-1">
-    <span class="subtitle-1">推荐歌单</span>
+    <span class="subtitle-1">{{text}}</span>
       <router-link :to='to' tag='span' class="caption grey--text d-flex align-center" v-if="to">
         更多<i class="iconfont icon-enter"></i>
       </router-link>

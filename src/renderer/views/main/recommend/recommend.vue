@@ -7,7 +7,7 @@
         <v-tab to='/bar'>主播电台</v-tab>
         <v-tab to='/foofoo'>排行榜</v-tab>
         <v-tab to='/barbar'>最新歌手</v-tab>
-        <v-tab to='/foobar'>最新音乐</v-tab>
+        <v-tab to='/main/recommend/latest-music'>最新音乐</v-tab>
       </v-tabs>
     </v-row>
 

@@ -11,6 +11,10 @@ export default [
       {
         path: 'song-list',
         component: () => import(/* webpackChunkName: 'recommend~song-list' */ '@/views/main/recommend/song-list/song-list.vue')
+      },
+      {
+        path: 'latest-music',
+        component: () => import(/* webpackChunkName: 'recommend~latest-music' */ '@/views/main/recommend/latest-music/latest-music.vue')
       }
     ]
   }

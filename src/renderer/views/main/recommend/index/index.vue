@@ -24,9 +24,18 @@
       />
     </v-row>
     <base-title text="独家放送"  to='/main/personalizedContent'/>
-    <v-row class="d-flex justify-space-between" v-if="personalizedContent.length">
+    <v-row class="d-flex justify-space-between mb-9" v-if="personalizedContent.length">
       <base-personalized-content-cover v-for="content in personalizedContent" :key="content.videoId"
       width="32.21%" :personalized-content="content"/>
+    </v-row>
+    <base-title text="最新音乐"  to='/main/recommend/latest-music'/>
+    <v-row class="border-a">
+      <v-col class="pa-0">
+        <BaseLatestMusicItem v-for="(music, index) in latestMusic.slice(0, 5)" :key="music.id" :music='music' :index='index + 1'></BaseLatestMusicItem>
+      </v-col>
+      <v-col class="pa-0">
+        <BaseLatestMusicItem v-for="(music, index) in latestMusic.slice(5, 10)" :key="music.id" :music='music' :index='index + 6'></BaseLatestMusicItem>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -36,13 +45,15 @@ import BaseSwiper from '@/base/swiper/base-swiper.vue'
 import BaseTitle from '@/base/title/base-title.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
 import BasePersonalizedContentCover from '@/base/personalized-content-cover/base-personalized-content-cover.vue'
+import BaseLatestMusicItem from '@/base/latest-music-item/base-latest-music-item.vue'
 import dayjs from '@/common/day.js'
 
 import {
   getBanner,
   getRecommendSongListWithLogin,
   getRecommendSongListWithoutLogin,
-  getPersonalizedContent
+  getPersonalizedContent,
+  getLatestMusic
 } from '@/API/recommend.js'
 import { mapGetters } from 'vuex'
 export default {
@@ -52,7 +63,8 @@ export default {
     BaseSwiper,
     BaseTitle,
     BaseSongListCover,
-    BasePersonalizedContentCover
+    BasePersonalizedContentCover,
+    BaseLatestMusicItem
   },
   computed: {
     ...mapGetters('user', {
@@ -61,11 +73,12 @@ export default {
   },
   data() {
     return {
-      banners: [],
-      recommendSongList: [], //推荐歌单
       day: dayjs().format('dddd'),
       date: dayjs().format('D'),
-      personalizedContent: [] // 独家放送
+      banners: [],
+      recommendSongList: [], //推荐歌单
+      personalizedContent: [], // 独家放送
+      latestMusic: [], // 最新音乐
     }
   },
   created() {
@@ -80,6 +93,9 @@ export default {
         this.recommendSongList = data.result.slice(0, 9)
       })
     getPersonalizedContent().then(data => this.personalizedContent = data.result)
+    getLatestMusic().then(data => {
+      this.latestMusic = data.data.filter(m => m.album.type === 'EP/Single').slice(0, 10)
+    })
   }
 }
 </script>
