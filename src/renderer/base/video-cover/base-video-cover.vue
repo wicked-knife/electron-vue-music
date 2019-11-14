@@ -1,18 +1,18 @@
 <template>
   <div class="wrapper" :style="{width}">
-    <div :class="['img-wrapper', songList.copywriter.length > 4 ? '__active-hover' : '']">
+    <div :class="['img-wrapper', video.copywriter.length > 4 ? '__active-hover' : '']">
       <img
-        :src="songList.picUrl"
+        :src="video.picUrl"
         class="cover"
         draggable="false"
       />
-      <div class="desc" v-if="songList.copywriter.length > 4">{{songList.copywriter}}</div>
+      <div class="desc" v-if="video.copywriter.length > 4">{{video.copywriter}}</div>
       <div class="play-count">
-        <i class="iconfont icon-earphone"></i> {{_playCount}}
+        <i class="iconfont icon-video"></i> {{_playCount}}
       </div>
-      <i class="iconfont icon-play_fill"></i>
     </div>
-    <div class="name">{{songList.name}}</div>
+    <div class="name">{{video.name}}</div>
+    <div class="author caption grey--text">{{video.artistName}}</div>
   </div>
 </template>
 
@@ -23,14 +23,14 @@ export default {
       type: String,
       default: '150px'
     },
-    songList: {
+    video: {
       type: Object,
       required: true
     }
   },
   computed:{
     _playCount(){
-      let _count = this.songList.playCount || this.songList.playcount
+      let _count = this.video.playCount || this.video.playcount
       return _count < 100000 ? _count : Math.floor(_count / 10000) + '万'
     }
   }
@@ -50,9 +50,6 @@ export default {
       .desc {
         transform: translateY(0);
       }
-      .icon-play_fill {
-        opacity: 1;
-      }
     }
     .desc {
       position: absolute;
@@ -64,42 +61,26 @@ export default {
       padding: 4px 8px;
       transform: translateY(-100%);
       transition: transform 0.3s ease;
+      width: 100%;
     }
     .play-count {
-      width: 70%;
+      width: 50%;
       position: absolute;
       top: 0;
       right: 0;
       color: #fff;
       font-size: 12px;
       background-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0, 0, 0, 0.44) 100%);
-      padding: 2px 8px;
+      padding: 2px 4px;
       display: flex;
       align-items: center;
       justify-content: flex-end;
       opacity: 1;
       transition:  opacity ease 0.3s;
-      .icon-earphone{
-        font-size: 11px;
+      .icon-video{
+        font-size: 14px;
         margin-right: 4px;
       }
-    }
-    .icon-play_fill {
-      position: absolute;
-      font-size: 16px;
-      right: 8px;
-      bottom: 14px;
-      width: 27px;
-      height: 27px;
-      border-radius: 50%;
-      background-color: rgba(0, 0, 0, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      opacity: 0;
-      transition: opacity ease 0.3s;
     }
   }
   .cover {
@@ -107,6 +88,10 @@ export default {
   }
   .name {
     font-size: 13px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 .__active-hover{

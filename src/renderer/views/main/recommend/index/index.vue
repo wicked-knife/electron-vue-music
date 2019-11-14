@@ -29,13 +29,17 @@
       width="32.21%" :personalized-content="content"/>
     </v-row>
     <base-title text="最新音乐"  to='/main/recommend/latest-music'/>
-    <v-row class="border-a">
+    <v-row class="border-a  mb-9">
       <v-col class="pa-0 border-r" cols="6">
         <BaseLatestMusicItem v-for="(music, index) in latestMusic.slice(0, 5)" :key="music.id" :music='music' :index='index + 1' :stripe="index % 2 === 1"/>
       </v-col>
       <v-col class="pa-0" cols="6">
         <BaseLatestMusicItem v-for="(music, index) in latestMusic.slice(5, 10)" :key="music.id" :music='music' :index='index + 6' :stripe="index % 2 === 1"/>
       </v-col>
+    </v-row>
+    <base-title text="推荐MV" to='/main/video/index'/>
+    <v-row class="d-flex justify-space-between">
+      <base-video-cover v-for="mv in recommendMV" :key='mv.id' :video='mv' width="24.03%"/>
     </v-row>
   </v-container>
 </template>
@@ -46,6 +50,7 @@ import BaseTitle from '@/base/title/base-title.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
 import BasePersonalizedContentCover from '@/base/personalized-content-cover/base-personalized-content-cover.vue'
 import BaseLatestMusicItem from '@/base/latest-music-item/base-latest-music-item.vue'
+import BaseVideoCover from '@/base/video-cover/base-video-cover.vue'
 import dayjs from '@/common/day.js'
 
 import {
@@ -53,7 +58,8 @@ import {
   getRecommendSongListWithLogin,
   getRecommendSongListWithoutLogin,
   getPersonalizedContent,
-  getLatestMusic
+  getLatestMusic,
+  getRecommendMV
 } from '@/API/recommend.js'
 import { mapGetters } from 'vuex'
 export default {
@@ -64,7 +70,8 @@ export default {
     BaseTitle,
     BaseSongListCover,
     BasePersonalizedContentCover,
-    BaseLatestMusicItem
+    BaseLatestMusicItem,
+    BaseVideoCover
   },
   computed: {
     ...mapGetters('user', {
@@ -79,6 +86,7 @@ export default {
       recommendSongList: [], //推荐歌单
       personalizedContent: [], // 独家放送
       latestMusic: [], // 最新音乐
+      recommendMV: [] // 推荐MV
     }
   },
   created() {
@@ -95,8 +103,8 @@ export default {
     getPersonalizedContent().then(data => this.personalizedContent = data.result)
     getLatestMusic().then(data => {
       this.latestMusic = data.data.filter(m => m.album.type === 'EP/Single').slice(0, 10)
-      console.log(this.latestMusic)
     })
+    getRecommendMV().then(data => this.recommendMV = data.result)
   }
 }
 </script>

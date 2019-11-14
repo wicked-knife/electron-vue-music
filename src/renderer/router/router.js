@@ -5,6 +5,8 @@ import MainLayout from '@/views/main/main-layout.vue'
 import recommendRoutes from '@/router/modules/recommend.js'
 import personalFMRoutes from '@/router/modules/personalFM.js'
 import personalizedContentRoutes from '@/router/modules/personalizedContent.js'
+import videoRoutes from '@/router/modules/video.js'
+
 import Login from '@/views/login/login.vue'
 const routes = [
   {
@@ -17,7 +19,8 @@ const routes = [
     children: [
       ...recommendRoutes,
       ...personalFMRoutes,
-      ...personalizedContentRoutes
+      ...personalizedContentRoutes,
+      ...videoRoutes
     ]
   },
   { path: '/login', component: Login }

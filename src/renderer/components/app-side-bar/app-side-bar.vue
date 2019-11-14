@@ -11,6 +11,9 @@
           <v-list-item to='/main/personalFM' active-class="route-active" class="nav-item" >
             <i class="iconfont icon-FM mr-2"></i> 私人FM
           </v-list-item>
+          <v-list-item to='/main/video' active-class="route-active" class="nav-item" >
+            <i class="iconfont icon-video mr-2"></i> 视频
+          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>

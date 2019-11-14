@@ -86,3 +86,13 @@ export const getPersonalizedContent = () => axios.get('/personalized/privatecont
 */
 
 export const getLatestMusic = (type = 0) => axios.get('/top/song', {params: {type}})
+
+/*
+### 推荐 mv
+
+说明 : 调用此接口 , 可获取推荐 mv
+
+**接口地址 :** `/personalized/mv`
+*/
+
+export const getRecommendMV = () => axios.get('/personalized/mv')
