@@ -62,30 +62,12 @@ export const getPersonalizedContent = () => axios.get('/personalized/privatecont
 /*
 ### 新歌速递
 
-说明 : 调用此接口 , 可获取新歌速递
+说说明 : 调用此接口 , 可获取推荐新音乐
 
-**必选参数 :**
-
-`type`: 地区类型 id,对应以下:
-
-```
-全部:0
-
-华语:7
-
-欧美:96
-
-日本:8
-
-韩国:16
-```
-
-**接口地址 :** `/top/song`
-
-**调用例子 :** `/top/song?type=96`
+**接口地址 :** `/personalized/newsong`
 */
 
-export const getLatestMusic = (type = 0) => axios.get('/top/song', {params: {type}})
+export const getLatestMusic = () => axios.get('/personalized/newsong')
 
 /*
 ### 推荐 mv
@@ -96,3 +78,17 @@ export const getLatestMusic = (type = 0) => axios.get('/top/song', {params: {typ
 */
 
 export const getRecommendMV = () => axios.get('/personalized/mv')
+
+
+/*
+### 热门电台
+说明 : 调用此接口,可获取热门电台
+
+**可选参数 :**
+
+`limit` : 返回数量 , 默认为 30
+
+`offset` : 偏移数量，用于分页 , 如 :( 页数 -1)\*30, 其中 30 为 limit 的值 , 默认为 0
+*/
+
+export const getRecommendRadio = (limit = 6) => axios.get('/dj/hot', {params: {limit}})

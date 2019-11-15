@@ -41,6 +41,10 @@
     <v-row class="d-flex justify-space-between">
       <base-video-cover v-for="mv in recommendMV" :key='mv.id' :video='mv' width="24.03%"/>
     </v-row>
+    <base-title text="主播电台" to="/main/recommend/radio" />
+    <v-row class="d-flex justify-space-between">
+      <BaseRadioCover v-for="radio in recommendRadio" :key="radio.id" :radio='radio' width="15.38%"/>
+    </v-row>
   </v-container>
 </template>
 
@@ -51,6 +55,7 @@ import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
 import BasePersonalizedContentCover from '@/base/personalized-content-cover/base-personalized-content-cover.vue'
 import BaseLatestMusicItem from '@/base/latest-music-item/base-latest-music-item.vue'
 import BaseVideoCover from '@/base/video-cover/base-video-cover.vue'
+import BaseRadioCover from '@/base/radio-cover/base-radio-cover.vue'
 import dayjs from '@/common/day.js'
 
 import {
@@ -59,7 +64,8 @@ import {
   getRecommendSongListWithoutLogin,
   getPersonalizedContent,
   getLatestMusic,
-  getRecommendMV
+  getRecommendMV,
+  getRecommendRadio
 } from '@/API/recommend.js'
 import { mapGetters } from 'vuex'
 export default {
@@ -71,7 +77,8 @@ export default {
     BaseSongListCover,
     BasePersonalizedContentCover,
     BaseLatestMusicItem,
-    BaseVideoCover
+    BaseVideoCover,
+    BaseRadioCover
   },
   computed: {
     ...mapGetters('user', {
@@ -86,7 +93,8 @@ export default {
       recommendSongList: [], //推荐歌单
       personalizedContent: [], // 独家放送
       latestMusic: [], // 最新音乐
-      recommendMV: [] // 推荐MV
+      recommendMV: [], // 推荐MV
+      recommendRadio: [] // 推荐电台
     }
   },
   created() {
@@ -102,9 +110,10 @@ export default {
       })
     getPersonalizedContent().then(data => this.personalizedContent = data.result)
     getLatestMusic().then(data => {
-      this.latestMusic = data.data.filter(m => m.album.type === 'EP/Single').slice(0, 10)
+      this.latestMusic = data.result.map(m => m.song)
     })
     getRecommendMV().then(data => this.recommendMV = data.result)
+    getRecommendRadio().then(data => this.recommendRadio = data.djRadios)
   }
 }
 </script>

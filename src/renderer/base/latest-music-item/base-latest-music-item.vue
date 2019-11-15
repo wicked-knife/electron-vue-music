@@ -49,6 +49,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 10px 10px 10px 12px;
+  max-height: 60px;
   &:hover{
     background-color: rgb(35,37,41) !important;
   }

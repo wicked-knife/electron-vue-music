@@ -13,6 +13,10 @@ export default [
         component: () => import(/* webpackChunkName: 'recommend~song-list' */ '@/views/main/recommend/song-list/song-list.vue')
       },
       {
+        path: 'radio',
+        component: () => import(/* webpackChunkName: 'recommend~radio' */ '@/views/main/recommend/radio/radio.vue')
+      },
+      {
         path: 'latest-music',
         component: () => import(/* webpackChunkName: 'recommend~latest-music' */ '@/views/main/recommend/latest-music/latest-music.vue')
       }
