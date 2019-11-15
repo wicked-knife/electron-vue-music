@@ -1,9 +1,10 @@
 <template>
   <div class="swiper-container" @mouseleave="arrowVisiable = false" @mouseenter="arrowVisiable = true">
-    <div class="swiper-wrapper">
-      <div v-for="(i, index) in list"  :class="['swiper-box', _setClassName(index)]" :key="i.imageUrl">
+    <div class="swiper-wrapper" :style="height ? {height} : null">
+      <div v-for="(i, index) in list"  :class="['swiper-box', _setClassName(index)]" :key="i.imageUrl" 
+      @click="_handleSwiperClick(index)">
         <img :src="i.imageUrl" class="swiper-img" draggable="false">
-        <span :class="['tag', i.titleColor]">{{i.typeTitle}}</span>
+        <span :class="['tag', i.titleColor ? i.titleColor : 'red']">{{i.typeTitle}}</span>
       </div>
       <i class="iconfont icon-return" @click="prev" v-show="arrowVisiable"></i>
       <i class="iconfont icon-enter" @click="next" v-show="arrowVisiable"></i>
@@ -15,17 +16,21 @@
 </template>
 
 <script>
-let timer = null
 export default {
   props: {
     list: {
       type: Array
+    },
+    height: {
+      type: [Number, String],
+      default: '200px'
     }
   },
   data(){
     return {
       currentIndex: 0,
-      arrowVisiable: false
+      arrowVisiable: false,
+      timer: null
     }
   },
   methods:{
@@ -40,6 +45,12 @@ export default {
         return 'next'
       }
     },
+    _handleSwiperClick(index){
+      if(index === this.currentIndex) {
+        return this.$emit('swiper-click', this.list[index], index)
+      }
+      this.currentIndex = index
+    },
     prev(){
       this.currentIndex === 0 ? (this.currentIndex = this.list.length - 1) : this.currentIndex--  
     },
@@ -51,11 +62,11 @@ export default {
     arrowVisiable:{
       handler(newVal){
         if(!newVal) {
-          timer = setInterval(() => {
+          this.timer = setInterval(() => {
             this.next()
-          }, 6000)
+          }, 600000)
         } else {
-          clearInterval(timer)
+          clearInterval(this.timer)
         }
       },
       immediate: true
@@ -67,16 +78,16 @@ export default {
 <style lang="scss" scoped>
 .swiper-container {
   width: 100%;
-  height: 220px;
   .swiper-wrapper {
     position: relative;
-    height: 200px;
+    min-height: 200px;
     .swiper-box {
+      font-size: 0px;
       position: absolute;
-      height: 200px;
+      width: 540px;
       bottom: 0;
       left: 50%;
-      transform: translate3d(-50%, 5px, 0) scale3d(0.95, 0.95, 1);
+      transform: translate3d(-50%, 2.5%, 0) scale3d(0.95, 0.95, 1);
       visibility: hidden;
       transition: all 0.6s ease;
       filter: brightness(0.6);
@@ -84,7 +95,7 @@ export default {
       will-change: transform;
       &.prev {
         left: 0;
-        transform: translate3d(-13.5px, 5px, 0) scale3d(0.95, 0.95, 1);
+        transform: translate3d(-2.5%, 2.5%, 0) scale3d(0.95, 0.95, 1);
         visibility: visible;
       }
       &.active {
@@ -96,7 +107,7 @@ export default {
       }
       &.next {
         left: calc(100% - 526.5px);
-        transform: translate3d(0, 5px, 0) scale3d(0.95, 0.95, 1);
+        transform: translate3d(0, 2.5%, 0) scale3d(0.95, 0.95, 1);
         visibility: visible;
       }
       .tag{
@@ -117,7 +128,7 @@ export default {
       }
     }
     .swiper-img {
-      height: 100%;
+      width: 100%;
     }
     .iconfont {
       position: absolute;
