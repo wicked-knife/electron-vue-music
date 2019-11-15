@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper" :style="{width}">
-    <div class="img-wrapper">
+    <div class="img-wrapper mb-2">
       <img :src="personalizedContent.sPicUrl" class="cover" draggable="false">
       <i class="iconfont icon-video"></i>
     </div>
@@ -32,6 +32,9 @@ export default {
   flex-direction: column;
   cursor: pointer;
   position: relative;
+  .img-wrapper{
+    font-size: 0px;
+  }
   .cover{
     width: 100%;
   }

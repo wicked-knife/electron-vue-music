@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper" :style="{width}">
-    <div :class="['img-wrapper', radio.copywriter.length > 4 ? '__active-hover' : '']">
+    <div :class="['img-wrapper mb-2', radio.copywriter.length > 4 ? '__active-hover' : '']">
       <img :src="radio.picUrl" class="cover" draggable="false" />
       <div class="name subtitle-3">{{radio.name}}</div>
     </div>
@@ -32,10 +32,10 @@ export default {
   .img-wrapper {
     position: relative;
     cursor: pointer;
-    height: 100%;
+    font-size: 0px;
     .name {
       position: absolute;
-      bottom: 8px;
+      bottom: 0px;
       left: 0;
       width: 100%;
       text-indent: 4px;

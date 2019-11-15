@@ -60,7 +60,7 @@ export default {
 .cover-wrapper {
   position: relative;
   cursor: pointer;
-  height: 42px;
+  font-size: 0px;
   .cover {
     width: 42px;
     height: 42px;

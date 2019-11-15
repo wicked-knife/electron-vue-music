@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper" :style="{width}">
-    <div :class="['img-wrapper', songList.copywriter.length > 4 ? '__active-hover' : '']">
+    <div :class="['img-wrapper mb-2', songList.copywriter.length > 4 ? '__active-hover' : '']">
       <img
         :src="songList.picUrl"
         class="cover"
@@ -46,6 +46,7 @@ export default {
   .img-wrapper {
     position: relative;
     cursor: pointer;
+    font-size: 0px;
     &:hover {
       .desc {
         transform: translateY(0);
