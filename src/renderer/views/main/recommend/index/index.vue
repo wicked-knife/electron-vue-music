@@ -45,6 +45,8 @@
     <v-row class="d-flex justify-space-between">
       <BaseRadioCover v-for="radio in recommendRadio" :key="radio.id" :radio='radio' width="15.38%"/>
     </v-row>
+    <v-row>
+    </v-row>
   </v-container>
 </template>
 
@@ -56,6 +58,7 @@ import BasePersonalizedContentCover from '@/base/personalized-content-cover/base
 import BaseLatestMusicItem from '@/base/latest-music-item/base-latest-music-item.vue'
 import BaseVideoCover from '@/base/video-cover/base-video-cover.vue'
 import BaseRadioCover from '@/base/radio-cover/base-radio-cover.vue'
+import Func from '@/base/func.vue'
 import dayjs from '@/common/day.js'
 
 import {

@@ -3,24 +3,6 @@
     <v-row>
       <base-swiper :list="banners" @swiper-click="handleSwiperClick" height="210px"/>
     </v-row>
-    <v-row>
-      <v-tabs
-      background-color="cyan"
-      dark
-      next-icon="mdi-arrow-right-bold-box-outline"
-      prev-icon="mdi-arrow-left-bold-box-outline"
-      show-arrows
-    >
-      <v-tabs-slider color="yellow"></v-tabs-slider>
-      <v-tab
-        v-for="i in 30"
-        :key="i"
-        :href="'#tab-' + i"
-      >
-        Item {{ i }}
-      </v-tab>
-    </v-tabs>
-    </v-row>
   </v-container>
 </template>
 
