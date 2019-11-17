@@ -8,7 +8,14 @@ import BaseVideoCover from '@/base/video-cover/base-video-cover.vue'
 import BaseRadioCover from '@/base/radio-cover/base-radio-cover.vue'
 import BaseDialog from '@/base/dialog/base-dialog.vue'
 import dayjs from '@/common/day.js'
-
+import { Sortable, Plugins  } from '@shopify/draggable'
+const defaultLayout = [
+  '推荐歌单',
+  '独家放送',
+  '最新音乐',
+  '推荐MV',
+  '主播电台'
+]
 import {
   getBanner,
   getRecommendSongListWithLogin,
@@ -39,7 +46,7 @@ export default {
   },
   data() {
     return {
-      layout: ['推荐歌单','独家放送','最新音乐', '推荐MV', '主播电台'],
+      layout: defaultLayout,
       day: dayjs().format('dddd'),
       date: dayjs().format('D'),
       banners: [],
@@ -49,6 +56,7 @@ export default {
       recommendMV: [], // 推荐MV
       recommendRadio: [], // 推荐电台,
       dialogVisiable: false,
+      layoutSort: null
     }
   },
   created() {
@@ -62,150 +70,205 @@ export default {
       : getRecommendSongListWithoutLogin(10).then(data => {
         this.recommendSongList = data.result.slice(0, 9)
       })
-    getPersonalizedContent().then(data => this.personalizedContent = data.result)
+    getPersonalizedContent().then(
+      data => (this.personalizedContent = data.result)
+    )
     getLatestMusic().then(data => {
       this.latestMusic = data.result.map(m => m.song)
     })
-    getRecommendMV().then(data => this.recommendMV = data.result)
-    getRecommendRadio().then(data => this.recommendRadio = data.djRadios)
+    getRecommendMV().then(data => (this.recommendMV = data.result))
+    getRecommendRadio().then(data => (this.recommendRadio = data.djRadios))
   },
-  methods:{
-    genDynamicTemplate(tempName){
-      const isTempNameValid = ['推荐歌单','独家放送','最新音乐', '推荐MV', '主播电台'].indexOf(tempName) !== -1
-      if(isTempNameValid) {
-        if(tempName === '推荐歌单') {
+  methods: {
+    genDynamicTemplate(tempName) {
+      const isTempNameValid = this.layout.indexOf(tempName) !== -1
+      if (isTempNameValid) {
+        if (tempName === '推荐歌单') {
           return (
             <div>
               <base-title text="推荐歌单" to="/main/recommend/song-list" />
               <v-row class="d-flex justify-space-between">
-                <div class="daily-wrapper" style={{width: '18.46%'}}>
+                <div class="daily-wrapper" style={{ width: '18.46%' }}>
                   <div class="inner">
-                    <div class="day grey--text text--darken-2">
-                      {this.day}
-                    </div>
-                    <div class="date">
-                      {this.date}
-                    </div>
+                    <div class="day grey--text text--darken-2">{this.day}</div>
+                    <div class="date">{this.date}</div>
                   </div>
                   <div class="name">每日歌曲推荐</div>
                 </div>
-                {
-                  this.recommendSongList.map(songList => {
-                    return (<base-song-list-cover
+                {this.recommendSongList.map(songList => {
+                  return (
+                    <base-song-list-cover
                       key={songList.id}
                       width="18.46%"
                       song-list={songList}
-                    />)
-                  })
-                }
+                    />
+                  )
+                })}
               </v-row>
             </div>
           )
         }
-        if(tempName === '独家放送') {
+        if (tempName === '独家放送') {
           return (
             <div>
-              <base-title text="独家放送"  to='/main/personalizedContent'/>
+              <base-title text="独家放送" to="/main/personalizedContent" />
               <v-row class="d-flex justify-space-between mb-9">
-                {
-                  this.personalizedContent.map(content => {
-                    return (
-                      <base-personalized-content-cover key={content.videoId}
-                        width="32.21%" personalized-content={content}/>
-                    )
-                  })
-                }
+                {this.personalizedContent.map(content => {
+                  return (
+                    <base-personalized-content-cover
+                      key={content.videoId}
+                      width="32.21%"
+                      personalized-content={content}
+                    />
+                  )
+                })}
               </v-row>
             </div>
           )
         }
-        if(tempName === '最新音乐') {
+        if (tempName === '最新音乐') {
           return (
             <div>
-              <base-title text="最新音乐"  to='/main/recommend/latest-music'/>
+              <base-title text="最新音乐" to="/main/recommend/latest-music" />
               <v-row class="border-a  mb-9">
                 <v-col class="pa-0 border-r" cols="6">
-                  {
-                    this.latestMusic.slice(0, 5).map((music, index) => {
-                      return (
-                        <BaseLatestMusicItem  key={music.id} music={music} index={index + 1} stripe={index % 2 === 1}/>
-                      )
-                    })
-                  }
+                  {this.latestMusic.slice(0, 5).map((music, index) => {
+                    return (
+                      <BaseLatestMusicItem
+                        key={music.id}
+                        music={music}
+                        index={index + 1}
+                        stripe={index % 2 === 1}
+                      />
+                    )
+                  })}
                 </v-col>
                 <v-col class="pa-0" cols="6">
-                  {
-                    this.latestMusic.slice(5, 10).map((music, index) => {
-                      return (
-                        <BaseLatestMusicItem  key={music.id} music={music} index={index + 6} stripe={index % 2 === 1}/>
-                      )
-                    })
-                  }
+                  {this.latestMusic.slice(5, 10).map((music, index) => {
+                    return (
+                      <BaseLatestMusicItem
+                        key={music.id}
+                        music={music}
+                        index={index + 6}
+                        stripe={index % 2 === 1}
+                      />
+                    )
+                  })}
                 </v-col>
               </v-row>
             </div>
           )
         }
-        if(tempName === '推荐MV') {
+        if (tempName === '推荐MV') {
           return (
             <div>
-              <base-title text="推荐MV" to='/main/video/index'/>
+              <base-title text="推荐MV" to="/main/video/index" />
               <v-row class="d-flex justify-space-between">
-                {
-                  this.recommendMV.map(mv => {
-                    return (
-                      <base-video-cover  key={mv.id} video={mv} width="24.03%"/>
-                    )
-                  })
-                }
-      
+                {this.recommendMV.map(mv => {
+                  return (
+                    <base-video-cover key={mv.id} video={mv} width="24.03%" />
+                  )
+                })}
               </v-row>
             </div>
           )
         }
-        if(tempName === '主播电台') {
+        if (tempName === '主播电台') {
           return (
             <div>
               <base-title text="主播电台" to="/main/recommend/radio" />
               <v-row class="d-flex justify-space-between">
-                {
-                  this.recommendRadio.map(radio => {
-                    return <base-radio-cover key={radio.id} radio={radio} width="15.38%"/>
-                  })
-                }
+                {this.recommendRadio.map(radio => {
+                  return (
+                    <base-radio-cover
+                      key={radio.id}
+                      radio={radio}
+                      width="15.38%"
+                    />
+                  )
+                })}
               </v-row>
             </div>
           )
         }
       }
     },
-    showDialog(){
+    showDialog() {
       this.dialogVisiable = true
+    },
+    resetLayout(){
+      this.layout = defaultLayout
+    },
+    handleDialogConfirm(){
+      const sortedLayout = Array.prototype.map.call(this.$refs['layout-list'].querySelectorAll('li'), node => node.innerText.trim())
+      this.layout = sortedLayout
     }
   },
-  render(){
+  render() {
     return (
       <v-container fluid class="container-1040">
         <v-row>
           <base-swiper list={this.banners} />
         </v-row>
-        {
-          this.layout.map(tempName => this.genDynamicTemplate(tempName))
-        }
+        {this.layout.map(tempName => this.genDynamicTemplate(tempName))}
         <v-row class="mb-4">
-          <v-divider/>
+          <v-divider />
         </v-row>
         <v-row class="subtitle-3 grey--text justify-center mb-4">
-            现在可以根据个人喜好，自由调整栏目顺序啦~
+          现在可以根据个人喜好，自由调整栏目顺序啦~
         </v-row>
         <v-row class="justify-center">
-          <v-btn height="30px" outlined class="subtitle-3 btn-border" vOn:click={this.showDialog}>调整栏目顺序</v-btn>
+          <v-btn
+            height="30px"
+            outlined
+            class="subtitle-3 btn-border"
+            vOn:click={this.showDialog}
+          >
+            调整栏目顺序
+          </v-btn>
         </v-row>
-        <base-dialog vModel={this.dialogVisiable}>
-          asdad
+        <base-dialog vModel={this.dialogVisiable} title="调整栏目顺序" {...{on: {'dialog:confirm': this.handleDialogConfirm}}}>
+          <div class="dialog-content">
+            <div class="tip subtitle-3 grey--text text--darken-1">
+              <i class="iconfont icon-light"></i>
+              想调整首页栏目的顺序？按住右边的按钮拖动即可。
+            </div>
+            <ul class="layout-list pa-0" ref='layout-list'>
+              {this.layout.map(l => (
+                <li class="layout-item grey--text" key={l}>
+                  {l} <i class="iconfont icon-menu"></i>
+                </li>
+              ))}
+            </ul>
+            <div class="default-sort subtitle-3 grey--text text-center" vOn:click={this.resetLayout}>
+              恢复默认排序
+            </div>
+          </div>
         </base-dialog>
       </v-container>
     )
+  },
+  watch: {
+    dialogVisiable(newValue) {
+      if (newValue && !this.layoutSort) {
+        this.$nextTick(() => {
+          this.layoutSort = new Sortable(
+            document.querySelector('.layout-list'),
+            {
+              draggable: 'li.layout-item',
+              swapAnimation: {
+                duration: 200,
+                easingFunction: 'ease-in-out'
+              },
+              mirror: {
+                xAxis: false
+              },
+              plugins: [Plugins.SwapAnimation]
+            }
+          )
+        })
+      }
+    }
   }
 }
 </script>
@@ -248,6 +311,43 @@ export default {
   }
   .name {
     font-size: 13px;
+  }
+}
+.dialog-content {
+  .tip {
+    padding: 10px 0 10px 20px;
+  }
+  .icon-light {
+    font-size: 14px !important;
+  }
+  .layout-list {
+    position: relative;
+  }
+  .layout-item {
+    list-style: none;
+    padding: 12px 38px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #3b3a3d;
+    display: flex;
+    justify-content: space-between;
+    background-color: #2d2f33;
+    width: 388px;
+    &:hover {
+      background-color: #35363a;
+    }
+    .icon-menu {
+      cursor: move;
+    }
+  }
+  .default-sort{
+    padding: 10px 0;
+    cursor: pointer;
+    &:hover{
+      background-color: #35363a;
+    }
+  }
+  .draggable-mirror {
+    opacity: 0.8;
   }
 }
 </style>
