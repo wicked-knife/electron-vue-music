@@ -6,6 +6,7 @@ import BasePersonalizedContentCover from '@/base/personalized-content-cover/base
 import BaseLatestMusicItem from '@/base/latest-music-item/base-latest-music-item.vue'
 import BaseVideoCover from '@/base/video-cover/base-video-cover.vue'
 import BaseRadioCover from '@/base/radio-cover/base-radio-cover.vue'
+import BaseDialog from '@/base/dialog/base-dialog.vue'
 import dayjs from '@/common/day.js'
 
 import {
@@ -28,7 +29,8 @@ export default {
     BasePersonalizedContentCover,
     BaseLatestMusicItem,
     BaseVideoCover,
-    BaseRadioCover
+    BaseRadioCover,
+    BaseDialog
   },
   computed: {
     ...mapGetters('user', {
@@ -45,7 +47,8 @@ export default {
       personalizedContent: [], // 独家放送
       latestMusic: [], // 最新音乐
       recommendMV: [], // 推荐MV
-      recommendRadio: [] // 推荐电台
+      recommendRadio: [], // 推荐电台,
+      dialogVisiable: false,
     }
   },
   created() {
@@ -167,7 +170,7 @@ export default {
               <v-row class="d-flex justify-space-between">
                 {
                   this.recommendRadio.map(radio => {
-                    return <BaseRadioCover key={radio.id} radio={radio} width="15.38%"/>
+                    return <base-radio-cover key={radio.id} radio={radio} width="15.38%"/>
                   })
                 }
               </v-row>
@@ -175,6 +178,9 @@ export default {
           )
         }
       }
+    },
+    showDialog(){
+      this.dialogVisiable = true
     }
   },
   render(){
@@ -186,8 +192,18 @@ export default {
         {
           this.layout.map(tempName => this.genDynamicTemplate(tempName))
         }
-        <v-row>
+        <v-row class="mb-4">
+          <v-divider/>
         </v-row>
+        <v-row class="subtitle-3 grey--text justify-center mb-4">
+            现在可以根据个人喜好，自由调整栏目顺序啦~
+        </v-row>
+        <v-row class="justify-center">
+          <v-btn height="30px" outlined class="subtitle-3 btn-border" vOn:click={this.showDialog}>调整栏目顺序</v-btn>
+        </v-row>
+        <base-dialog vModel={this.dialogVisiable}>
+          asdad
+        </base-dialog>
       </v-container>
     )
   }

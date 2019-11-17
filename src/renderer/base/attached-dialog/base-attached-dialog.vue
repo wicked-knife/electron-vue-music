@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-    <div :class="['attached-dialog-wrapper', position]" v-show="value" @click.stop>
+    <div :class="['attached-dialog-wrapper', position]" v-show="value" @click.stop ref="container">
       <slot>
       </slot>
     </div>
@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import bus from '@/common/bus'
 export default {
   props: {
     position: {
@@ -20,16 +21,19 @@ export default {
       required: true
     }
   },
-  methods: {
-    test() {
-      console.log('focus')
-    },
-    test2() {
-      console.log('blur')
+  methods:{
+    handleClickOutside(ev){
+      if(!this.$refs.container.contains(ev.target)) {
+        this.$emit('click:outside', ev)
+      }
     }
   },
   mounted() {
     this.$el.parentElement.style.position = 'relative'
+    bus.on('document:clicked', this.handleClickOutside)
+  },
+  destroyed(){
+    bus.off('document:clicked', this.handleClickOutside)
   }
 }
 </script>

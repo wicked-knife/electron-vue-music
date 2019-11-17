@@ -17,13 +17,13 @@
             <i class="iconfont icon-user"></i>
             <span class="tip ml-2 mr-2">请登录</span>
           </div>
-          <div class="user-wrapper grey--text no-drag mr-4"  v-if="loginState" @click="userInfoVisiable = !userInfoVisiable">
+          <div class="user-wrapper grey--text no-drag mr-4"  v-if="loginState" @click="userInfoVisiable = !userInfoVisiable" ref="user-wrapper">
             <v-avatar width="26" height="26" class="avatar">
               <img :src="userInfo.avatarUrl" >
             </v-avatar>
             <span class="username mr-2">{{userInfo.nickname}}</span>
             <i class="iconfont icon-sort-down"></i>
-            <base-attached-dialog position='bottom' :value='userInfoVisiable'>
+            <base-attached-dialog position='bottom' :value='userInfoVisiable' @click:outside="handleClickOutside">
             <div class="info-wrapper">
               <v-container fluid class="mt-2 border-b">
                 <v-row align="center">
@@ -138,6 +138,11 @@ export default {
         this.$alert({text: '重复签到', color: 'red'})
         this.dailySign()
       })
+    },
+    handleClickOutside(ev){
+      if(!this.$refs['user-wrapper'].contains(ev.target)) {
+        this.userInfoVisiable = false
+      }
     }
   },
   computed: {

@@ -40,7 +40,7 @@ html {   overflow-y: hidden;
 }
 
 .subtitle-3{
-  font-size: 12px;
+  font-size: 12px !important;
 }
 
 .border-t{
@@ -54,4 +54,7 @@ html {   overflow-y: hidden;
 }
 .border-a{
   border: 1px solid $border-color;
+}
+.btn-border{
+  border: 1px solid #9e9e9e;
 }

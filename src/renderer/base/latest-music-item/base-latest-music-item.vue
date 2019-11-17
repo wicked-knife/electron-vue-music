@@ -1,6 +1,6 @@
 <template>
   <div :class="['wrapper', stripe ? 'stripe' : '']">
-    <span class="index subtitle-3 grey--text text--darken-1 mr-5">{{_index}}</span>
+    <span class="index subtitle-3 grey--text mr-5">{{_index}}</span>
     <div class="cover-wrapper mr-3">
       <img :src="music.album.picUrl" class="cover" />
       <i class="iconfont icon-play_fill"></i>
@@ -8,7 +8,7 @@
     <div class="name-wrapper">
       <span class="subtitle-2 name">{{music.name}}</span>
       <div class="d-flex align-center">
-        <span class="caption artist">{{music.artists[0].name}}</span>
+        <span class="caption artist grey--text">{{music.artists[0].name}}</span>
         <i class="iconfont icon-mv ml-1" v-if="music.mvid"></i>
       </div>
     </div>
