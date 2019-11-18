@@ -33,7 +33,10 @@
       </div>
     </v-row>
     <v-row>
-      <BaseTagList :list='this.hotTags.map(c => c.name)' v-model="currentSubCate"></BaseTagList>
+      <base-tag-list :list='this.hotTags.map(c => c.name)' v-model="currentSubCate"></base-tag-list>
+    </v-row>
+    <v-row class="d-flex justify-space-between">
+      <base-song-list-cover  v-for="list in songList" :key="list.id" :song-list='list' width="18.75%" showCreator/>
     </v-row>
   </v-container>
 </template>
@@ -42,18 +45,20 @@
 import { getAllCateList, getSongList, getHotCateList } from '@/API/songList.js'
 import BaseAttachedDialog from '@/base/attached-dialog/base-attached-dialog.vue'
 import BaseTagList from '@/base/tag-list/base-tag-list.vue'
+import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
 export default {
   created() {
     getAllCateList().then(({categories, sub}) => {
       this.categories = categories
       this.sub = sub
     })
-    getSongList(this.currentSubCate).then(data => data)
+    getSongList({cat: this.currentSubCate}).then(({playlists}) => this.songList = playlists.map(p => ({...p, picUrl: p.coverImgUrl})))
     getHotCateList().then(({tags}) => this.hotTags = tags)
   },
   components: {
     BaseAttachedDialog,
-    BaseTagList
+    BaseTagList,
+    BaseSongListCover
   },
   methods:{
     _setIcon(cateName){
@@ -86,7 +91,8 @@ export default {
       categories: [],
       sub: [],
       currentSubCate: '全部歌单',
-      hotTags: []
+      hotTags: [],
+      songList: [] 
     }
   },
   mounted(){

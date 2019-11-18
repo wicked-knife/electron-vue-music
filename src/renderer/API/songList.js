@@ -36,4 +36,4 @@ export const getHotCateList = () => axios.get('/playlist/hot')
 **调用例子 :** `/top/playlist?limit=10&order=new`
 */
 
-export const getSongList = (cat) => axios.get('/top/playlist', {params: {cat}})
+export const getSongList = ({cat, limit = 50, page = 1}) => axios.get('/top/playlist', {params: {cat, limit,  offset: (page - 1) * limit }})

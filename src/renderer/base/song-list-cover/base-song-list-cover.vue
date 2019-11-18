@@ -1,14 +1,23 @@
 <template>
   <div class="wrapper" :style="{width}">
-    <div :class="['img-wrapper mb-2', songList.copywriter.length > 4 ? '__active-hover' : '']">
+    <div :class="['img-wrapper mb-2', songList.copywriter && songList.copywriter.length > 4 ? '__active-hover' : '']">
       <img
         :src="songList.picUrl"
         class="cover"
         draggable="false"
       />
-      <div class="desc" v-if="songList.copywriter.length > 4">{{songList.copywriter}}</div>
+      <div class="desc" v-if="songList.copywriter && songList.copywriter.length > 4">{{songList.copywriter}}</div>
       <div class="play-count">
         <i class="iconfont icon-earphone"></i> {{_playCount}}
+      </div>
+      <div class="creator subtitle-3" v-if="showCreator">
+        <i class="iconfont icon-user ml-2 mr-1"></i>
+        <span class="nickname mr-1">
+          {{songList.creator.nickname}}
+        </span>
+        <i class="iconfont icon-local-music" v-if="songList.creator.userType === 4"></i>
+        <i class="iconfont icon-star yellow--text" v-if="songList.creator.userType === 200"></i>
+        <i class="iconfont icon-V " v-if="songList.creator.userType === 3"></i>
       </div>
       <i class="iconfont icon-play_fill"></i>
     </div>
@@ -26,6 +35,10 @@ export default {
     songList: {
       type: Object,
       required: true
+    },
+    showCreator: {
+      type: Boolean,
+      default: false
     }
   },
   computed:{
@@ -66,6 +79,29 @@ export default {
       transform: translateY(-100%);
       transition: transform 0.3s ease;
     }
+    .creator{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0, 0, 0, 0.44) 100%);
+      padding: 5px 0;
+      display: flex;
+      align-items: center;
+      .icon-user{
+        font-size: 12px;
+      }
+      .nickname{
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        display: block;
+        max-width: 50%;
+      }
+      .icon-V,.icon-local-music{
+        color: $theme-color;
+      }
+    }
     .play-count {
       width: 70%;
       position: absolute;
@@ -88,8 +124,8 @@ export default {
     .icon-play_fill {
       position: absolute;
       font-size: 16px;
-      right: 8px;
-      bottom: 14px;
+      right: 5px;
+      bottom: 5px;
       width: 27px;
       height: 27px;
       border-radius: 50%;
