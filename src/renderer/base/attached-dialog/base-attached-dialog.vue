@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-    <div :class="['attached-dialog-wrapper', position]" v-show="value" @click.stop ref="container">
+    <div :class="['attached-dialog-wrapper', position, left ? '__left' : '']" v-show="value" @click.stop ref="container">
       <slot>
       </slot>
     </div>
@@ -19,6 +19,10 @@ export default {
     value: {
       type: Boolean,
       required: true
+    },
+    left: {
+      type: Boolean,
+      default: false
     }
   },
   methods:{
@@ -65,6 +69,13 @@ $bg-color: #2d2f33;
     bottom: -10px;
     left: 50%;
     transform: translateX(-50%) translateY(100%);
+    &.__left{
+      left: 0;
+      transform: translateX(0%) translateY(100%);
+      &::before{
+        left: 20px;
+      }
+    }
     &::before {
       z-index: 1;
       content: "";
@@ -110,7 +121,6 @@ $bg-color: #2d2f33;
     }
   }
 }
-
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
