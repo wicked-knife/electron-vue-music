@@ -9,13 +9,8 @@ import BaseRadioCover from '@/base/radio-cover/base-radio-cover.vue'
 import BaseDialog from '@/base/dialog/base-dialog.vue'
 import dayjs from '@/common/day.js'
 import { Sortable, Plugins  } from '@shopify/draggable'
-const defaultLayout = [
-  '推荐歌单',
-  '独家放送',
-  '最新音乐',
-  '推荐MV',
-  '主播电台'
-]
+import {getPersistLayout, persistLayout} from '@/store/persist/layout.js'
+const defaultLayout = ['推荐歌单','独家放送','最新音乐','推荐MV','主播电台']
 import {
   getBanner,
   getRecommendSongListWithLogin,
@@ -46,7 +41,7 @@ export default {
   },
   data() {
     return {
-      layout: defaultLayout,
+      layout: getPersistLayout() || defaultLayout,
       day: dayjs().format('dddd'),
       date: dayjs().format('D'),
       banners: [],
@@ -183,8 +178,7 @@ export default {
                     <base-radio-cover
                       key={radio.id}
                       radio={radio}
-                      width="15.38%"
-                    />
+                      width="15.38%"/>
                   )
                 })}
               </v-row>
@@ -198,10 +192,17 @@ export default {
     },
     resetLayout(){
       this.layout = defaultLayout
+      persistLayout(defaultLayout)
     },
     handleDialogConfirm(){
       const sortedLayout = Array.prototype.map.call(this.$refs['layout-list'].querySelectorAll('li'), node => node.innerText.trim())
       this.layout = sortedLayout
+      this.dialogVisiable = false
+      persistLayout(this.layout)
+    },
+    handleDialogHide(){
+      Array.prototype.forEach.call(this.$refs['layout-list'].querySelectorAll('li'), (node, index) => node.innerText = this.layout[index])
+      this.dialogVisiable = false
     }
   },
   render() {
@@ -222,12 +223,17 @@ export default {
             height="30px"
             outlined
             class="subtitle-3 btn-border"
-            vOn:click={this.showDialog}
-          >
+            vOn:click={this.showDialog}>
             调整栏目顺序
           </v-btn>
         </v-row>
-        <base-dialog vModel={this.dialogVisiable} title="调整栏目顺序" {...{on: {'dialog:confirm': this.handleDialogConfirm}}}>
+        <base-dialog vModel={this.dialogVisiable} title="调整栏目顺序" {...{
+          on: {
+            'dialog:confirm': this.handleDialogConfirm,
+            'dialog:close': this.handleDialogHide,
+            'dialog:cancel': this.handleDialogHide
+          }
+        }}>
           <div class="dialog-content">
             <div class="tip subtitle-3 grey--text text--darken-1">
               <i class="iconfont icon-light"></i>

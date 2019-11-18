@@ -43,7 +43,6 @@ export default {
       this.$emit('dialog:cancel')
     },
     handleConfirmClick(){
-      this.$emit('update:dialog-visiable', false)
       this.$emit('dialog:confirm')
     }
   }
