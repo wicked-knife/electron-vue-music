@@ -17,7 +17,7 @@
             <i class="iconfont icon-user"></i>
             <span class="tip ml-2 mr-2">请登录</span>
           </div>
-          <div class="user-wrapper grey--text no-drag mr-4"  v-if="loginState" @click="userInfoVisiable = !userInfoVisiable" ref="user-wrapper">
+          <div class="user-wrapper grey--text no-drag mr-4"  v-if="loginState" @click="userInfoVisiable = !userInfoVisiable" ref="attached-dialog-wrapper">
             <v-avatar width="26" height="26" class="avatar">
               <img :src="userInfo.avatarUrl" >
             </v-avatar>
@@ -140,7 +140,7 @@ export default {
       })
     },
     handleClickOutside(ev){
-      if(!this.$refs['user-wrapper'].contains(ev.target)) {
+      if(!this.$refs['attached-dialog-wrapper'].contains(ev.target)) {
         this.userInfoVisiable = false
       }
     }

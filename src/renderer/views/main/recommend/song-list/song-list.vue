@@ -1,11 +1,11 @@
 <template>
   <v-container fluid class="container-1040">
-    <v-row>
-      <div>
+    <v-row class="mb-3">
+      <div ref="attached-dialog-wrapper">
         <v-btn size="small" height="24px" depressed class="subtitle-2" @click="dialogVisiable = !dialogVisiable">
           {{currentSubCate}}<i class="iconfont icon-down"></i>
         </v-btn>
-        <base-attached-dialog position="bottom" :value="dialogVisiable" left>
+        <base-attached-dialog position="bottom" :value="dialogVisiable" left @click:outside='handleClickOutside'>
           <div class="cate-wrapper">
             <div class="wrapper-title subtitle-2">
               添加标签
@@ -32,21 +32,28 @@
         </base-attached-dialog>
       </div>
     </v-row>
+    <v-row>
+      <BaseTagList :list='this.hotTags.map(c => c.name)' v-model="currentSubCate"></BaseTagList>
+    </v-row>
   </v-container>
 </template>
 
 <script>
-import { getAllCateList } from '@/API/songList.js'
+import { getAllCateList, getSongList, getHotCateList } from '@/API/songList.js'
 import BaseAttachedDialog from '@/base/attached-dialog/base-attached-dialog.vue'
+import BaseTagList from '@/base/tag-list/base-tag-list.vue'
 export default {
   created() {
     getAllCateList().then(({categories, sub}) => {
       this.categories = categories
       this.sub = sub
     })
+    getSongList(this.currentSubCate).then(data => data)
+    getHotCateList().then(({tags}) => this.hotTags = tags)
   },
   components: {
-    BaseAttachedDialog
+    BaseAttachedDialog,
+    BaseTagList
   },
   methods:{
     _setIcon(cateName){
@@ -66,15 +73,24 @@ export default {
     handleCateItemClick(cateName){
       this.currentSubCate = cateName
       this.dialogVisiable = false
+    },
+    handleClickOutside(ev){
+      if(!this.$refs['attached-dialog-wrapper'].contains(ev.target)) {
+        this.dialogVisiable = false
+      }
     }
   },
   data() {
     return {
-      dialogVisiable: true,
+      dialogVisiable: false,
       categories: [],
       sub: [],
-      currentSubCate: '全部歌单'
+      currentSubCate: '全部歌单',
+      hotTags: []
     }
+  },
+  mounted(){
+    console.log(this.$el.querySelector)
   }
 }
 </script>
