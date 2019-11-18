@@ -38,6 +38,11 @@
     <v-row class="d-flex justify-space-between">
       <base-song-list-cover  v-for="list in songList" :key="list.id" :song-list='list' width="18.75%" showCreator/>
     </v-row>
+    <v-row>
+      <v-pagination       
+      v-model="currentPage"
+      :length="6"/>
+    </v-row>
   </v-container>
 </template>
 
@@ -46,6 +51,7 @@ import { getAllCateList, getSongList, getHotCateList } from '@/API/songList.js'
 import BaseAttachedDialog from '@/base/attached-dialog/base-attached-dialog.vue'
 import BaseTagList from '@/base/tag-list/base-tag-list.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
+import {VPagination} from 'vuetify/lib'
 export default {
   created() {
     getAllCateList().then(({categories, sub}) => {
@@ -58,7 +64,8 @@ export default {
   components: {
     BaseAttachedDialog,
     BaseTagList,
-    BaseSongListCover
+    BaseSongListCover,
+    VPagination
   },
   methods:{
     _setIcon(cateName){
@@ -92,7 +99,8 @@ export default {
       sub: [],
       currentSubCate: '全部歌单',
       hotTags: [],
-      songList: [] 
+      songList: [],
+      currentPage: 1
     }
   },
   mounted(){

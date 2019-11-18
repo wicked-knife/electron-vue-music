@@ -26,7 +26,10 @@ new Vue({
           primary: '#b1b1b1'
         }
       }
-    }
+    },
+    icons: {
+      iconfont: 'mdiSvg'
+    },
   }),
   router,
   store: new Vuex.Store(store),
