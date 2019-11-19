@@ -39,9 +39,7 @@
       <base-song-list-cover  v-for="list in songList" :key="list.id" :song-list='list' width="18.75%" showCreator/>
     </v-row>
     <v-row>
-      <v-pagination       
-      v-model="currentPage"
-      :length="6"/>
+      <v-pagination v-if="totalPage > 1" v-model="currentPage" total-visible="9" :length="totalPage"/>
     </v-row>
   </v-container>
 </template>
@@ -58,7 +56,7 @@ export default {
       this.categories = categories
       this.sub = sub
     })
-    getSongList({cat: this.currentSubCate}).then(({playlists}) => this.songList = playlists.map(p => ({...p, picUrl: p.coverImgUrl})))
+    this.getSongList()
     getHotCateList().then(({tags}) => this.hotTags = tags)
   },
   components: {
@@ -90,6 +88,12 @@ export default {
       if(!this.$refs['attached-dialog-wrapper'].contains(ev.target)) {
         this.dialogVisiable = false
       }
+    },
+    getSongList(){
+      getSongList({cat: this.currentSubCate, page: this.currentPage}).then(({playlists, total}) => {
+        this.songList = playlists.map(p => ({...p, picUrl: p.coverImgUrl}))
+        this.total = total
+      })
     }
   },
   data() {
@@ -100,11 +104,23 @@ export default {
       currentSubCate: '全部歌单',
       hotTags: [],
       songList: [],
-      currentPage: 1
+      currentPage: 1,
+      total: 0
     }
   },
-  mounted(){
-    console.log(this.$el.querySelector)
+  computed: {
+    totalPage(){
+      return Math.ceil(this.total / 50)
+    }
+  },
+  watch: {
+    currentPage(){
+      this.getSongList()
+    },
+    currentSubCate(){
+      this.currentPage = 1
+      this.getSongList()
+    }
   }
 }
 </script>

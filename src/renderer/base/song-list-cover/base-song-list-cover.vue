@@ -98,6 +98,9 @@ export default {
         display: block;
         max-width: 50%;
       }
+      .icon-star, .icon-V{
+        font-size: 12px;
+      }
       .icon-V,.icon-local-music{
         color: $theme-color;
       }

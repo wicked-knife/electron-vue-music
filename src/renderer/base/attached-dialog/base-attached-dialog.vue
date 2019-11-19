@@ -46,6 +46,7 @@ export default {
 $bg-color: #2d2f33;
 .attached-dialog-wrapper {
   position: absolute;
+  z-index: 9;
   background-color: $bg-color;
   border: 1px solid #090a0c;
   border-radius: 5px;
