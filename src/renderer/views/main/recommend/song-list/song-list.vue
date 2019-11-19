@@ -36,6 +36,20 @@
       <base-tag-list :list='this.hotTags.map(c => c.name)' v-model="currentSubCate"></base-tag-list>
     </v-row>
     <v-row class="d-flex justify-space-between" v-loading="loading">
+      <div class="hq-songlist" style="width: 18.75%" v-if="currentPage === 1 && songList.length !== 0">
+        <div class="img-cover mb-2">
+          <img :src="songList[0].picUrl" class="cover" draggable="false">
+          <div class="hq-text">
+            <i class="iconfont icon-tiara"></i>
+            <div class="text">
+              精品歌单 <i class="iconfont icon-enter"></i>
+            </div>
+          </div>
+        </div>
+        <div class="desc">
+        精品歌单倾心推荐，给最懂音乐的你  
+        </div>
+      </div>
       <base-song-list-cover  v-for="list in songList" :key="list.id" :song-list='list' width="18.75%" showCreator/>
     </v-row>
     <v-row>
@@ -92,7 +106,7 @@ export default {
     },
     getSongList(){
       this.loading = true
-      getSongList({cat: this.currentSubCate, page: this.currentPage}).then(({playlists, total}) => {
+      getSongList({cat: this.currentSubCate, page: this.currentPage, limit: this.currentPage === 1 ? 49 : 50}).then(({playlists, total}) => {
         this.songList = playlists.map(p => ({...p, picUrl: p.coverImgUrl}))
         this.total = total
         this.loading = false
@@ -223,6 +237,54 @@ export default {
         width: 20%;
       }
     }
+  }
+}
+
+.hq-songlist{
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  .img-cover{
+    position: relative;
+    font-size: 0px;
+    width: 100%;
+    padding-top: 100%;
+    overflow: hidden;
+    .cover{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      filter: blur(15px) brightness(0.5);
+    }
+    .hq-text{
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate3d(-50%, -50%, 0);
+      color: #e6ca87;
+      .icon-tiara{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 90px;
+        height: 90px;
+        border: 4px solid #e6ca87;
+        border-radius: 50%;
+        font-size: 45px;
+        font-weight: bolder;
+        margin-bottom: 0.5vw;
+        & ~ div{
+          font-size: 13px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+  .desc{
+    font-size: 13px;
   }
 }
 </style>
