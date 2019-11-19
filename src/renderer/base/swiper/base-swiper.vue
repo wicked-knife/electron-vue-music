@@ -106,7 +106,7 @@ export default {
         filter: brightness(1);
       }
       &.next {
-        left: calc(100% - 526.5px);
+        left: calc(100% - 527.5px);
         transform: translate3d(0, 2.5%, 0) scale3d(0.95, 0.95, 1);
         visibility: visible;
       }
