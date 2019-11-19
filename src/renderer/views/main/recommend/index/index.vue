@@ -51,28 +51,37 @@ export default {
       recommendMV: [], // 推荐MV
       recommendRadio: [], // 推荐电台,
       dialogVisiable: false,
-      layoutSort: null
+      layoutSort: null,
+      loading: true
     }
   },
   created() {
-    getBanner().then(data => {
-      this.banners = data.banners.map(i => ({ ...i, src: i.imageUrl }))
+    this.loading = true
+    Promise.all([
+      getBanner(),
+      this.loginState ? getRecommendSongListWithLogin() : getRecommendSongListWithoutLogin(),
+      getPersonalizedContent(),
+      getLatestMusic(),
+      getRecommendMV(),
+      getRecommendRadio(),
+    ]).then(([
+      {banners}, 
+      songlist, 
+      {result: personalizedContent}, 
+      {result: latestMusic}, 
+      {result: recommendMV}, 
+      {djRadios: recommendRadio}]) => {
+      this.banners = banners.map(i => ({ ...i, src: i.imageUrl }))
+      this.recommendSongList = this.loginState ? songlist.recommend.slice(0, 9) : songlist.result.slice(0, 9)
+      this.personalizedContent = personalizedContent
+      this.latestMusic = latestMusic.map(m => m.song)
+      this.recommendMV = recommendMV
+      this.recommendRadio = recommendRadio
+      this.loading = false
+    }).catch(() => {
+      this.$alert({text:'网络出错', color: 'red'})
+      this.loading = false
     })
-    this.loginState
-      ? getRecommendSongListWithLogin().then(data => {
-        this.recommendSongList = data.recommend.slice(0, 9)
-      })
-      : getRecommendSongListWithoutLogin(10).then(data => {
-        this.recommendSongList = data.result.slice(0, 9)
-      })
-    getPersonalizedContent().then(
-      data => (this.personalizedContent = data.result)
-    )
-    getLatestMusic().then(data => {
-      this.latestMusic = data.result.map(m => m.song)
-    })
-    getRecommendMV().then(data => (this.recommendMV = data.result))
-    getRecommendRadio().then(data => (this.recommendRadio = data.djRadios))
   },
   methods: {
     genDynamicTemplate(tempName) {
@@ -207,7 +216,7 @@ export default {
   },
   render() {
     return (
-      <v-container fluid class="container-1040">
+      <v-container fluid class="container-1040" v-loading={this.loading}>
         <v-row>
           <base-swiper list={this.banners} />
         </v-row>
