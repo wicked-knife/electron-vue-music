@@ -35,7 +35,7 @@
     <v-row>
       <base-tag-list :list='this.hotTags.map(c => c.name)' v-model="currentSubCate"></base-tag-list>
     </v-row>
-    <v-row class="d-flex justify-space-between">
+    <v-row class="d-flex justify-space-between" v-loading="loading">
       <base-song-list-cover  v-for="list in songList" :key="list.id" :song-list='list' width="18.75%" showCreator/>
     </v-row>
     <v-row>
@@ -51,6 +51,7 @@ import BaseTagList from '@/base/tag-list/base-tag-list.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
 import {VPagination} from 'vuetify/lib'
 export default {
+  name: 'recommend-song-list',
   created() {
     getAllCateList().then(({categories, sub}) => {
       this.categories = categories
@@ -90,9 +91,11 @@ export default {
       }
     },
     getSongList(){
+      this.loading = true
       getSongList({cat: this.currentSubCate, page: this.currentPage}).then(({playlists, total}) => {
         this.songList = playlists.map(p => ({...p, picUrl: p.coverImgUrl}))
         this.total = total
+        this.loading = false
       })
     }
   },
@@ -105,7 +108,8 @@ export default {
       hotTags: [],
       songList: [],
       currentPage: 1,
-      total: 0
+      total: 0,
+      loading: true
     }
   },
   computed: {

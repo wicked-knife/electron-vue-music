@@ -2,31 +2,35 @@ import Vue from 'vue'
 import loadingTemp from './loading.vue'
 const LoadingCtor = Vue.extend(loadingTemp)
 
-function createLoadingInstance(){
-  const loadingInstance = new LoadingCtor({
+function createLoadingInstance() {
+  return new LoadingCtor({
     el: document.createElement('div'),
-    data(){
+    data() {
       return {
         loading: false
       }
     }
   })
-  return {
-    bind: function(el, {value}){
-      if(value) {
-        el.style.position = 'relative'
-        el.appendChild(loadingInstance.$el)
-        loadingInstance.loading = true
-      }
-    },
-    update: function(el, {oldValue, value}){
-      if(oldValue !== value) {
-        loadingInstance.loading = value
-      }
-    }
-  }
 }
 
 export default function registerVLoadingDirective(_Vue) {
-  _Vue.directive('loading', createLoadingInstance())
+  _Vue.directive('loading', {
+    bind: function(el, { value }) {
+      if (value) {
+        el.$loading = createLoadingInstance()
+        el.style.position = 'relative'
+        el.appendChild(el.$loading.$el)
+        el.$loading.loading = true
+      }
+    },
+    update: function(el, { oldValue, value }) {
+      if (oldValue !== value) {
+        el.$loading.loading = value
+      }
+    },
+    unbind(el){
+      el.$loading.$destroy()
+      delete el.$loading
+    }
+  })
 }
