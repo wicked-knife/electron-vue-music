@@ -35,6 +35,7 @@
 import BaseAttachedDialog from '@/base/attached-dialog/base-attached-dialog.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
 import {getAllCateList, getHighQualitySongList} from '@/API/songList.js'
+import bus from '@/common/bus.js'
 const HQSongListCate = ['华语', '欧美', '韩语','日语','粤语','小语种','运动','ACG','影视原声','流行','摇滚','后摇','古风','民谣','轻音乐','电子','器乐','说唱','古典','爵士']
 export default {
   components: {
@@ -49,12 +50,16 @@ export default {
       songList: [],
       lasttime: 0,
       loading: true,
-      shouldShowTag: true
+      shouldShowTag: true,
+      more: true
     }
   },
   created(){
     getAllCateList().then(({sub}) => this.cateList = sub.filter(c => HQSongListCate.includes(c.name)))
     this.getHighQualitySongList()
+  },
+  mounted(){
+    bus.on('scroll:reachBottom', this.handleReachBottom)
   },
   methods:{
     handleCateItemClick(cateName){
@@ -67,12 +72,21 @@ export default {
       }
     },
     getHighQualitySongList(){
-      this.loading = true
-      getHighQualitySongList({cat: this.currentSubCate, before: this.lasttime}).then(({lasttime, playlists}) => {
+      // 向下滚动加载更多时，不要出现loading
+      !this.lasttime && (this.loading = true)
+      getHighQualitySongList({cat: this.currentSubCate, before: this.lasttime}).then(({lasttime, playlists, more}) => {
+        this.more = more
+        if(this.lasttime) {
+          this.songList.push( ...playlists.map(s => ({...s, picUrl: s.coverImgUrl})) )
+        } else {
+          this.songList = playlists.map(s => ({...s, picUrl: s.coverImgUrl}))
+        }
         this.lasttime = lasttime
-        this.songList = playlists.map(s => ({...s, picUrl: s.coverImgUrl}))
-        this.loading = false
+        this.loading && (this.loading = false)
       })
+    },
+    handleReachBottom(){
+      this.more && this.getHighQualitySongList()
     }
   },
   watch:{
@@ -81,6 +95,9 @@ export default {
       this.lasttime = 0
       this.getHighQualitySongList()
     }
+  },
+  destroyed(){
+    bus.off('scroll:reachBottom', this.handleReachBottom)
   }
 }
 </script>

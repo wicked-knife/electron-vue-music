@@ -3,7 +3,7 @@
     <app-side-bar />
     <app-top-bar />
     <v-content class="app-content">
-      <v-container fluid class='pl-0 pr-0 __fix-viewport beautify-scrollbar'>
+      <v-container fluid class='pl-0 pr-0 __fix-viewport beautify-scrollbar' @scroll="handleScroll">
         <keep-alive>
             <router-view />
         </keep-alive>
@@ -19,6 +19,9 @@
 import AppTopBar from '@/components/app-top-bar/app-top-bar'
 import AppSideBar from '@/components/app-side-bar/app-side-bar'
 import {VApp, VContent, VFooter} from 'vuetify/lib'
+import bus from '@/common/bus.js'
+
+const Padding = 24
 export default {
   data() {
     return {}
@@ -30,6 +33,13 @@ export default {
     AppSideBar,
     VFooter
   },
+  methods: {
+    handleScroll(ev){
+      if(ev.target.scrollTop + ev.target.offsetHeight - Padding === ev.target.firstElementChild.offsetHeight) {
+        bus.emit('scroll:reachBottom')
+      }
+    }
+  }
 }
 </script>
 

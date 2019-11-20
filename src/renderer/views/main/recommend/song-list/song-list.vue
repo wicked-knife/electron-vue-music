@@ -63,6 +63,7 @@ import BaseTagList from '@/base/tag-list/base-tag-list.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
 import {VPagination} from 'vuetify/lib'
 export default {
+  name:'song-list-index',
   created() {
     getAllCateList().then(({categories, sub}) => {
       this.categories = categories
