@@ -36,7 +36,7 @@
       <base-tag-list :list='this.hotTags.map(c => c.name)' v-model="currentSubCate"></base-tag-list>
     </v-row>
     <v-row class="d-flex justify-space-between" v-loading="loading">
-      <div class="hq-songlist" style="width: 18.75%" v-if="currentPage === 1 && songList.length !== 0">
+      <div class="hq-songlist" style="width: 18.75%" v-if="currentPage === 1 && songList.length !== 0" @click="toHQSongList">
         <div class="img-cover mb-2">
           <img :src="songList[0].picUrl" class="cover" draggable="false">
           <div class="hq-text">
@@ -53,7 +53,7 @@
       <base-song-list-cover  v-for="list in songList" :key="list.id" :song-list='list' width="18.75%" showCreator/>
     </v-row>
     <v-row>
-      <v-pagination v-if="totalPage > 1" v-model="currentPage" total-visible="9" :length="totalPage"/>
+      <v-pagination v-if="totalPage > 1" v-model="currentPage" total-visible="9" :length="totalPage" color="#b82525"/>
     </v-row>
   </v-container>
 </template>
@@ -111,6 +111,9 @@ export default {
         this.total = total
         this.loading = false
       })
+    },
+    toHQSongList(){
+      this.$router.push('/main/recommend/song-list/HQ')
     }
   },
   data() {

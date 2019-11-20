@@ -40,7 +40,7 @@ export default {
 .__fix-viewport{
   height: 100vh;
   max-height: calc(100vh - 102px);
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
 }
 </style>

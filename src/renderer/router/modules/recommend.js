@@ -10,7 +10,18 @@ export default [
       },
       {
         path: 'song-list',
-        component: () => import(/* webpackChunkName: 'recommend~song-list' */ '@/views/main/recommend/song-list/song-list.vue')
+        component: () => import(/* webpackChunkName: 'recommend~song-list' */ '@/views/main/recommend/song-list/index.vue'),
+        redirect: '/main/recommend/song-list/index',
+        children:[
+          {
+            path: 'index',
+            component: () => import(/* webpackChunkName: 'recommend~song-list' */ '@/views/main/recommend/song-list/song-list.vue'),
+          },
+          {
+            path: 'HQ',
+            component: () => import(/* webpackChunkName: 'recommend~song-list' */ '@/views/main/recommend/song-list/HQ-song-list.vue'),
+          }
+        ]
       },
       {
         path: 'radio',
