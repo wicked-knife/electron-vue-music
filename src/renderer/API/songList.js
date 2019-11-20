@@ -55,4 +55,4 @@ export const getSongList = ({cat, limit = 50, page = 1}) => axios.get('/top/play
 **接口地址 :** `/top/playlist/highquality`
 */
 
-export const getHighQualitySongList = () => axios.get('/top/playlist/highquality')
+export const getHighQualitySongList = ({limit = 20, before, cat = '全部歌单'}) => axios.get('/top/playlist/highquality', {params: {limit, before, cat}})

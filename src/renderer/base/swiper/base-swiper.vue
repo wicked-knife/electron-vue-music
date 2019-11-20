@@ -64,7 +64,7 @@ export default {
         if(!newVal) {
           this.timer = setInterval(() => {
             this.next()
-          }, 600000)
+          }, 6000)
         } else {
           clearInterval(this.timer)
         }

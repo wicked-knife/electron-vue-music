@@ -1,27 +1,39 @@
 <template>
-  <div class="wrapper" :style="{width}">
-    <div :class="['img-wrapper mb-2', songList.copywriter && songList.copywriter.length > 4 ? '__active-hover' : '']">
+  <div :class="['wrapper', HQ ? 'HQ' : '']" :style="{width}">
+    <div :class="['img-wrapper mb-2', songList.copywriter && songList.copywriter.length > 4 ? '__active-hover' : '', HQ ? 'HQ' : '']">
       <img
         :src="songList.picUrl"
         class="cover"
         draggable="false"
       />
-      <div class="desc" v-if="songList.copywriter && songList.copywriter.length > 4">{{songList.copywriter}}</div>
+      <div class="desc" v-if="songList.copywriter && songList.copywriter.length > 4 && !HQ">{{songList.copywriter}}</div>
       <div class="play-count">
         <i class="iconfont icon-earphone"></i> {{_playCount}}
       </div>
       <div class="creator subtitle-3" v-if="showCreator">
-        <i class="iconfont icon-user ml-2 mr-1"></i>
-        <span class="nickname mr-1">
+        <i class="iconfont icon-user ml-2 mr-1" v-if="!HQ"></i>
+        <span class="nickname mr-1" v-if="!HQ">
           {{songList.creator.nickname}}
         </span>
+        <i class="iconfont icon-local-music" v-if="songList.creator.userType === 4 && !HQ"></i>
+        <i class="iconfont icon-star yellow--text" v-if="songList.creator.userType === 200 && !HQ"></i>
+        <i class="iconfont icon-V " v-if="songList.creator.userType === 3 && !HQ"></i>
+      </div>
+      <i class="iconfont icon-play_fill"></i>
+    </div>
+    <div class="name" v-if="!HQ">{{songList.name}}</div>
+    <div class="HQ-info" v-if="HQ">
+      <div class="name mb-2"><span class="HQ-tag" v-show="showTag">{{songList.tag}}</span>{{songList.name}}</div>
+      <div class="creator subtitle-3 mb-4 grey--text text--darken-2">
+        by <span class="nickname">{{songList.creator.nickname}}</span>      
         <i class="iconfont icon-local-music" v-if="songList.creator.userType === 4"></i>
         <i class="iconfont icon-star yellow--text" v-if="songList.creator.userType === 200"></i>
         <i class="iconfont icon-V " v-if="songList.creator.userType === 3"></i>
       </div>
-      <i class="iconfont icon-play_fill"></i>
-    </div>
-    <div class="name">{{songList.name}}</div>
+      <div class="copywriter subtitle-3 grey--text">
+        {{songList.copywriter}}
+      </div>
+    </div>  
   </div>
 </template>
 
@@ -37,6 +49,14 @@ export default {
       required: true
     },
     showCreator: {
+      type: Boolean,
+      default: false
+    },
+    HQ: {
+      type: Boolean,
+      default: false
+    },
+    showTag: {
       type: Boolean,
       default: false
     }
@@ -56,6 +76,39 @@ export default {
   flex-direction: column;
   overflow: hidden;
   margin-bottom: 36px;
+  &.HQ{
+    flex-direction: row;
+    @media screen and (max-width: 1250px){
+      width: 50% !important;
+    }
+    .HQ-info{
+      box-sizing: border-box;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      width: calc(100% - 100px);
+      .name{
+        width: 100%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      .nickname{
+        cursor: pointer;
+        &:hover{
+          color: #757575 !important;
+        }
+      }
+    }
+    .HQ-tag{
+      font-size: 12px;
+      color: $theme-color;
+      border: 1px solid $theme-color;
+      padding: 0 2px;
+      line-height: 0;
+      margin-right: 4px;
+    }
+  }
   .img-wrapper {
     position: relative;
     cursor: pointer;
@@ -98,12 +151,6 @@ export default {
         display: block;
         max-width: 50%;
       }
-      .icon-star, .icon-V{
-        font-size: 12px;
-      }
-      .icon-V,.icon-local-music{
-        color: $theme-color;
-      }
     }
     .play-count {
       width: 70%;
@@ -141,6 +188,36 @@ export default {
       opacity: 0;
       transition: opacity ease 0.3s;
     }
+    &.HQ{
+      display: flex;
+      width: 100px;
+      &::before{
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        left: -21px;
+        top: -21px;
+        border: 21px solid #e7aa5a;
+        border-color: transparent  transparent #e7aa5a transparent ;
+        transform: rotateZ(-45deg);
+      }
+      &::after{
+        font-family: 'iconfont';
+        content: '\e603';
+        display: block;
+        position: absolute;
+        top: -2px;
+        left: 2px;
+        transform: rotateZ(-45deg);
+        z-index: 1;
+        font-size: 14px;
+      }
+      .cover{
+        width: 100px;
+        height: 100px;
+      }
+    }
   }
   .cover {
     width: 100%;
@@ -155,5 +232,12 @@ export default {
       opacity: 0;
     }
   }
+}
+
+.icon-star, .icon-V{
+  font-size: 12px;
+}
+.icon-V,.icon-local-music{
+  color: $theme-color;
 }
 </style>

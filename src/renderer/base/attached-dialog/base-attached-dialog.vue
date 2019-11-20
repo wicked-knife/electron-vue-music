@@ -1,6 +1,9 @@
 <template>
     <transition name="fade">
-    <div :class="['attached-dialog-wrapper', position, left ? '__left' : '']" v-show="value" @click.stop ref="container">
+    <div :class="['attached-dialog-wrapper', position, left ? '__left' : '', right ? '__right' : '']" v-show="value" @click.stop ref="container">
+      <div class="dialog-title subtitle-2" v-if="title">
+        {{title}}
+      </div>
       <slot>
       </slot>
     </div>
@@ -23,6 +26,14 @@ export default {
     left: {
       type: Boolean,
       default: false
+    },
+    right: {
+      type: Boolean,
+      default: false
+    },
+    title: {
+      type: String,
+      default: ''
     }
   },
   methods:{
@@ -77,6 +88,15 @@ $bg-color: #2d2f33;
         left: 20px;
       }
     }
+    &.__right{
+      right: 0;
+      left: auto;
+      transform: translateX(0%) translateY(100%);
+      &::before{
+        left: auto;
+        right: 20px;
+      }
+    }
     &::before {
       z-index: 1;
       content: "";
@@ -121,5 +141,10 @@ $bg-color: #2d2f33;
       border-color: transparent $bg-color transparent transparent;
     }
   }
+}
+
+.dialog-title{
+  padding: 10px 0 10px 16px;
+  border-bottom: 1px solid #36383c;
 }
 </style>

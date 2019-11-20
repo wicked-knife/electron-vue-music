@@ -5,11 +5,8 @@
         <v-btn size="small" height="24px" depressed class="subtitle-2" @click="dialogVisiable = !dialogVisiable">
           {{currentSubCate}}<i class="iconfont icon-down"></i>
         </v-btn>
-        <base-attached-dialog position="bottom" :value="dialogVisiable" left @click:outside='handleClickOutside'>
+        <base-attached-dialog position="bottom" :value="dialogVisiable" left @click:outside='handleClickOutside' title="添加标签">
           <div class="cate-wrapper">
-            <div class="wrapper-title subtitle-2">
-              添加标签
-            </div>
             <div class="scroller beautify-scrollbar">
               <div class="cate-content">
                 <div :class="['cate-item mb-2', currentSubCate === '全部歌单' ? 'active' : '']" @click="handleCateItemClick('全部歌单')">全部歌单<span class="hot">HOT</span></div>
@@ -51,6 +48,7 @@
         </div>
       </div>
       <base-song-list-cover  v-for="list in songList" :key="list.id" :song-list='list' width="18.75%" showCreator/>
+      <div :style="{width: fillGap}"></div>
     </v-row>
     <v-row>
       <v-pagination v-if="totalPage > 1" v-model="currentPage" total-visible="9" :length="totalPage" color="#b82525"/>
@@ -65,7 +63,6 @@ import BaseTagList from '@/base/tag-list/base-tag-list.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
 import {VPagination} from 'vuetify/lib'
 export default {
-  name: 'recommend-song-list',
   created() {
     getAllCateList().then(({categories, sub}) => {
       this.categories = categories
@@ -132,6 +129,10 @@ export default {
   computed: {
     totalPage(){
       return Math.ceil(this.total / 50)
+    },
+    fillGap(){
+      const rest = 5 - this.songList.length % 5
+      return rest === 0 ? 0 : (100 - 18.75 * 5) / 4 * (rest - 1) + (18.75 * rest) + '%'
     }
   },
   watch: {
@@ -152,10 +153,6 @@ export default {
 }
 .cate-wrapper{
   width: 540px;
-  .wrapper-title{
-    padding: 10px 0 10px 16px;
-    border-bottom: 1px solid #36383c;
-  }
   .scroller{
     max-height: 365px;
     overflow-y: scroll;

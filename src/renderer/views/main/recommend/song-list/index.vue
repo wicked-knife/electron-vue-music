@@ -7,6 +7,6 @@
 
 <script>
 export default {
-  
+  name: 'recommend-song-list',
 }
 </script>
