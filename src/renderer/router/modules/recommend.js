@@ -28,6 +28,10 @@ export default [
         component: () => import(/* webpackChunkName: 'recommend~radio' */ '@/views/main/recommend/radio/radio.vue')
       },
       {
+        path: 'rank',
+        component: () => import(/* webpackChunkName: 'recommend~rank' */ '@/views/main/recommend/rank/rank.vue')
+      },
+      {
         path: 'latest-music',
         component: () => import(/* webpackChunkName: 'recommend~latest-music' */ '@/views/main/recommend/latest-music/latest-music.vue')
       }

@@ -217,6 +217,9 @@ export default {
         width: 100px;
         height: 100px;
       }
+      .play-count{
+        width: 100%;
+      }
     }
   }
   .cover {

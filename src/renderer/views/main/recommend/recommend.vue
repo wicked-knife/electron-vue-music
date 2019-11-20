@@ -5,7 +5,7 @@
         <v-tab to='/main/recommend/index'>个性推荐</v-tab>
         <v-tab to='/main/recommend/song-list'>歌单</v-tab>
         <v-tab to='/main/recommend/radio'>主播电台</v-tab>
-        <v-tab to='/foofoo'>排行榜</v-tab>
+        <v-tab to='/main/recommend/rank'>排行榜</v-tab>
         <v-tab to='/barbar'>最新歌手</v-tab>
         <v-tab to='/main/recommend/latest-music'>最新音乐</v-tab>
       </v-tabs>
