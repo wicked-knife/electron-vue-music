@@ -1,10 +1,11 @@
 <template>
-  <v-container class="container-1040">
+  <div>
     <base-tab-bar v-model="currentTab">
       <base-tab-item text='新歌速递' />
       <base-tab-item text='新碟上架' />
     </base-tab-bar>
-  </v-container>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
