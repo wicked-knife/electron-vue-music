@@ -52,7 +52,7 @@ export default {
       }
     }
     .play-count {
-      width: 70%;
+      width: 100%;
       position: absolute;
       top: 0;
       right: 0;

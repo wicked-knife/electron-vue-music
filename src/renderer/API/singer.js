@@ -57,7 +57,7 @@ category Code 取值:
 **调用例子 :** `/artist/list?cat=1001`
 */
 
-export const getSingerList = ({cat = 5001, limit = 30, page = 1, initial = -1} = {}) => axios.get('/artist/list', {params: {cat, limit, offset: (page - 1) * limit, initial}})
+export const getSingerList = ({cat = 5001, limit = 20, page = 1, initial = -1} = {}) => axios.get('/artist/list', {params: {cat, limit, offset: (page - 1) * limit, initial}})
 
 
 /*
@@ -76,4 +76,4 @@ export const getSingerList = ({cat = 5001, limit = 30, page = 1, initial = -1} =
 **调用例子 :** `/top/artists?offset=0&limit=30`
 */
 
-export const getHotSingerList = ({limit = 30, page = 1} = {}) => axios.get('/top/artists', {params: {limit, offset: (page - 1) * limit, cat: 6001}})
+export const getHotSingerList = ({limit = 20, page = 1} = {}) => axios.get('/top/artists', {params: {limit, offset: (page - 1) * limit, cat: 6001}})

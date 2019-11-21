@@ -48,7 +48,7 @@
         </div>
       </div>
       <base-song-list-cover  v-for="list in songList" :key="list.id" :song-list='list' width="18.75%" showCreator/>
-      <div :style="{width: fillGap}"></div>
+      <div :style="{width: fillGap(songList, 5, 18.75)}"></div>
     </v-row>
     <v-row>
       <v-pagination v-if="totalPage > 1" v-model="currentPage" total-visible="9" :length="totalPage" color="#b82525"/>
@@ -62,8 +62,10 @@ import BaseAttachedDialog from '@/base/attached-dialog/base-attached-dialog.vue'
 import BaseTagList from '@/base/tag-list/base-tag-list.vue'
 import BaseSongListCover from '@/base/song-list-cover/base-song-list-cover.vue'
 import {VPagination} from 'vuetify/lib'
+import fillGap from '@/mixins/fillGap.js'
 export default {
   name:'song-list-index',
+  mixins: [fillGap],
   created() {
     getAllCateList().then(({categories, sub}) => {
       this.categories = categories
@@ -130,10 +132,6 @@ export default {
   computed: {
     totalPage(){
       return Math.ceil(this.total / 50)
-    },
-    fillGap(){
-      const rest = 5 - this.songList.length % 5
-      return rest === 0 ? 0 : (100 - 18.75 * 5) / 4 * (rest - 1) + (18.75 * rest) + '%'
     }
   },
   watch: {

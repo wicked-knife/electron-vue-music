@@ -36,12 +36,18 @@ export default {
     position: relative;
     cursor: pointer;
     font-size: 0px;
+    padding-top: 100%;
   }
   .cover {
+    position: absolute;
     width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
   }
   .name {
     font-size: 13px;
+    cursor: pointer;
     .icon-user{
       font-size: 12px;
       color: $theme-color;
