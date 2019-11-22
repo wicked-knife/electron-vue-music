@@ -1,15 +1,26 @@
 <template>
-  <div :class="['wrapper', stripe ? 'stripe' : '']">
+  <div :class="['wrapper', stripe ? 'stripe' : '', size]">
     <span class="index subtitle-3 grey--text mr-5">{{_index}}</span>
     <div class="cover-wrapper mr-3">
       <img :src="music.album.picUrl" class="cover" />
       <i class="iconfont icon-play_fill"></i>
     </div>
-    <div class="name-wrapper">
+    <div class="name-wrapper" v-if="size === 'normal'">
       <span class="subtitle-2 name">{{music.name}}</span>
       <div class="d-flex align-center">
         <span class="caption artist grey--text">{{music.artists[0].name}}</span>
         <i class="iconfont icon-mv ml-1" v-if="music.mvid"></i>
+      </div>
+    </div>
+    <div class="large-info" v-if="size === 'large'">
+      <div class="name subtitle-2">
+        {{music.name}}
+        <i class="iconfont icon-mv ml-1" v-if="music.mvid"></i>
+      </div>
+      <div class="artist caption grey--text">{{music.artists[0].name}}</div>
+      <div class="album-name caption artist grey--text">{{music.album.name}}</div>
+      <div class="duration grey--text caption">
+        {{_duration}}
       </div>
     </div>
   </div>
@@ -31,7 +42,7 @@ export default {
       type: Number,
       required: true
     },
-    stripe:{
+    stripe: {
       type: Boolean,
       default: false
     }
@@ -39,6 +50,11 @@ export default {
   computed: {
     _index() {
       return this.index < 10 ? '0' + this.index : this.index
+    },
+    _duration(){
+      const minutes = Math.floor(this.music.duration / 1000 / 60)
+      const seconds = Math.floor(this.music.duration / 1000 % 60)
+      return `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
     }
   }
 }
@@ -50,12 +66,36 @@ export default {
   align-items: center;
   padding: 10px 10px 10px 12px;
   max-height: 60px;
-  &:hover{
-    background-color: rgb(35,37,41) !important;
+  &:hover {
+    background-color: rgb(35, 37, 41) !important;
+    .artist {
+      color: #fff !important;
+    }
   }
-  &.stripe{
-    background-color: rgb(26,28,32);
+  &.stripe {
+    background-color: rgb(26, 28, 32);
   }
+  &.large {
+    width: 100%;
+    .name{
+      width: 14vw;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .album-name{
+      width: 16vw;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+}
+.large-info{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
 }
 .cover-wrapper {
   position: relative;
@@ -81,33 +121,44 @@ export default {
     border: 0.5px solid rgba(255, 255, 255, 0.7);
     transform: translate3d(-50%, -50%, 0);
     transition: background-color ease 0.3s;
-    &:hover{
+    &:hover {
       background-color: rgba(0, 0, 0, 0.7);
     }
   }
 }
-.name-wrapper{
+.name-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  .name{
-    width: 26.20vw;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
   .artist{
-    color: #757575;
-    &:hover{
-      color: #fff;
-    }
+    width: auto
   }
-  .icon-mv{
-    color: $theme-color;
-    cursor: pointer;
-    &:hover{
-      filter: brightness(1.3);
-    }
+}
+.icon-mv {
+  color: $theme-color;
+  cursor: pointer;
+  &:hover {
+    filter: brightness(1.3);
   }
+}
+.name {
+  width: 26.2vw;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.artist {
+  color: #757575;
+  width: 12vw;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  &:hover {
+    color: #fff;
+  }
+}
+.duration{
+  width: 60px;
 }
 </style>

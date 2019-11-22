@@ -20,6 +20,11 @@ export default {
     return {
       currentTab: '新歌速递'
     }
+  },
+  watch:{
+    currentTab(val){
+      val === '新歌速递' ? this.$router.push('/main/recommend/latest-music/new-song') : this.$router.push('/main/recommend/latest-music/new-disc')
+    }
   }
 }
 </script>

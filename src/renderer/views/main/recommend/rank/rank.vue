@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="container-1040">
     <base-title text="官方榜" />
-    <v-row class="d-flex justify-space-between">
+    <v-row class="d-flex justify-space-between" v-loading="loading">
       <base-rank-cover v-for="rank in rankList" :key="rank.id" :rank="rank" width="15.38%"/>
       <div :style="{width: fillGap(rankList, 6, 15.38)}"></div>
     </v-row>
@@ -18,7 +18,8 @@ export default {
   mixins: [fillGap],
   data(){
     return {
-      rankList: []
+      rankList: [],
+      loading: true
     }
   },
   components:{
@@ -28,6 +29,7 @@ export default {
   created(){
     getRankList().then(({list}) => {
       this.rankList = list
+      this.loading = false
     })
   }
 }
