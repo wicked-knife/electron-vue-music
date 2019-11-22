@@ -2,7 +2,7 @@
   <div class="wrapper" :style="{width}">
     <div class="img-wrapper mb-2">
       <img
-        :src="singer.img1v1Url"
+        :src="singer.img1v1Url + '?param=160y160'"
         class="cover"
         draggable="false"
       />

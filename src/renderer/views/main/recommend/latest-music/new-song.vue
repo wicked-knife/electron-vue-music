@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="container-1040">
     <v-row class="border-b">
-      <v-tabs background-color="transparent" height="40px">
+      <v-tabs background-color="transparent" height="40px" v-model="value">
         <v-tab class="tab">全部</v-tab>
         <v-tab class="tab">华语</v-tab>
         <v-tab class="tab">欧美</v-tab>
@@ -28,16 +28,23 @@
 import { getLatestSongByLan } from '@/API/latest-song.js'
 import BaseLatestMusicItem from '@/base/latest-music-item/base-latest-music-item.vue'
 export default {
+  name: 'new-song',
   created() {
     getLatestSongByLan().then(({data}) => this.renderList = data)
   },
   data(){
     return {
-      renderList: []
+      renderList: [],
+      value: null
     }
   },
   components:{
     BaseLatestMusicItem
+  },
+  watch:{
+    value(v){
+      console.log(v)
+    }
   }
 }
 </script>

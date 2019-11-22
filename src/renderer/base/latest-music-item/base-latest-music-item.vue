@@ -2,7 +2,7 @@
   <div :class="['wrapper', stripe ? 'stripe' : '', size]">
     <span class="index subtitle-3 grey--text mr-5">{{_index}}</span>
     <div class="cover-wrapper mr-3">
-      <img :src="music.album.picUrl" class="cover" />
+      <img :src="music.album.picUrl + '?param=50y50'" class="cover" />
       <i class="iconfont icon-play_fill"></i>
     </div>
     <div class="name-wrapper" v-if="size === 'normal'">

@@ -2,10 +2,9 @@
   <div class="wrapper" :style="{width}">
     <div class="img-wrapper mb-2">
       <img
-        :src="rank.coverImgUrl"
+        :src="rank.coverImgUrl + '?param=160y160'"
         class="cover"
-        draggable="false"
-      />
+        draggable="false"/>
       <div class="play-count">
         <i class="iconfont icon-earphone"></i> {{_playCount}}
       </div>

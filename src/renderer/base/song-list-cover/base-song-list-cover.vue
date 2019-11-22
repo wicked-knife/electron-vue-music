@@ -2,7 +2,7 @@
   <div :class="['wrapper', HQ ? 'HQ' : '']" :style="{width}">
     <div :class="['img-wrapper mb-2', songList.copywriter && songList.copywriter.length > 4 ? '__active-hover' : '', HQ ? 'HQ' : '']">
       <img
-        :src="songList.picUrl"
+        :src="songList.picUrl + '?param=200y200'"
         class="cover"
         draggable="false"
       />

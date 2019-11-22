@@ -4,7 +4,9 @@
       <base-tab-item text='新歌速递' />
       <base-tab-item text='新碟上架' />
     </base-tab-bar>
-    <router-view></router-view>
+    <keep-alive :include="['new-song', 'new-disc']">
+      <router-view />
+    </keep-alive>
   </div>
 </template>
 
@@ -12,6 +14,7 @@
 import BaseTabBar from '@/base/tab-bar/base-tab-bar.vue'
 import BaseTabItem from '@/base/tab-bar/base-tab-item.vue'
 export default {
+  name: 'recommend-latest-music',
   components: {
     BaseTabBar,
     BaseTabItem

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper" :style="{width}">
     <div :class="['img-wrapper mb-2', radio.copywriter && radio.copywriter.length > 4 ? '__active-hover' : '']">
-      <img :src="radio.picUrl" class="cover" draggable="false" />
+      <img :src="radio.picUrl + '?param=160y160'" class="cover" draggable="false" />
       <div class="name subtitle-3">{{radio.name}}</div>
     </div>
     <div class="copywriter">{{radio.copywriter || radio.rcmdtext || radio.category}}</div>

@@ -12,7 +12,7 @@
     </v-row>
 
     <v-container fluid>
-      <keep-alive :include="['recommend-index','recommend-radio', 'recommend-song-list', 'recommend-rank', 'recommend-singer']">
+      <keep-alive :include="['recommend-index','recommend-radio', 'recommend-song-list', 'recommend-rank', 'recommend-singer', 'recommend-latest-music']">
         <router-view></router-view>
       </keep-alive>
     </v-container>
