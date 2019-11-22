@@ -1,6 +1,6 @@
 <template>
   <div :class="['wrapper', HQ ? 'HQ' : '']" :style="{width}">
-    <div :class="['img-wrapper mb-2', songList.copywriter && songList.copywriter.length > 4 ? '__active-hover' : '', HQ ? 'HQ' : '']">
+    <div :class="['img-wrapper mb-2', songList.copywriter && songList.copywriter.length > 4 ? '__active-hover' : '', HQ ? 'HQ' : 'normal']">
       <img
         :src="songList.picUrl + '?param=200y200'"
         class="cover"
@@ -76,11 +76,13 @@ export default {
   flex-direction: column;
   overflow: hidden;
   margin-bottom: 36px;
+
   &.HQ{
     flex-direction: row;
     @media screen and (max-width: 1250px){
       width: 50% !important;
     }
+
     .HQ-info{
       box-sizing: border-box;
       padding: 10px;
@@ -113,6 +115,14 @@ export default {
     position: relative;
     cursor: pointer;
     font-size: 0px;
+    &.normal{
+     padding-top: 100%;
+    .cover{
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
     &:hover {
       .desc {
         transform: translateY(0);

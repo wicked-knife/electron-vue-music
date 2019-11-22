@@ -38,7 +38,6 @@ export default [
       {
         path: 'latest-music',
         component: () => import(/* webpackChunkName: 'recommend~latest-music' */ '@/views/main/recommend/latest-music/latest-music.vue'),
-        redirect: '/main/recommend/latest-music/new-song',
         children: [
           {
             path: 'new-song',

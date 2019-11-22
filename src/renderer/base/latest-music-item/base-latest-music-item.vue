@@ -161,4 +161,7 @@ export default {
 .duration{
   width: 60px;
 }
+.index{
+  width: 22px;
+}
 </style>

@@ -45,6 +45,7 @@ export default {
     position: relative;
     cursor: pointer;
     font-size: 0px;
+    padding-top: 100%;
     &:hover {
       .icon-play_fill {
         opacity: 1;
@@ -88,6 +89,9 @@ export default {
     }
   }
   .cover {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
   }
   .name {

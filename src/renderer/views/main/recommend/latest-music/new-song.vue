@@ -13,7 +13,7 @@
       <v-btn text tile :ripple="false" height="30px">
         <i class="iconfont icon-play_fill mr-1"></i><span class="subtitle-3">播放全部</span>
       </v-btn>
-      <v-btn  height="30px">
+      <v-btn  height="30px" color="transparent">
         <i class="iconfont icon-addfile"></i> <span class="subtitle-3">收藏全部</span>
       </v-btn>
     </v-row>
