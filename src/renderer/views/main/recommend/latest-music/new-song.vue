@@ -17,8 +17,8 @@
         <i class="iconfont icon-addfile"></i> <span class="subtitle-3">收藏全部</span>
       </v-btn>
     </v-row>
-    <v-row>
-      <base-latest-music-item v-for="(music, index) in renderList" :music='music' :index='index + 1' :key="music.album.id + index"
+    <v-row v-loading="loading">
+      <base-latest-music-item v-for="(music, index) in renderList" :music='music' :index='index + 1' :key="music.album.id + music.duration"
       size="large" :stripe='index % 2 === 0'/>
     </v-row>
   </v-container>
@@ -27,23 +27,39 @@
 <script>
 import { getLatestSongByLan } from '@/API/latest-song.js'
 import BaseLatestMusicItem from '@/base/latest-music-item/base-latest-music-item.vue'
+const indexToCode = [{code: 0, data: []}, {code: 7, data: []}, {code: 96, data: []}, {code: 16, data: []}, {code: 8, data: []}]
 export default {
   name: 'new-song',
   created() {
-    getLatestSongByLan().then(({data}) => this.renderList = data)
+    this.getLatestSong()
   },
   data(){
     return {
       renderList: [],
-      value: null
+      value: 0,
+      loading: true
+    }
+  },
+  methods: {
+    getLatestSong(){
+      if(!indexToCode[this.value].data.length) {
+        this.loading = true
+        getLatestSongByLan(indexToCode[this.value].code).then(({data}) => {
+          indexToCode[this.value].data = data
+          this.renderList = indexToCode[this.value].data
+          this.loading = false
+        })
+      } else {
+        this.renderList = indexToCode[this.value].data
+      }
     }
   },
   components:{
     BaseLatestMusicItem
   },
   watch:{
-    value(v){
-      console.log(v)
+    value(){
+      this.getLatestSong()
     }
   }
 }
