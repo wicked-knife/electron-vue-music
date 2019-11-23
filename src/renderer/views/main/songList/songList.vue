@@ -1,6 +1,6 @@
 <template>
   <v-container fluid v-loading="loading">
-    <v-row class="d-flex pl-7 pr-7" v-if="songList">
+    <v-row class="d-flex pl-7 pr-7 mb-12" v-if="songList">
       <div class="song-list-image mr-6">
         <img :src="songList.coverImgUrl + '?param=200y200'" />
       </div>
@@ -23,7 +23,7 @@
               <img :src="songList.creator.avatarUrl + '?param=40y40'" />
             </v-avatar>
             <i class="iconfont V" v-if="songList.creator.userId === 1">V</i>
-            <i class="iconfont icon-star" v-if="songList.creator.userType !== 200"></i>
+            <i class="iconfont icon-star" v-if="songList.creator.userType === 200"></i>
           </div>
           <div class="nickname grey--text subtitle-2 mr-4">{{songList.creator.nickname}}</div>
           <div class="create-time grey--text text--darken-2">{{__formatedDate}}创建</div>
@@ -39,11 +39,15 @@
             <i class="iconfont icon-share grey--text mr-1"></i>分享({{songList.shareCount}})
           </v-btn>
           <v-btn color="#25272b" height="26px" class="subtitle-3 pl-2 pr-2">
-            <i class="iconfont icon-download grey--text mr-1"></i>下载
+            <i class="iconfont icon-download grey--text mr-1"></i>下载全部
           </v-btn>
         </div>
-        <div class="song-list-tag subtitle-2">
-          标签: <span v-for="tag in songList.tags" :key="tag" class="blue--text text--darken-3 ml-1 mr-1 subtitle-3">{{tag}}</span>
+        <div class="song-list-tag subtitle-3 mb-2" v-if="songList.tags.length !== 0">
+          标签: <span v-for="tag in songList.tags" :key="tag" class="blue--text text--darken-3 ml-1 mr-1">{{tag}}</span>
+        </div>
+        <div class="desc subtitle-3" v-if="songList.description" >
+          <i :class="['iconfont icon-down grey--text text--darken-2', expanded ? 'expanded' : '']" @click="expanded = !expanded" v-if="shouldShowExpand"></i>
+          <span class="tit">简介: </span><pre :class="['desc-text ml-2', expanded ? 'expanded' : '']" ref="desc">{{songList.description}}</pre>
         </div>
       </div>
     </v-row>
@@ -57,20 +61,28 @@ export default {
   data() {
     return {
       songList: null,
-      loading: true
+      loading: true,
+      expanded: false,
+      shouldShowExpand: false
     }
   },
   created() {
     getSongListDetail(this.$route.params.id).then(({ playlist }) => {
       this.songList = playlist
       this.loading = false
+      this.songList.description && this.$nextTick(this.__checkShouldExpand)
     })
+  },
+  methods:{
+    __checkShouldExpand(){
+      this.shouldShowExpand = this.$refs['desc'].offsetHeight !== 18
+    }
   },
   computed: {
     __playCount() {
-      return this.songList.playCount < 100000
+      return this.songList.playCount < 10000
         ? this.songList.playCount
-        : Math.floor(this.songList.playCount / 100000) + '万'
+        : Math.floor(this.songList.playCount / 10000) + '万'
     },
     __formatedDate() {
       return dayjs(this.songList.createTime).format('YYYY-MM-DD')
@@ -93,6 +105,9 @@ export default {
     .play-count {
       font-size: 12px;
       padding: 0 8px;
+      & > div:nth-child(2){
+        text-align: right;
+      }
     }
   }
   .song-list-creator {
@@ -159,6 +174,41 @@ export default {
       cursor: pointer;
       &:hover{
         color: #1e88e5 !important;
+      }
+    }
+  }
+  .desc{
+    display: flex;
+    position: relative;
+    box-sizing: border-box;
+    padding-right: 30px;
+    .tit{
+      display: inline-block;
+      width: 28px;
+      flex-shrink: 0;
+    }
+    .desc-text{
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+      display: -webkit-box;
+      max-width: 100%;
+      font-family: inherit;
+      white-space: pre-wrap;
+      &.expanded{
+        -webkit-line-clamp: unset;
+      }
+    }
+    .icon-down{
+      position: absolute;
+      right: 0;
+      top: 0;
+      font-size: 14px;
+      cursor: pointer;
+      &.expanded{
+        transform: rotateZ(180deg);
       }
     }
   }
