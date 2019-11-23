@@ -56,3 +56,20 @@ export const getSongList = ({cat, limit = 50, page = 1}) => axios.get('/top/play
 */
 
 export const getHighQualitySongList = ({limit = 20, before, cat = '全部歌单'}) => axios.get('/top/playlist/highquality', {params: {limit, before, cat}})
+
+
+/*
+
+### 获取歌单详情
+
+说明 : 歌单能看到歌单名字 , 但看不到具体歌单内容 , 调用此接口 , 传入歌单 id, 可
+以获取对应歌单内的所有的音乐，但是返回的trackIds是完整的，tracks 则是不完整的，可拿全部 trackIds 请求一次 `song/detail` 接口获取所有歌曲的详情 ([https://github.com/Binaryify/NeteaseCloudMusicApi/issues/452](https://github.com/Binaryify/NeteaseCloudMusicApi/issues/452))
+
+**必选参数 :** `id` : 歌单 id
+
+**可选参数 :** `s` : 歌单最近的 s 个收藏者
+
+**接口地址 :** `/playlist/detail`
+*/
+
+export const getSongListDetail = id => axios.get('/playlist/detail', {params: {id}})
