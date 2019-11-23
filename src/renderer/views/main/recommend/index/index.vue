@@ -104,6 +104,11 @@ export default {
                       key={songList.id}
                       width="18.46%"
                       song-list={songList}
+                      {...{
+                        on: {
+                          'songList:click': this.handleSongListClick
+                        }
+                      }}
                     />
                   )
                 })}
@@ -211,6 +216,9 @@ export default {
     handleDialogHide(){
       Array.prototype.forEach.call(this.$refs['layout-list'].querySelectorAll('li'), (node, index) => node.innerText = this.layout[index])
       this.dialogVisiable = false
+    },
+    handleSongListClick(songList){
+      this.$router.push('/main/song-list/' + songList.id )
     }
   },
   render() {

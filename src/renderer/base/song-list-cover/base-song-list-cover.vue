@@ -1,6 +1,7 @@
 <template>
   <div :class="['wrapper', HQ ? 'HQ' : '']" :style="{width}">
-    <div :class="['img-wrapper mb-2', songList.copywriter && songList.copywriter.length > 4 ? '__active-hover' : '', HQ ? 'HQ' : 'normal']">
+    <div :class="['img-wrapper mb-2', songList.copywriter && songList.copywriter.length > 4 ? '__active-hover' : '', HQ ? 'HQ' : 'normal']"
+      @click="handleSongListClick">
       <img
         :src="songList.picUrl + '?param=200y200'"
         class="cover"
@@ -21,7 +22,7 @@
       </div>
       <i class="iconfont icon-play_fill"></i>
     </div>
-    <div class="name" v-if="!HQ">{{songList.name}}</div>
+    <div class="name" v-if="!HQ"  @click="handleSongListClick">{{songList.name}}</div>
     <div class="HQ-info" v-if="HQ">
       <div class="name mb-2"><span class="HQ-tag" v-show="showTag">{{songList.tag}}</span>{{songList.name}}</div>
       <div class="creator subtitle-3 mb-4 grey--text text--darken-2">
@@ -65,6 +66,11 @@ export default {
     _playCount(){
       let _count = this.songList.playCount || this.songList.playcount
       return _count < 100000 ? _count : Math.floor(_count / 10000) + '万'
+    }
+  },
+  methods:{
+    handleSongListClick(){
+      this.$emit('songList:click', this.songList)
     }
   }
 }
@@ -237,6 +243,7 @@ export default {
   }
   .name {
     font-size: 13px;
+    cursor: pointer;
   }
 }
 .__active-hover{
