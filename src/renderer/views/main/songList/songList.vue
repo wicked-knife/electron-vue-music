@@ -1,6 +1,6 @@
 <template>
   <v-container fluid v-loading="loading">
-    <v-row class="d-flex pl-7 pr-7 mb-12" v-if="songList">
+    <v-row class="d-flex pl-7 pr-7 mb-6" v-if="songList">
       <div class="song-list-image mr-6">
         <img :src="songList.coverImgUrl + '?param=200y200'" />
       </div>
@@ -30,40 +30,84 @@
         </div>
         <div class="btn-group mb-4">
           <v-btn color="#b82525" height="26px" class="subtitle-3 pl-2 pr-2">
-            <i class="iconfont icon-play_fill mr-1 "></i>播放全部
+            <i class="iconfont icon-play_fill mr-1"></i>播放全部
           </v-btn>
           <v-btn color="#25272b" height="26px" class="subtitle-3 pl-2 pr-2">
-            <i class="iconfont icon-addfile mr-1 grey--text"></i>{{songList.subscribed ? '已收藏' : '收藏全部'}}({{songList.subscribedCount}})
+            <i class="iconfont icon-addfile mr-1 grey--text"></i>
+            {{songList.subscribed ? '已收藏' : '收藏全部'}}({{songList.subscribedCount}})
           </v-btn>
           <v-btn color="#25272b" height="26px" class="subtitle-3 pl-2 pr-2">
-            <i class="iconfont icon-share grey--text mr-1"></i>分享({{songList.shareCount}})
+            <i class="iconfont icon-share grey--text mr-1"></i>
+            分享({{songList.shareCount}})
           </v-btn>
           <v-btn color="#25272b" height="26px" class="subtitle-3 pl-2 pr-2">
             <i class="iconfont icon-download grey--text mr-1"></i>下载全部
           </v-btn>
         </div>
         <div class="song-list-tag subtitle-3 mb-2" v-if="songList.tags.length !== 0">
-          标签: <span v-for="tag in songList.tags" :key="tag" class="blue--text text--darken-3 ml-1 mr-1">{{tag}}</span>
+          标签:
+          <span
+            v-for="tag in songList.tags"
+            :key="tag"
+            class="blue--text text--darken-3 ml-1 mr-1"
+          >{{tag}}</span>
         </div>
-        <div class="desc subtitle-3" v-if="songList.description" >
-          <i :class="['iconfont icon-down grey--text text--darken-2', expanded ? 'expanded' : '']" @click="expanded = !expanded" v-if="shouldShowExpand"></i>
-          <span class="tit">简介: </span><pre :class="['desc-text ml-2', expanded ? 'expanded' : '']" ref="desc">{{songList.description}}</pre>
+        <div class="desc subtitle-3" v-if="songList.description">
+          <i
+            :class="['iconfont icon-down grey--text text--darken-2', expanded ? 'expanded' : '']"
+            @click="expanded = !expanded"
+            v-if="shouldShowExpand"
+          ></i>
+          <span class="tit">简介:</span>
+          <pre :class="['desc-text ml-2', expanded ? 'expanded' : '']" ref="desc">{{songList.description}}</pre>
         </div>
+      </div>
+    </v-row>
+    <v-row class="d-flex align-center flex-nowrap pl-8 pr-8 border-b">
+      <v-tabs height="40px" background-color="transparent" v-model="currentTab">
+        <v-tab class="tab-item">歌曲列表</v-tab>
+        <v-tab class="tab-item">评论({{songList ? songList.commentCount : ''}})</v-tab>
+        <v-tab class="tab-item">收藏者</v-tab>
+      </v-tabs>
+      <base-input background-color='#202226' placeholder="搜索歌单音乐"/>
+    </v-row>
+    <v-row v-show="currentTab === 0">
+      歌曲列表
+    </v-row>
+    <v-row v-show="currentTab === 1">
+      评论
+    </v-row>
+    <v-row v-show="currentTab === 2" class="pt-4 subscribers">
+      <div class="avatar-item mb-9" v-for="subscriber in subscribers" :key="subscriber.userId">
+        <v-avatar width="60px" height="60px" class="mb-2">
+          <img :src="subscriber.avatarUrl + '?param=60y60'" draggable="false">
+        </v-avatar>
+        <span class="caption grey--text avatar-nickname">
+          {{subscriber.nickname}}
+        </span>
       </div>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { getSongListDetail } from '@/API/songList.js'
+import { getSongListDetail, getSongListSubscribers } from '@/API/songList.js'
+import BaseInput from '@/base/input/base-input.vue'
 import dayjs from '@/common/day.js'
 export default {
+  components:{
+    BaseInput
+  },
   data() {
     return {
       songList: null,
       loading: true,
       expanded: false,
-      shouldShowExpand: false
+      shouldShowExpand: false,
+      currentTab: 0,
+      subscribers: [], // 收藏者
+      subscribersPage: 1, // 收藏者当前页,
+      moreSubscribers: true
     }
   },
   created() {
@@ -72,9 +116,12 @@ export default {
       this.loading = false
       this.songList.description && this.$nextTick(this.__checkShouldExpand)
     })
+    getSongListSubscribers({id: this.$route.params.id, limit: 66, page: this.subscribersPage}).then(({subscribers}) => {
+      this.subscribers = subscribers
+    })
   },
-  methods:{
-    __checkShouldExpand(){
+  methods: {
+    __checkShouldExpand() {
       this.shouldShowExpand = this.$refs['desc'].offsetHeight !== 18
     }
   },
@@ -92,6 +139,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.song-list-image {
+  width: 200px;
+}
+.tab-item{
+  min-width: 60px;
+  margin: 0 16px;
+}
 .song-list-info {
   flex: 1;
   .song-list-title {
@@ -105,7 +159,7 @@ export default {
     .play-count {
       font-size: 12px;
       padding: 0 8px;
-      & > div:nth-child(2){
+      & > div:nth-child(2) {
         text-align: right;
       }
     }
@@ -148,8 +202,8 @@ export default {
       font-size: 12px;
     }
   }
-  .btn-group{
-    .icon-play_fill{
+  .btn-group {
+    .icon-play_fill {
       border: 1px solid #fff;
       width: 15px;
       height: 15px;
@@ -159,35 +213,35 @@ export default {
       justify-content: center;
       font-size: 13px;
     }
-    .icon-addfile{
+    .icon-addfile {
       font-size: 20px;
     }
-    .icon-share{
+    .icon-share {
       transform: translateY(1px);
     }
-    button{
+    button {
       letter-spacing: initial;
     }
   }
-  .song-list-tag{
-    span{
+  .song-list-tag {
+    span {
       cursor: pointer;
-      &:hover{
+      &:hover {
         color: #1e88e5 !important;
       }
     }
   }
-  .desc{
+  .desc {
     display: flex;
     position: relative;
     box-sizing: border-box;
     padding-right: 30px;
-    .tit{
+    .tit {
       display: inline-block;
       width: 28px;
       flex-shrink: 0;
     }
-    .desc-text{
+    .desc-text {
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
@@ -197,17 +251,17 @@ export default {
       max-width: 100%;
       font-family: inherit;
       white-space: pre-wrap;
-      &.expanded{
+      &.expanded {
         -webkit-line-clamp: unset;
       }
     }
-    .icon-down{
+    .icon-down {
       position: absolute;
       right: 0;
       top: 0;
       font-size: 14px;
       cursor: pointer;
-      &.expanded{
+      &.expanded {
         transform: rotateZ(180deg);
       }
     }
@@ -218,5 +272,39 @@ export default {
   border: 1px solid $theme-color;
   font-size: 13px;
   padding: 0 4px;
+}
+.subscribers{
+.avatar-item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 9.09%;
+  @media screen and (max-width: 1530px){
+    width:10%;
+  }
+  @media screen and (max-width: 1366px){
+    width: 11.11%
+  }
+  @media screen and (max-width: 1280px){
+    width: 12.5%
+  }
+  @media screen and (max-width: 1150px){
+    width: 14.28%
+  }
+  .avatar-nickname{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    &:hover{
+      color: #fff !important;
+    }
+  }
+  img{
+    cursor: pointer;
+  }
+}
 }
 </style>

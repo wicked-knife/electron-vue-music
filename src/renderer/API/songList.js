@@ -73,3 +73,20 @@ export const getHighQualitySongList = ({limit = 20, before, cat = '全部歌单'
 */
 
 export const getSongListDetail = id => axios.get('/playlist/detail', {params: {id}})
+
+
+/*
+### 歌单收藏者
+说明 : 调用此接口 , 传入歌单 id 可获取歌单的所有收藏者  
+**必选参数 :**
+
+`id` : 歌单 id
+
+**可选参数 :** `limit`: 取出评论数量 , 默认为 20
+
+`offset`: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)\*20, 其中 20 为 limit 的值
+
+**接口地址 :** `/playlist/subscribers`
+*/
+
+export const getSongListSubscribers = ({id, page = 1, limit = 20}) => axios.get('/playlist/subscribers', {params: {id, offset: (page - 1) * limit, limit}})

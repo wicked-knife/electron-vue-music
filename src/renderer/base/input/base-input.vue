@@ -1,5 +1,5 @@
 <template>
-  <div class="input-wrapper" :style="{width: _width}">
+  <div class="input-wrapper" :style="{width: _width, backgroundColor}">
     <input type="text" :placeholder="placeholder" class="mr-1">
     <i class="iconfont icon-search mr-2 grey--text"></i>
   </div>
@@ -15,6 +15,9 @@ export default {
     width: {
       type: [String, Number],
       default: 220
+    },
+    backgroundColor: {
+      type: String
     }
   },
   computed: {
