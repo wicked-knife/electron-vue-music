@@ -77,16 +77,22 @@
     <v-row v-show="currentTab === 1">
       评论
     </v-row>
-    <v-row v-show="currentTab === 2" class="pt-4 subscribers">
-      <div class="avatar-item mb-9" v-for="subscriber in subscribers" :key="subscriber.userId">
-        <v-avatar width="60px" height="60px" class="mb-2">
-          <img :src="subscriber.avatarUrl + '?param=60y60'" draggable="false">
-        </v-avatar>
-        <span class="caption grey--text avatar-nickname">
-          {{subscriber.nickname}}
-        </span>
-      </div>
-    </v-row>
+    <v-container fluid v-show="currentTab === 2" class="pa-0">
+      <v-row v-show="currentTab === 2" class="pt-4 subscribers">
+        <div class="avatar-item mb-9" v-for="subscriber in subscribers" :key="subscriber.userId">
+          <v-avatar width="60px" height="60px" class="mb-2">
+            <img :src="subscriber.avatarUrl + '?param=60y60'" draggable="false">
+          </v-avatar>
+          <span class="caption grey--text avatar-nickname">
+            {{subscriber.nickname}}
+          </span>
+        </div>
+      </v-row>
+        <v-row>
+          <v-pagination v-if="songList && songList.subscribedCount > 66" v-model="subscribersPage" total-visible="9" :length="Math.floor(songList.subscribedCount / 66)" color="#b82525"/>
+        </v-row>
+    </v-container>
+
   </v-container>
 </template>
 
@@ -116,13 +122,21 @@ export default {
       this.loading = false
       this.songList.description && this.$nextTick(this.__checkShouldExpand)
     })
-    getSongListSubscribers({id: this.$route.params.id, limit: 66, page: this.subscribersPage}).then(({subscribers}) => {
-      this.subscribers = subscribers
-    })
+    this.getSongListSubscribers()
   },
   methods: {
     __checkShouldExpand() {
       this.shouldShowExpand = this.$refs['desc'].offsetHeight !== 18
+    },
+    getSongListSubscribers(){
+      getSongListSubscribers({id: this.$route.params.id, limit: 66, page: this.subscribersPage}).then(({subscribers}) => {
+        this.subscribers = subscribers
+      })
+    }
+  },
+  watch: {
+    subscribersPage(){
+      this.getSongListSubscribers()
     }
   },
   computed: {
