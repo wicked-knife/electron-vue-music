@@ -6,7 +6,7 @@ import recommendRoutes from '@/router/modules/recommend.js'
 import personalFMRoutes from '@/router/modules/personalFM.js'
 import personalizedContentRoutes from '@/router/modules/personalizedContent.js'
 import videoRoutes from '@/router/modules/video.js'
-import songListRoutes from '@/router/modules/songList.js'
+import songListDetailRoutes from '@/router/modules/songListDetail.js'
 
 import Login from '@/views/login/login.vue'
 const routes = [
@@ -22,7 +22,7 @@ const routes = [
       ...personalFMRoutes,
       ...personalizedContentRoutes,
       ...videoRoutes,
-      ...songListRoutes
+      ...songListDetailRoutes
     ]
   },
   { path: '/login', component: Login }

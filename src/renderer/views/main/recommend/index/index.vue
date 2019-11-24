@@ -218,7 +218,7 @@ export default {
       this.dialogVisiable = false
     },
     handleSongListClick(songList){
-      this.$router.push('/main/song-list/' + songList.id )
+      this.$router.push('/main/song-list-detail/' + songList.id )
     }
   },
   render() {

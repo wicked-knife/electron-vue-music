@@ -74,9 +74,9 @@
     <v-row v-show="currentTab === 0">
       歌曲列表
     </v-row>
-    <v-row v-show="currentTab === 1">
-      评论
-    </v-row>
+    <v-container v-show="currentTab === 1" class="pa-0">
+      <base-comment-input />
+    </v-container>
     <v-container fluid v-show="currentTab === 2" class="pa-0">
       <v-row v-show="currentTab === 2" class="pt-4 subscribers">
         <div class="avatar-item mb-9" v-for="subscriber in subscribers" :key="subscriber.userId">
@@ -99,10 +99,12 @@
 <script>
 import { getSongListDetail, getSongListSubscribers } from '@/API/songList.js'
 import BaseInput from '@/base/input/base-input.vue'
+import BaseCommentInput from '@/base/comment-input/base-comment-input.vue'
 import dayjs from '@/common/day.js'
 export default {
   components:{
-    BaseInput
+    BaseInput,
+    BaseCommentInput
   },
   data() {
     return {
