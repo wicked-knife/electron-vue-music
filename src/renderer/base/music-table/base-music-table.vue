@@ -3,6 +3,7 @@
     <thead class="grey--text">
       <tr>
         <th style="width: 50px" class="border-r"></th>
+        <th style="width: 50px" class="border-r">操作</th>
         <th v-for="(head, index) in $headers" :key="index" 
         :class="['border-r', head.sortable ? 'sortable' : '', head.sortType !== 0 ? 'active' : '']" 
         @click="__handleTheadClick(head,index)">
@@ -12,6 +13,15 @@
         </th>
       </tr>
     </thead>
+    <tbody>
+      <tr v-for="(item, index) in items" :key="item.id">
+        <td>{{index + 1}}</td>
+        <td>{{['xxx','yyyy'].join('/')}}</td>
+        <td v-for="key in $headers.map(h => h.value)" :key="key">
+          {{item[key]}}
+        </td>
+      </tr>
+    </tbody>
   </table>
 </template>
 
@@ -19,6 +29,10 @@
 export default {
   props: {
     headers: {
+      type: Array,
+      required: true
+    },
+    items: {
       type: Array,
       required: true
     }
@@ -36,6 +50,10 @@ export default {
       if(!head.sortable) {
         return
       }
+      this.$headers.forEach((h,_index) => {
+        if(_index === index) return
+        h.sortType !== 0 && (h.sortType = 0)
+      })
       // sortType:  0:不排序    1:升序   2:降序
       if(this.$headers[index].sortType === 2) {
         this.$headers[index].sortType = 0
@@ -45,14 +63,7 @@ export default {
       this.$forceUpdate()
     },
     __dynamicIcon(sortType) {
-      switch (sortType) {
-      case 0:
-        return 'icon-sort'
-      case 1:
-        return 'icon-sort-down'
-      case 2:
-        return 'icon-sort-up'
-      }
+      return ['icon-sort', 'icon-sort-down', 'icon-sort-up'][sortType]
     }
   }
 }

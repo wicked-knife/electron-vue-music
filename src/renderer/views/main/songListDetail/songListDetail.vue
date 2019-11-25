@@ -72,7 +72,7 @@
       <base-input background-color='#202226' placeholder="搜索歌单音乐" v-show="currentTab === 0"/>
     </v-row>
     <v-row v-show="currentTab === 0">
-      <base-music-table :headers='tableHeaders' />
+      <base-music-table :headers='tableHeaders' :items='songList.tracks' v-if="songList"/>
     </v-row>
 
     <v-container v-show="currentTab === 1" class="pl-4 pr-4" ref="comment-wrapper">
@@ -135,10 +135,9 @@ export default {
       shouldShowExpand: false,
       currentTab: 0,
       tableHeaders: [
-        {text: '操作'},
-        {text: '音乐标题', sortable: true},
-        {text: '歌手'},
-        {text: '时长'}
+        {text: '音乐标题', sortable: true, value: 'name'},
+        {text: '歌手', sortable:true},
+        {text: '时长', sortable: true, value: 'duration'}
       ],
       subscribers: [], // 收藏者
       subscribersPage: 1, // 收藏者当前页
@@ -149,6 +148,11 @@ export default {
   },
   created() {
     getSongListDetail(this.$route.params.id).then(({ playlist }) => {
+      playlist.tracks.forEach(song => {
+        let minutes = Math.floor(song.dt / 1000 / 60)
+        let seconds = Math.floor(song.dt / 1000 % 60)
+        song.duration = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
+      })
       this.songList = playlist
       this.loading = false
       this.songList.description && this.$nextTick(this.__checkShouldExpand)
