@@ -3,7 +3,9 @@
     <thead class="grey--text">
       <tr>
         <th style="width: 50px" class="border-r"></th>
-        <th v-for="(head, index) in $headers" :key="index" :class="['border-r', head.sortable ? 'sortable' : '']" @click="__handleTheadClick(index)">
+        <th v-for="(head, index) in $headers" :key="index" 
+        :class="['border-r', head.sortable ? 'sortable' : '', head.sortType !== 0 ? 'active' : '']" 
+        @click="__handleTheadClick(head,index)">
           <div class="d-flex align-center justify-space-between">
             {{head.text}}<i :class="['iconfont', __dynamicIcon(head.sortType) ]"></i>
           </div>
@@ -30,13 +32,17 @@ export default {
     this.$headers = this.headers.map(h => ({...h, sortType: 0}))
   },
   methods:{
-    __handleTheadClick(index){
+    __handleTheadClick(head,index){
+      if(!head.sortable) {
+        return
+      }
       // sortType:  0:不排序    1:升序   2:降序
       if(this.$headers[index].sortType === 2) {
         this.$headers[index].sortType = 0
       } else {
         this.$headers[index].sortType ++
       }
+      this.$forceUpdate()
     },
     __dynamicIcon(sortType) {
       switch (sortType) {
@@ -58,8 +64,9 @@ export default {
   border-spacing: 0px;
   .icon-sort{
     visibility: hidden;
+  }
+  .icon-sort-down,.icon-sort-up,.icon-sort{
     font-size: 9px;
-    line-height: 28px;
   }
   & > thead > tr{
     & > th{
@@ -78,6 +85,9 @@ export default {
           visibility: visible;
         }
       }
+    }
+    & > th.active{
+      background-color: #23262c;
     }
   }
 }
