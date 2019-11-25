@@ -1,5 +1,5 @@
 <template>
-  <div class="input-wrapper">
+  <v-row class="input-wrapper flex-column">
     <textarea rows="3" class="comment-input beautify-scrollbar" maxlength="999" v-model="value"></textarea>
     <div :class="['input-count subtitle-3', restInputCount === 0 ? 'red--text' : '']">{{restInputCount}}</div>
     <div class="d-flex justify-space-between align-center mt-2">
@@ -10,7 +10,7 @@
       </div>
       <v-btn height="26px" min-width="42px" width="42px" class="subtitle-3" color="#2b2c31">评论</v-btn>
     </div>
-  </div>
+  </v-row>
 </template>
 
 <script>
@@ -32,7 +32,7 @@ export default {
 .input-wrapper {
   box-sizing: border-box;
   background-color: #1c1e23;
-  padding: 12px;
+  padding: 12px 12px 8px 12px;
   .comment-input {
     width: 100%;
     background-color: #2b2c31;

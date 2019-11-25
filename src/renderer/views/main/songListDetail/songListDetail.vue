@@ -69,14 +69,27 @@
         <v-tab class="tab-item">评论({{songList ? songList.commentCount : ''}})</v-tab>
         <v-tab class="tab-item">收藏者</v-tab>
       </v-tabs>
-      <base-input background-color='#202226' placeholder="搜索歌单音乐"/>
+      <base-input background-color='#202226' placeholder="搜索歌单音乐" v-show="currentTab === 0"/>
     </v-row>
     <v-row v-show="currentTab === 0">
       歌曲列表
     </v-row>
-    <v-container v-show="currentTab === 1" class="pa-0">
-      <base-comment-input />
+
+    <v-container v-show="currentTab === 1" class="pl-4 pr-4" ref="comment-wrapper">
+      <base-comment-input class="mb-4"/>
+      <base-title text="精彩评论" v-if="commentPage === 1"/>
+      <v-row v-if="commentPage === 1">
+        <base-comment-item v-for="comment in hotCommentList" :key="comment.commentId" :comment="comment"/>
+      </v-row>
+      <base-title text="最新评论"/>
+      <v-row>
+        <base-comment-item v-for="comment in commentList" :key="comment.commentId" :comment="comment"/>
+      </v-row>
+      <v-row>
+        <v-pagination v-if="songList && songList.commentCount > 50" v-model="commentPage" total-visible="9" :length="Math.floor(songList.commentCount / 50)" color="#b82525"/>
+      </v-row>
     </v-container>
+
     <v-container fluid v-show="currentTab === 2" class="pa-0">
       <v-row v-show="currentTab === 2" class="pt-4 subscribers">
         <div class="avatar-item mb-9" v-for="subscriber in subscribers" :key="subscriber.userId">
@@ -98,13 +111,19 @@
 
 <script>
 import { getSongListDetail, getSongListSubscribers } from '@/API/songList.js'
+import { getSongListComment } from '@/API/comment.js'
 import BaseInput from '@/base/input/base-input.vue'
 import BaseCommentInput from '@/base/comment-input/base-comment-input.vue'
+import BaseCommentItem from '@/base/comment-item/base-comment-item.vue'
+import BaseTitle from '@/base/title/base-title.vue'
 import dayjs from '@/common/day.js'
+let commentOffsetTop = 0
 export default {
   components:{
     BaseInput,
-    BaseCommentInput
+    BaseCommentInput,
+    BaseTitle,
+    BaseCommentItem
   },
   data() {
     return {
@@ -114,8 +133,10 @@ export default {
       shouldShowExpand: false,
       currentTab: 0,
       subscribers: [], // 收藏者
-      subscribersPage: 1, // 收藏者当前页,
-      moreSubscribers: true
+      subscribersPage: 1, // 收藏者当前页
+      commentList: [],
+      hotCommentList: [],
+      commentPage: 1
     }
   },
   created() {
@@ -125,6 +146,7 @@ export default {
       this.songList.description && this.$nextTick(this.__checkShouldExpand)
     })
     this.getSongListSubscribers()
+    this.getCommentList()
   },
   methods: {
     __checkShouldExpand() {
@@ -134,11 +156,28 @@ export default {
       getSongListSubscribers({id: this.$route.params.id, limit: 66, page: this.subscribersPage}).then(({subscribers}) => {
         this.subscribers = subscribers
       })
+    },
+    getCommentList(){
+      getSongListComment({id: this.$route.params.id, limit: 50, page: this.commentPage}).then(({hotComments, comments}) => {
+        !this.hotCommentList.length && (this.hotCommentList = hotComments)
+        this.commentList = comments
+        this.$nextTick(() => {
+          if(this.currentTab === 1) {
+            if(!commentOffsetTop) {
+              commentOffsetTop = this.$refs['comment-wrapper'].offsetTop
+            }
+            document.querySelector('.__fix-viewport').scrollTo(0, commentOffsetTop)
+          }
+        })
+      })
     }
   },
   watch: {
     subscribersPage(){
       this.getSongListSubscribers()
+    },
+    commentPage(){
+      this.getCommentList()
     }
   },
   computed: {
