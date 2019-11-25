@@ -72,13 +72,13 @@
       <base-input background-color='#202226' placeholder="搜索歌单音乐" v-show="currentTab === 0"/>
     </v-row>
     <v-row v-show="currentTab === 0">
-      歌曲列表
+      <base-music-table :headers='tableHeaders' />
     </v-row>
 
     <v-container v-show="currentTab === 1" class="pl-4 pr-4" ref="comment-wrapper">
       <base-comment-input class="mb-4"/>
-      <base-title text="精彩评论" v-if="commentPage === 1"/>
-      <v-row v-if="commentPage === 1">
+      <base-title text="精彩评论" v-if="commentPage === 1 && hotCommentList.length !== 0"/>
+      <v-row v-if="commentPage === 1 && hotCommentList.length !== 0">
         <base-comment-item v-for="comment in hotCommentList" :key="comment.commentId" :comment="comment"/>
       </v-row>
       <base-title text="最新评论"/>
@@ -116,6 +116,7 @@ import BaseInput from '@/base/input/base-input.vue'
 import BaseCommentInput from '@/base/comment-input/base-comment-input.vue'
 import BaseCommentItem from '@/base/comment-item/base-comment-item.vue'
 import BaseTitle from '@/base/title/base-title.vue'
+import BaseMusicTable from '@/base/music-table/base-music-table.vue'
 import dayjs from '@/common/day.js'
 let commentOffsetTop = 0
 export default {
@@ -123,7 +124,8 @@ export default {
     BaseInput,
     BaseCommentInput,
     BaseTitle,
-    BaseCommentItem
+    BaseCommentItem,
+    BaseMusicTable
   },
   data() {
     return {
@@ -132,6 +134,12 @@ export default {
       expanded: false,
       shouldShowExpand: false,
       currentTab: 0,
+      tableHeaders: [
+        {text: '操作'},
+        {text: '音乐标题', sortable: true},
+        {text: '歌手'},
+        {text: '时长'}
+      ],
       subscribers: [], // 收藏者
       subscribersPage: 1, // 收藏者当前页
       commentList: [],
@@ -159,7 +167,7 @@ export default {
     },
     getCommentList(){
       getSongListComment({id: this.$route.params.id, limit: 50, page: this.commentPage}).then(({hotComments, comments}) => {
-        !this.hotCommentList.length && (this.hotCommentList = hotComments)
+        !this.hotCommentList.length && (this.hotCommentList = hotComments || [])
         this.commentList = comments
         this.$nextTick(() => {
           if(this.currentTab === 1) {

@@ -2,7 +2,7 @@
   <div class="comment-wrapper border-b pb-4 mb-4">
     <div class="comment-l mr-3">
       <v-avatar width="40px" height="40px">
-        <img :src="comment.user.avatarUrl + '?param=40y40'" draggable="false">
+        <img :src="comment.user.avatarUrl + '?param=40y40'" draggable="false" class="avatar">
       </v-avatar>
     </div>
     <div class="comment-r">
@@ -10,7 +10,7 @@
         <span class="user-name blue--text text--darken-2 mr-1">{{comment.user.nickname}}:</span>{{comment.content}}
       </div>
       <div class="reply mt-2 subtitle-3 grey--text" v-if="comment.beReplied && comment.beReplied.length !== 0">
-        <span class="user-name blue--text text--darken-2 mr-1" v-if="comment.beReplied[0].status === 0">{{comment.beReplied[0].user.nickname}}:</span>{{comment.beReplied[0].content}}
+        <span class="user-name blue--text text--darken-2 mr-1" v-if="comment.beReplied[0].status === 0">@{{comment.beReplied[0].user.nickname}}:</span>{{comment.beReplied[0].content}}
         <div class="text-center" v-if="comment.beReplied[0].status !== 0">
           {{comment.beReplied[0].status === -10 ? '该评论涉及违规内容，经举报已被屏蔽' : '该评论已删除'}}
         </div>
@@ -57,6 +57,10 @@ export default {
     .report{
       visibility: visible !important;
     }
+  }
+  
+  .avatar{
+    cursor: pointer;
   }
 }
 .comment-r{
