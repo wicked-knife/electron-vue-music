@@ -19,7 +19,12 @@
       </tr>
     </thead>
     <tbody class="border-t">
-      <tr v-for="(item, index) in $items" :key="item.id" @click="activatedIndex = index" :class="activatedIndex === index ? 'active' : ''">
+      <tr
+        v-for="(item, index) in $items"
+        :key="item.id"
+        @click="activatedIndex = index"
+        :class="activatedIndex === index ? 'active' : ''"
+      >
         <td class="text-center">{{index + 1}}</td>
         <td class="text-center">
           <i class="iconfont icon-like"></i>
@@ -52,14 +57,25 @@ export default {
   },
   created() {
     this.$headers = this.headers.map(h => ({ ...h, sortType: 0 }))
-    this.$items = this.items.map(i => {
-      return {
-        ...i,
-        artists: i.artists.map(artist => `<span>${artist}</span>`).join('/'),
-        // name: `${i.name[0]}${i.name[1] ? `<span class="alia">${i.name[1]}</span>${i.mv ? '<i class="iconfont icon-mv"></i>' : ''}` : ''}`
-        name: `<div class="name-wrapper">${i.name[0]}${i.name[1] ? `<span class="alia">${i.name[1]}</span>${i.mv ? '<i class="iconfont icon-mv"></i>' : ''}` : ''}</div>`
-      }
-    })
+    this.$items = this.items.map(i =>
+      Object.assign(
+        i,
+        ...this.$headers.map(h => {
+          if (h.value === 'artists') {
+            return { [h.value]: i.artists.map(artist => `<span>${artist}</span>`).join('/') }
+          }
+          if (h.value === 'name') {
+            return {[h.value]: `<div class="name-wrapper">${i.name[0]}${i.name[1]? `<span class="alia">${i.name[1]}</span>${i.mv ? '<i class="iconfont icon-mv"></i>' : '' }`: ''}</div>` }
+          }
+          if (h.value === 'album') {
+            return {[h.value]: `<span>${i.album}</span>`}
+          }
+          return {
+            [h.value]: i[h.value]
+          }
+        })
+      )
+    )
   },
   methods: {
     __handleTheadClick(head, index) {
@@ -98,9 +114,10 @@ export default {
   .icon-sort {
     font-size: 9px;
   }
-  .icon-like,.icon-download{
+  .icon-like,
+  .icon-download {
     cursor: pointer;
-    &:hover{
+    &:hover {
       color: #fff !important;
     }
   }
@@ -128,26 +145,30 @@ export default {
   }
   & > tbody > tr {
     height: 30px;
-    &.active{
+    &.active {
       background-color: #2c2e32 !important;
-      .artists, .duration, .album{
+      .artists,
+      .duration,
+      .album {
         color: #fff;
       }
-      .name{
-        .alia{
+      .name {
+        .alia {
           color: #fff;
         }
       }
-      td:first-child{
+      td:first-child {
         color: #fff;
       }
     }
-    &:nth-child(even){
+    &:nth-child(even) {
       background-color: #1a1c20;
     }
-    &:hover{
+    &:hover {
       background-color: #232529;
-      .artists, .duration, .album{
+      .artists,
+      .duration,
+      .album {
         color: #fff;
       }
     }
@@ -156,20 +177,28 @@ export default {
       overflow: hidden;
       white-space: nowrap;
       max-width: 1px;
-      &:first-child{
+      &:first-child {
         color: #616161;
       }
-      &:nth-child(2){
+      &:nth-child(2) {
         color: #616161;
       }
       &:nth-child(n + 3) {
         padding-left: 10px;
       }
-      &.artists, &.duration,&.album{
+      &.artists,
+      &.duration,
+      &.album {
         color: #9e9e9e;
       }
-      &.name{
-        .name-wrapper{
+      &.artists,
+      &.album {
+        span {
+          cursor: pointer;
+        }
+      }
+      &.name {
+        .name-wrapper {
           display: inline-block;
           max-width: 99%;
           text-overflow: ellipsis;
@@ -179,13 +208,13 @@ export default {
           padding-right: 16px;
           position: relative;
         }
-        .alia{
+        .alia {
           position: relative;
           color: #616161;
           margin-left: 4px;
           margin-right: 4px;
         }
-        .icon-mv{
+        .icon-mv {
           color: $theme-color;
           cursor: pointer;
           position: absolute;
