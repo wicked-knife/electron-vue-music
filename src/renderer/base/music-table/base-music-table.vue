@@ -56,7 +56,8 @@ export default {
       return {
         ...i,
         artists: i.artists.map(artist => `<span>${artist}</span>`).join('/'),
-        name: `${i.name[0]}${i.name[1] ? `<span>${i.name[1]}</span>` : ''}`
+        // name: `${i.name[0]}${i.name[1] ? `<span class="alia">${i.name[1]}</span>${i.mv ? '<i class="iconfont icon-mv"></i>' : ''}` : ''}`
+        name: `<div class="name-wrapper">${i.name[0]}${i.name[1] ? `<span class="alia">${i.name[1]}</span>${i.mv ? '<i class="iconfont icon-mv"></i>' : ''}` : ''}</div>`
       }
     })
   },
@@ -84,7 +85,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .music-table {
   width: 100%;
   border-spacing: 0px;
@@ -133,7 +134,7 @@ export default {
         color: #fff;
       }
       .name{
-        :first-child{
+        .alia{
           color: #fff;
         }
       }
@@ -168,13 +169,34 @@ export default {
         color: #9e9e9e;
       }
       &.name{
-        :first-child{
+        .name-wrapper{
+          display: inline-block;
+          max-width: 99%;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+          box-sizing: border-box;
+          padding-right: 16px;
+          position: relative;
+        }
+        .alia{
+          position: relative;
           color: #616161;
           margin-left: 4px;
+          margin-right: 4px;
+        }
+        .icon-mv{
+          color: $theme-color;
+          cursor: pointer;
+          position: absolute;
+          right: 0;
+          top: -2px;
+          &:hover {
+            filter: brightness(1.3);
+          }
         }
       }
     }
   }
 }
-
 </style>
