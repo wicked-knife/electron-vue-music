@@ -6,6 +6,10 @@ export default [{
     {
       path: 'index',
       component: () => import(/* webpackChunkName: 'video~index' */ '@/views/main/video/index/index.vue')
+    },
+    {
+      path: 'MV',
+      component: () => import(/* webpackChunkName: 'video~MV */ '@/views/main/video/MV/MV.vue')
     }
   ]
 }]
