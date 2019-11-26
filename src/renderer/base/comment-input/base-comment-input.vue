@@ -1,6 +1,6 @@
 <template>
   <v-row class="input-wrapper flex-column">
-    <textarea rows="3" class="comment-input beautify-scrollbar" maxlength="999" v-model="value"></textarea>
+    <textarea rows="3" class="comment-input beautify-scrollbar" maxlength="140" v-model="value"></textarea>
     <div :class="['input-count subtitle-3', restInputCount === 0 ? 'red--text' : '']">{{restInputCount}}</div>
     <div class="d-flex justify-space-between align-center mt-2">
       <div class="d-flex justify-space-between align-center">

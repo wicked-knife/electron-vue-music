@@ -135,9 +135,10 @@ export default {
       shouldShowExpand: false,
       currentTab: 0,
       tableHeaders: [
-        {text: '音乐标题', sortable: true, value: 'name'},
-        {text: '歌手', sortable:true},
-        {text: '时长', sortable: true, value: 'duration'}
+        {text: '音乐标题', sortable: true, value: 'name', width:'40%'},
+        {text: '歌手', sortable: true, value: 'artists', width: '20%'},
+        {text: '专辑', sortable: true, value: 'album', width: '20%'},
+        {text: '时长', sortable: true, value: 'duration', width: '100px'}
       ],
       subscribers: [], // 收藏者
       subscribersPage: 1, // 收藏者当前页
@@ -152,6 +153,9 @@ export default {
         let minutes = Math.floor(song.dt / 1000 / 60)
         let seconds = Math.floor(song.dt / 1000 % 60)
         song.duration = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
+        song.name = [song.name, ...song.alia]
+        song.artists = song.ar.map(artist => artist.name)
+        song.album = song.al.name
       })
       this.songList = playlist
       this.loading = false
