@@ -70,19 +70,23 @@ export default {
     getVideoByTag(flag){
       getVideoByTag(this.tagList.find(t => t.name === this.currentCate).id).then(({datas}) => {
         this.videoList.push(...datas.filter(d => d.type === 1).map(d => d.data))
+        // 这个接口没有分页，每次请求都是新的数据，第一次加载时请求两次
         if(flag) {
           getVideoByTag(this.tagList.find(t => t.name === this.currentCate).id).then(({datas}) => this.videoList.push(...datas.filter(d => d.type === 1).map(d => d.data)))
         }
       })
     }
   },
+  activated(){
+    bus.on('scroll:reachBottom', this.getVideoByTag)
+  },
+  deactivated(){
+    bus.off('scroll:reachBottom', this.getVideoByTag)
+  },
   created(){
     getVideoTagList().then(({data}) => {
       this.tagList = data.filter(t => t.name !== 'MV')
       this.getVideoByTag(1)
-    })
-    bus.on('scroll:reachBottom', () => {
-      this.getVideoByTag()
     })
   },
   watch:{

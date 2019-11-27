@@ -8,7 +8,7 @@
     </v-row>
 
     <v-container fluid>
-      <keep-alive >
+      <keep-alive>
         <router-view></router-view>
       </keep-alive>
     </v-container>
@@ -17,9 +17,7 @@
 
 <script>
 export default {
-  data() {
-    return {}
-  }
+  name: 'music-video'
 }
 </script>
 

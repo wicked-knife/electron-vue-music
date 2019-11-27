@@ -9,7 +9,7 @@ export default [{
     },
     {
       path: 'MV',
-      component: () => import(/* webpackChunkName: 'video~MV */ '@/views/main/video/MV/MV.vue')
+      component: () => import(/* webpackChunkName: 'video~MV' */ '@/views/main/video/MV/MV.vue')
     }
   ]
 }]
