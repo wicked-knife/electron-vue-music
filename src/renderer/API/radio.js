@@ -41,3 +41,20 @@ export const getRadioListByCate = (type) => axios.get('/dj/recommend/type', {par
 */
 
 export const getRecommendRadioCate = () => axios.get('/dj/category/recommend')
+
+
+/*
+### 电台 - 类别热门电台
+
+**可选参数 :**
+
+`limit` : 返回数量 , 默认为 30
+
+`offset` : 偏移数量，用于分页 , 如 :( 页数 -1)\*30, 其中 30 为 limit 的值 , 默认为 0
+
+`cateId`: 类别 id,可通过 `/dj/category/recommend` 接口获取
+
+**接口地址 :** `/dj/radio/hot`
+*/
+
+export const getHotRadioListByCate = ({limit = 12, page = 1, cateId}) => axios.get('/dj/radio/hot', {params: {limit, offset: (page - 1) * limit, cateId}})

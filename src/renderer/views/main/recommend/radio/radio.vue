@@ -4,13 +4,13 @@
       <base-swiper :list="banners" @swiper-click="handleSwiperClick" height="210px" />
     </v-row>
     <v-row class="mb-12">
-      <v-tabs height="70px" show-arrows background-color="transparent" hide-slider>
+      <v-tabs height="70px" show-arrows background-color="transparent" hide-slider v-if="shouldForceUpdate">
         <v-tab
           v-for="cate in cateList"
           :ripple="false"
           class="d-flex flex-column justify-center align-center"
           :key="cate.id"
-        >
+          :to="`/main/radio-cate-list/${cate.id}`">
           <div class="cate-icon" :style="{backgroundImage: 'url(' + cate.picPCBlackUrl + ')'}"></div>
           {{cate.name}}
         </v-tab>
@@ -60,7 +60,8 @@ export default {
       storyList: [],
       emoList: [],
       ACGNList: [],
-      loading: true
+      loading: true,
+      shouldForceUpdate: false
     }
   },
   components: {
@@ -100,6 +101,12 @@ export default {
         this.loading = false
       }
     )
+  },
+  activated(){
+    this.shouldForceUpdate = true
+  },
+  deactivated(){
+    this.shouldForceUpdate = false
   }
 }
 </script>

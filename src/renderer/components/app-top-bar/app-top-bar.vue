@@ -7,7 +7,7 @@
           <v-col>
             <v-row>
             <div class="route-control mr-4 ml-n4 no-drag">
-              <i class="iconfont icon-return grey--text"></i>
+              <i class="iconfont icon-return grey--text" @click="$router.go(-1)"></i>
               <i class="iconfont icon-enter grey--text"></i>
             </div>
             <BaseInput placeholder='搜索音乐、视频、歌词、电台' class="no-drag"/>
