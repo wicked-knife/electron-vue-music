@@ -29,6 +29,7 @@
     </v-row>
     <v-row class="d-flex justify-space-between">
       <base-video-cover v-for="video in videoList" :key="video.id" :video="video" width='24.03%'/>
+      <div :style="{width: fillGap(videoList, 4, 24.03)}"></div>
     </v-row>
   </v-container>
 </template>
@@ -38,7 +39,10 @@ import {getVideoTagList, getVideoByTag} from '@/API/video.js'
 import BaseTagList from '@/base/tag-list/base-tag-list.vue'
 import BaseAttachedDialog from '@/base/attached-dialog/base-attached-dialog.vue'
 import BaseVideoCover from '@/base/video-cover/base-video-cover.vue'
+import fillGapMixin from '@/mixins/fillGap.js'
+import bus from '@/common/bus.js'
 export default {
+  mixins:[fillGapMixin],
   components: {
     BaseTagList,
     BaseAttachedDialog,
@@ -47,7 +51,7 @@ export default {
   data(){
     return {
       tagList: [],
-      hotTag: ['演唱会','现场','翻唱','听BGM','MV','舞蹈','ACG音乐','游戏'],
+      hotTag: ['演唱会','现场','翻唱','听BGM','舞蹈','ACG音乐','游戏'],
       currentCate: '演唱会',
       dialogVisiable: false,
       videoList: []
@@ -63,15 +67,29 @@ export default {
       this.currentCate = cateName
       this.dialogVisiable = false
     },
-    getVideoByTag(){
-      getVideoByTag(this.tagList.find(t => t.name === this.currentCate).id).then(({datas}) => this.videoList = datas.map(d => d.data))
+    getVideoByTag(flag){
+      getVideoByTag(this.tagList.find(t => t.name === this.currentCate).id).then(({datas}) => {
+        this.videoList.push(...datas.filter(d => d.type === 1).map(d => d.data))
+        if(flag) {
+          getVideoByTag(this.tagList.find(t => t.name === this.currentCate).id).then(({datas}) => this.videoList.push(...datas.filter(d => d.type === 1).map(d => d.data)))
+        }
+      })
     }
   },
   created(){
     getVideoTagList().then(({data}) => {
-      this.tagList = data
+      this.tagList = data.filter(t => t.name !== 'MV')
+      this.getVideoByTag(1)
+    })
+    bus.on('scroll:reachBottom', () => {
       this.getVideoByTag()
     })
+  },
+  watch:{
+    currentCate(){
+      this.videoList = []
+      this.getVideoByTag(1)
+    }
   }
 }
 </script>
