@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import {formatMusicDuration} from '@/common/utils.js'
 export default {
   props: {
     width: {
@@ -37,9 +38,7 @@ export default {
       return _count < 100000 ? _count : Math.floor(_count / 10000) + '万'
     },
     _duration(){
-      const minutes = Math.floor(this.video.durationms / 1000 / 60)
-      const seconds = Math.floor(this.video.durationms / 1000 % 60)
-      return `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
+      return formatMusicDuration(this.video.durationms)
     }
   }
 }

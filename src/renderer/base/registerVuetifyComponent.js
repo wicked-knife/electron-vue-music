@@ -1,5 +1,5 @@
 
-import {VContainer, VRow, VCol, VList, VListItemGroup, VListItem, VTabs, VTab, VBtn, VDivider, VAvatar} from 'vuetify/lib'
+import {VContainer, VRow, VCol, VList, VListItemGroup, VListItem, VTabs, VTab, VBtn, VDivider, VAvatar, VBtnToggle} from 'vuetify/lib'
 
 function registerVuetifyComponent(_Vue) {
 // 常用组件注册为全局组件
@@ -14,6 +14,7 @@ function registerVuetifyComponent(_Vue) {
   _Vue.component('v-btn', VBtn)
   _Vue.component('v-divider', VDivider)
   _Vue.component('v-avatar', VAvatar)
+  _Vue.component('v-btn-toggle', VBtnToggle)
 }
 
 export default registerVuetifyComponent

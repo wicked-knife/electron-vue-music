@@ -14,8 +14,9 @@
     </div>
     <div class="large-info" v-if="size === 'large'">
       <div class="name subtitle-2">
-        {{music.name}}
-        <i class="iconfont icon-mv ml-1" v-if="music.mvid"></i>
+        <span>{{music.name}}
+          <i class="iconfont icon-mv ml-1" v-if="music.mvid"></i>
+        </span>
       </div>
       <div class="artist caption grey--text">{{music.artists[0].name}}</div>
       <div class="album-name caption artist grey--text">{{music.album.name}}</div>
@@ -27,6 +28,7 @@
 </template>
 
 <script>
+import {formatMusicDuration} from '@/common/utils.js'
 export default {
   props: {
     size: {
@@ -52,9 +54,7 @@ export default {
       return this.index < 10 ? '0' + this.index : this.index
     },
     _duration(){
-      const minutes = Math.floor(this.music.duration / 1000 / 60)
-      const seconds = Math.floor(this.music.duration / 1000 % 60)
-      return `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
+      return formatMusicDuration(this.music.duration)
     }
   }
 }
@@ -78,13 +78,26 @@ export default {
   &.large {
     width: 100%;
     .name{
-      width: 14vw;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
+      width: 21vw;
+      display: flex;
+      align-items: center;
+      & > span{
+        position: relative;
+        display: inline-block;
+        max-width: 99%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        padding-right: 20px;
+      }
+      .icon-mv{
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
     }
     .album-name{
-      width: 16vw;
+      width: 14vw;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
@@ -149,7 +162,7 @@ export default {
 }
 .artist {
   color: #757575;
-  width: 12vw;
+  width: 10vw;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

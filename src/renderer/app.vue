@@ -19,7 +19,9 @@ export default {
     this.checkLoginState().then(loginState => {
       if(loginState) {
         this.setLoginState(loginState)
-        refreshLogin()
+        // TODO: 每次热更新都会调用这个刷新登录接口，调用多了会被限制
+        // 等开发完毕后在解除注释
+        // refreshLogin()
       }
     })
   }

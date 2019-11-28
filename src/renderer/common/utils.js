@@ -16,3 +16,9 @@ export const throttle = (fn, delay = 100) => {
     }, delay)
   }
 }
+
+export const formatMusicDuration = (duration) => {
+  const minutes = Math.floor(duration / 1000 / 60)
+  const seconds = Math.floor(duration / 1000 % 60)
+  return `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
+}

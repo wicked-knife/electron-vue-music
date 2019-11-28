@@ -1,10 +1,10 @@
 <template>
-  <div :class="['wrapper', size]" :style="size === 'normal' ? {width} : null">
-    <div :class="['img-wrapper mb-2', radio.copywriter && radio.copywriter.length > 4 ? '__active-hover' : '']" @click="$emit('radio:click', radio)">
+  <div :class="['wrapper', size]" :style="size === 'normal' ? {width} : null" @click="$emit('radio:click', radio)">
+    <div :class="['img-wrapper mb-2', radio.copywriter && radio.copywriter.length > 4 ? '__active-hover' : '']">
       <img :src="radio.picUrl + '?param=160y160'" class="cover" draggable="false" />
       <div class="name subtitle-3" v-if="size === 'normal'">{{radio.name}}</div>
     </div>
-    <div class="copywriter" v-if="size === 'normal'" @click="$emit('radio:click', radio)">{{radio.copywriter || radio.rcmdtext || radio.category}}</div>
+    <div class="copywriter" v-if="size === 'normal'">{{radio.copywriter || radio.rcmdtext || radio.category}}</div>
     <div class="radio-info pt-3" v-if="size === 'large'">
       <div class="name subtitle-2 mb-3">
         {{radio.name}}

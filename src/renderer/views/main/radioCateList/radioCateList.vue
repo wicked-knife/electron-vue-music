@@ -2,7 +2,7 @@
   <v-container v-loading="loading" fluid class="pl-10 pr-10">
     <base-title v-if="radioList.length > 0" :text="radioList[0].category"/>
     <v-row class="d-flex flex-wrap">
-      <base-radio-cover v-for="radio in radioList" :radio="radio" size="large" :key="radio.id"/>
+      <base-radio-cover v-for="radio in radioList" :radio="radio" size="large" :key="radio.id" @radio:click="$router.push('/main/radio/' + radio.id)"/>
     </v-row>
   </v-container>
 </template>

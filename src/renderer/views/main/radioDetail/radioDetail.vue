@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid v-loading="loading">
+  <v-container fluid>
     <v-row class="d-flex pl-7 pr-7 mb-6" v-if="radio">
       <div class="song-list-image mr-6">
         <img :src="radio.picUrl + '?param=200y200'" />
@@ -14,10 +14,8 @@
             <v-avatar min-width="32px" height="32px" width="32px">
               <img :src="radio.dj.avatarUrl + '?param=40y40'" />
             </v-avatar>
-            <!-- <i class="iconfont V" v-if="radio.creator.userId === 1">V</i>
-            <i class="iconfont icon-star" v-if="radio.creator.userType === 200"></i> -->
-            <!-- TODO: 加上图标 radio.dj.userType === 4  -->
-            <i class="iconfont icon-local-music"></i>
+            <i class="iconfont icon-star" v-if="radio.dj.userType === 201"></i>
+            <i class="iconfont icon-local-music" v-if="radio.dj.userType === 4"></i>
           </div>
           <div class="nickname grey--text subtitle-2 mr-4">{{radio.dj.nickname}}</div>
           <div class="create-time grey--text text--darken-2">{{__formatedDate}}创建</div>
@@ -40,7 +38,7 @@
             :class="['iconfont icon-down grey--text text--darken-2', expanded ? 'expanded' : '']"
             @click="expanded = !expanded"
             v-if="shouldShowExpand"></i>
-          <span class="tag">{{radio.category}}</span>
+          <span class="tag" @click="$router.push('/main/radio-cate-list/' + radio.categoryId)">{{radio.category}}</span>
           <pre :class="['desc-text ml-2', expanded ? 'expanded' : '']" ref="desc">{{radio.desc}}</pre>
         </div>
       </div>
@@ -51,27 +49,32 @@
         <v-tab class="tab-item">订阅者({{radio && __subCount}})</v-tab>
       </v-tabs>
     </v-row>
-    <v-row v-show="currentTab === 0">
-      <div class="pl-4 subtitle-3 grey--text d-flex align-center pt-2 pb-2 list-head pr-5 justify-space-between">
+    <v-row v-show="currentTab === 0" >
+      <div class="pl-4 subtitle-3 grey--text d-flex align-center pt-2 pb-2 list-head pr-5 justify-space-between text--darken-2"
+      ref="list-wrapper">
         共{{radio && radio.programCount}}期
+        <div>
+          排序
+          <v-btn-toggle @change="handleSortTypeChange" :value="0">
+            <v-btn height="26px" min-width="30px" width="30px">
+              <i class="iconfont icon-sort_down"></i>
+            </v-btn>
+            <v-btn height="26px" min-width="30px" width="30px">
+              <i class="iconfont icon-sort_up"></i>
+            </v-btn>
+          </v-btn-toggle>
+        </div>
       </div>
+      <div v-loading="loading">
+        <base-radio-program v-for="(program, index) in programs" :key="program.id" :program="program" :stripe="index % 2 !== 1" 
+        :index="sortType ? index + 1 + (programPage - 1) * 100 : radio.programCount - index - (programPage - 1) * 100" 
+        :active='activeID === program.id' @click.native="activeID = program.id"/>
+      </div>
+      <v-pagination v-if="radio && radio.programCount > 100" v-model="programPage" total-visible="9" :length="Math.ceil(radio.programCount / 100)" color="#b82525"/>
     </v-row>
 
     <v-container fluid v-show="currentTab === 1" class="pa-0">
       暂无接口
-      <v-row v-show="currentTab === 2" class="pt-4 subscribers">
-        <div class="avatar-item mb-9" v-for="subscriber in subscribers" :key="subscriber.userId">
-          <v-avatar width="60px" height="60px" class="mb-2">
-            <img :src="subscriber.avatarUrl + '?param=60y60'" draggable="false">
-          </v-avatar>
-          <span class="caption grey--text avatar-nickname">
-            {{subscriber.nickname}}
-          </span>
-        </div>
-      </v-row>
-        <v-row>
-          <v-pagination v-if="songList && songList.subscribedCount > 66" v-model="subscribersPage" total-visible="9" :length="Math.floor(songList.subscribedCount / 66)" color="#b82525"/>
-        </v-row>
     </v-container>
 
   </v-container>
@@ -79,26 +82,24 @@
 
 <script>
 import { getRadioDetail, getRadioProgramList } from '@/API/radio.js'
+import BaseRadioProgram from '@/base/radio-program/base-radio-program.vue'
 import dayjs from '@/common/day.js'
+let listOffsetTop = 0
 export default {
   components:{
+    BaseRadioProgram
   },
   data() {
     return {
-      songList: null,
+      programs: [],
       radio: null,
-      loading: true,
+      loading: false,
       expanded: false,
       shouldShowExpand: false,
       currentTab: 0,
-      tableHeaders: [
-        {text: '音乐标题', sortable: true, value: 'name', width:'40%'},
-        {text: '歌手', sortable: true, value: 'artists', width: '20%'},
-        {text: '专辑', sortable: true, value: 'album', width: '20%'},
-        {text: '时长', sortable: true, value: 'duration', width: '100px'}
-      ],
-      subscribers: [], // 收藏者
-      subscribersPage: 1, // 收藏者当前页
+      activeID: '',
+      sortType: false, // false: 从新到旧 true: 从旧到新
+      programPage: 1
     }
   },
   created() {
@@ -107,18 +108,37 @@ export default {
       this.$nextTick(() => {
         this.__checkShouldExpand()
       })
-      this.loading = false
     })
-    getRadioProgramList({rid: this.$route.params.id}).then(data => console.log(data))
+    this.getRadioProgramList()
   },
   methods: {
     __checkShouldExpand() {
       this.shouldShowExpand = this.$refs['desc'].offsetHeight !== 20
+    },
+    getRadioProgramList(shouldScrollTop){
+      this.loading = true
+      getRadioProgramList({rid: this.$route.params.id, asc: this.sortType, page: this.programPage}).then(({programs}) => {
+        this.programs = programs
+        this.$nextTick(() => {
+          if(this.currentTab === 0) {
+            if(!listOffsetTop) {
+              listOffsetTop = this.$refs['list-wrapper'].offsetTop
+            }
+            shouldScrollTop && document.querySelector('.__fix-viewport').scrollTo(0, listOffsetTop)
+          }
+        })
+        this.loading = false
+      })
+    },
+    handleSortTypeChange(v){
+      this.sortType = !!v
+      this.programPage = 1
+      this.getRadioProgramList()
     }
   },
   watch: {
-    subscribersPage(){
-      this.getSongListSubscribers()
+    programPage(){
+      this.getRadioProgramList(true)
     }
   },
   computed: {
