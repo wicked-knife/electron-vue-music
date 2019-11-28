@@ -142,7 +142,7 @@ export default {
                 <v-col class="pa-0 border-r" cols="6">
                   {this.latestMusic.slice(0, 5).map((music, index) => {
                     return (
-                      <BaseLatestMusicItem
+                      <base-latest-music-item
                         key={music.id}
                         music={music}
                         index={index + 1}
@@ -154,7 +154,7 @@ export default {
                 <v-col class="pa-0" cols="6">
                   {this.latestMusic.slice(5, 10).map((music, index) => {
                     return (
-                      <BaseLatestMusicItem
+                      <base-latest-music-item
                         key={music.id}
                         music={music}
                         index={index + 6}
@@ -191,7 +191,12 @@ export default {
                     <base-radio-cover
                       key={radio.id}
                       radio={radio}
-                      width="15.38%"/>
+                      width="15.38%"
+                      {...{
+                        on:{
+                          'radio:click': this.handleRadioClick
+                        }
+                      }}/>
                   )
                 })}
               </v-row>
@@ -219,6 +224,9 @@ export default {
     },
     handleSongListClick(songList){
       this.$router.push('/main/song-list-detail/' + songList.id )
+    },
+    handleRadioClick(radio){
+      this.$router.push('/main/radio/' + radio.id )
     }
   },
   render() {
