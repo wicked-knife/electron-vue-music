@@ -47,7 +47,8 @@
         精品歌单倾心推荐，给最懂音乐的你  
         </div>
       </div>
-      <base-song-list-cover  v-for="list in songList" :key="list.id" :song-list='list' width="18.75%" showCreator/>
+      <base-song-list-cover  v-for="list in songList" :key="list.id" :song-list='list' width="18.75%" showCreator 
+      @click.native='$router.push("/main/song-list/" + list.id)'/>
       <div :style="{width: fillGap(songList, 5, 18.75)}"></div>
     </v-row>
     <v-row>

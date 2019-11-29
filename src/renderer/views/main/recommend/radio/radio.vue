@@ -18,23 +18,23 @@
     </v-row>
       <base-title text="创作|翻唱" />
       <v-row class="d-flex justify-space-between mb-10">
-        <BaseRadioCover v-for="radio in createList" :radio="radio" :key="radio.id" width="15.38%" />
+        <BaseRadioCover v-for="radio in createList" :radio="radio" :key="radio.id" width="15.38%" @click.native='$router.push("/main/radio/" + radio.id)'/>
       </v-row>
       <base-title text="3D|电子" />
       <v-row class="d-flex justify-space-between mb-10">
-        <BaseRadioCover v-for="radio in elecList" :radio="radio" :key="radio.id" width="15.38%" />
+        <BaseRadioCover v-for="radio in elecList" :radio="radio" :key="radio.id" width="15.38%" @click.native='$router.push("/main/radio/" + radio.id)'/>
       </v-row>
       <base-title text="音乐故事" />
       <v-row class="d-flex justify-space-between mb-10">
-        <BaseRadioCover v-for="radio in storyList" :radio="radio" :key="radio.id" width="15.38%" />
+        <BaseRadioCover v-for="radio in storyList" :radio="radio" :key="radio.id" width="15.38%" @click.native='$router.push("/main/radio/" + radio.id)'/>
       </v-row>
       <base-title text="情感调频" />
       <v-row class="d-flex justify-space-between mb-10">
-        <BaseRadioCover v-for="radio in emoList" :radio="radio" :key="radio.id" width="15.38%" />
+        <BaseRadioCover v-for="radio in emoList" :radio="radio" :key="radio.id" width="15.38%" @click.native='$router.push("/main/radio/" + radio.id)'/>
       </v-row>
       <base-title text="二次元" />
       <v-row class="d-flex justify-space-between mb-6">
-        <BaseRadioCover v-for="radio in ACGNList" :radio="radio" :key="radio.id" width="15.38%" />
+        <BaseRadioCover v-for="radio in ACGNList" :radio="radio" :key="radio.id" width="15.38%" @click.native='$router.push("/main/radio/" + radio.id)'/>
       </v-row>
   </v-container>
 </template>

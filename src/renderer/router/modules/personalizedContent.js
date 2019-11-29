@@ -1,6 +1,6 @@
 export default [
   {
-    path: 'personalizedContent',
-    component: () => import(/* webpackChunkName: 'personalizedContent' */ '@/views/main/personalizedContent/personalizedContent.vue')
+    path: 'personalized-content',
+    component: () => import(/* webpackChunkName: 'personalizedContent' */ '@/views/main/personalized-content/personalized-content.vue')
   }
 ]

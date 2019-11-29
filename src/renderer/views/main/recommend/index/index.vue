@@ -119,7 +119,7 @@ export default {
         if (tempName === '独家放送') {
           return (
             <div>
-              <base-title text="独家放送" to="/main/personalizedContent" />
+              <base-title text="独家放送" to="/main/personalized-content" />
               <v-row class="d-flex justify-space-between mb-9">
                 {this.personalizedContent.map(content => {
                   return (
@@ -223,7 +223,7 @@ export default {
       this.dialogVisiable = false
     },
     handleSongListClick(songList){
-      this.$router.push('/main/song-list-detail/' + songList.id )
+      this.$router.push('/main/song-list/' + songList.id )
     },
     handleRadioClick(radio){
       this.$router.push('/main/radio/' + radio.id )
