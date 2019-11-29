@@ -2,7 +2,8 @@
   <v-container fluid class="container-1040">
     <base-title text="官方榜" />
     <v-row class="d-flex justify-space-between" v-loading="loading">
-      <base-rank-cover v-for="rank in rankList" :key="rank.id" :rank="rank" width="15.38%"/>
+      <base-rank-cover v-for="rank in rankList" :key="rank.id" :rank="rank" width="15.38%"
+      @click.native='$router.push("/main/rank/" + rank.id)'/>
       <div :style="{width: fillGap(rankList, 6, 15.38)}"></div>
     </v-row>
   </v-container>
