@@ -67,11 +67,11 @@ export default {
       this.currentCate = cateName
       this.dialogVisiable = false
     },
-    getVideoByTag(flag){
+    getVideoByTag(requestTwice){
       getVideoByTag(this.tagList.find(t => t.name === this.currentCate).id).then(({datas}) => {
         this.videoList.push(...datas.filter(d => d.type === 1).map(d => d.data))
         // 这个接口没有分页，每次请求都是新的数据，第一次加载时请求两次
-        if(flag) {
+        if(requestTwice) {
           getVideoByTag(this.tagList.find(t => t.name === this.currentCate).id).then(({datas}) => this.videoList.push(...datas.filter(d => d.type === 1).map(d => d.data)))
         }
       })
