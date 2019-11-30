@@ -65,7 +65,7 @@
           </v-btn-toggle>
         </div>
       </div>
-      <div v-loading="loading">
+      <div v-loading="loading" style="width: 100%;">
         <base-radio-program v-for="(program, index) in programs" :key="program.id" :program="program" :stripe="index % 2 !== 1" 
         :index="sortType ? index + 1 + (programPage - 1) * 100 : radio.programCount - index - (programPage - 1) * 100" 
         :active='activeID === program.id' @click.native="activeID = program.id"/>

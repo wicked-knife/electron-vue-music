@@ -55,4 +55,4 @@ export const getSongListComment = ({id, limit = 20, page = 1, before}) => axios.
 **接口地址 :** `/comment/hot`
 */
 
-export const getHotComments = ({id, type, limit = 50, page = 1, before}) => axios.get('/comment/hot', {params: {id, type, limit, page, offset: (page - 1) * limit ,before}})
+export const getHotComments = ({id, type, limit = 20, page = 1, before}) => axios.get('/comment/hot', {params: {id, type, limit, page, offset: (page - 1) * limit ,before}})

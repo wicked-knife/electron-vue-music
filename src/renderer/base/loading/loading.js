@@ -19,7 +19,6 @@ export default function registerVLoadingDirective(_Vue) {
       if (value) {
         el.$loading = createLoadingInstance()
         el.style.position = 'relative'
-        el.offsetWidth === 0 && (el.style.width = '100%')
         el.appendChild(el.$loading.$el)
         el.$loading.loading = true
       }

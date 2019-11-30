@@ -81,7 +81,7 @@
       <v-row v-if="commentPage === 1 && hotCommentList.length !== 0">
         <base-comment-item v-for="comment in hotCommentList" :key="comment.commentId" :comment="comment"/>
       </v-row>
-      <v-btn block text v-if="commentPage === 1 && hotCommentList.length !== 0" class="mt-2 mb-4"
+      <v-btn block text v-if="commentPage === 1 && hotCommentList.length !== 0 && moreHot" class="mt-2 mb-4"
       @click='$router.push({name: "hot-comments", params: {type: 2, id: $route.params.id}})'
       >查看更多精彩评论 <i class="iconfont icon-enter" ></i></v-btn>
       <base-title text="最新评论"/>
@@ -148,7 +148,7 @@ export default {
       commentList: [],
       hotCommentList: [],
       commentPage: 1,
-      defaultAvatar: 'https://p2.music.126.net/VnZiScyynLG7atLIZ2YPkw==/18686200114669622.jpg?param=60y60'
+      moreHot: false
     }
   },
   created() {
@@ -178,9 +178,10 @@ export default {
       })
     },
     getCommentList(){
-      getSongListComment({id: this.$route.params.id, limit: 50, page: this.commentPage}).then(({hotComments, comments}) => {
+      getSongListComment({id: this.$route.params.id, limit: 50, page: this.commentPage}).then(({hotComments, comments, moreHot}) => {
         !this.hotCommentList.length && (this.hotCommentList = hotComments || [])
         this.commentList = comments
+        this.moreHot = moreHot
         this.$nextTick(() => {
           if(this.currentTab === 1) {
             if(!commentOffsetTop) {
