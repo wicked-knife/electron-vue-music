@@ -1,41 +1,3 @@
-<template>
-  <table class="music-table border-t border-b subtitle-3">
-    <thead class="grey--text border-b">
-      <tr>
-        <th style="width: 50px" class="border-r"></th>
-        <th style="width: 50px" class="border-r">操作</th>
-        <th
-          v-for="(head, index) in $headers"
-          :key="index"
-          :class="['border-r', head.sortable ? 'sortable' : '', head.sortType !== 0 ? 'active' : '']"
-          @click="__handleTheadClick(head,index)"
-          :style="{width: head.width}"
-        >
-          <div class="d-flex align-center justify-space-between">
-            {{head.text}}
-            <i :class="['iconfont', __dynamicIcon(head.sortType) ]"></i>
-          </div>
-        </th>
-      </tr>
-    </thead>
-    <tbody class="border-t">
-      <tr
-        v-for="(item, index) in $items"
-        :key="item.id"
-        @click="activatedIndex = index"
-        :class="activatedIndex === index ? 'active' : ''"
-      >
-        <td class="text-center">{{index + 1}}</td>
-        <td class="text-center">
-          <i class="iconfont icon-like"></i>
-          <i class="iconfont icon-download"></i>
-        </td>
-        <td v-for="key in $headers.map(h => h.value)" :key="key" v-html="item[key]" :class="key"></td>
-      </tr>
-    </tbody>
-  </table>
-</template>
-
 <script>
 export default {
   props: {
@@ -51,31 +13,50 @@ export default {
   data() {
     return {
       $headers: [],
-      $items: [],
       activatedIndex: -1
     }
   },
+  render(){
+    return  ( <table class="music-table border-t border-b subtitle-3">
+      <thead class="grey--text border-b">
+        <tr>
+          <th style="width: 50px" class="border-r"></th>
+          <th style="width: 50px" class="border-r">操作</th>
+          {this.$headers.map((head, index) => (
+            <th key={index} class={`border-r ${head.sortable ? 'sortable ' : ' '}${head.sortType !== 0 ? 'active' : ''}`}
+              {...{on: {click: this.__handleTheadClick.bind(this, head, index)}}}
+              style={{width: head.width}}>
+              <div class="d-flex align-center justify-space-between">
+                {head.text}
+                <i class={'iconfont ' + this.__dynamicIcon(head.sortType)}></i>
+              </div>
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody class="border-t">
+        {this.items.map((item, index) => (
+          <tr key={item.id} {...{on: {click: this.__handleItemClick.bind(this, index)}}} class={this.activatedIndex === index ? 'active' : ''}>
+            <td class="text-center">{index + 1}</td>
+            <td class="text-center">
+              <div class="d-flex justify-space-around">
+                <i class="iconfont icon-like"></i>
+                <i class="iconfont icon-download"></i>
+              </div>
+            </td>
+            {this.$headers.map(h => h.value).map(key => (
+              <td key={key} class={key}>
+                {this.__dynamicContent(item, key)}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    )
+  },
   created() {
     this.$headers = this.headers.map(h => ({ ...h, sortType: 0 }))
-    this.$items = this.items.map(i =>
-      Object.assign(
-        i,
-        ...this.$headers.map(h => {
-          if (h.value === 'artists') {
-            return { [h.value]: i.artists.map(artist => `<span>${artist}</span>`).join('/') }
-          }
-          if (h.value === 'name') {
-            return {[h.value]: `<div class="name-wrapper">${i.name[0]}${i.name[1]? `<span class="alia">${i.name[1]}</span>${i.mv ? '<i class="iconfont icon-mv"></i>' : '' }`: ''}</div>` }
-          }
-          if (h.value === 'album') {
-            return {[h.value]: `<span>${i.album}</span>`}
-          }
-          return {
-            [h.value]: i[h.value]
-          }
-        })
-      )
-    )
   },
   methods: {
     __handleTheadClick(head, index) {
@@ -94,14 +75,41 @@ export default {
       }
       this.$forceUpdate()
     },
+    __handleItemClick(index){
+      this.activatedIndex = index
+    },
     __dynamicIcon(sortType) {
       return ['icon-sort', 'icon-sort-down', 'icon-sort-up'][sortType]
+    },
+    __dynamicContent(item, key){
+      switch(key) {
+      case 'artists':{
+        const items = item[key].map(artist =>  <span>{artist}</span>)
+        for(let i = 0; i < items.length; i++) {
+          if(items[i + 1]) {
+            i++
+            items.splice(i, 0, ' / ')
+          }
+        }
+        return items
+      }
+      case 'name':
+        return (<div class="name-wrapper">
+          {item[key][0]}
+          {item[key][1] ? <span class="alia">{item[key][1]}</span> : ''}
+          {item.mv ? <i class="iconfont icon-mv"></i> : ''}
+        </div>)
+      case 'album':
+        return (<span>{item[key]}</span>)
+      default:
+        return item[key]
+      }
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .music-table {
   width: 100%;
   border-spacing: 0px;
@@ -205,14 +213,13 @@ export default {
           overflow: hidden;
           white-space: nowrap;
           box-sizing: border-box;
-          padding-right: 16px;
+          padding-right: 20px;
           position: relative;
         }
         .alia {
           position: relative;
           color: #616161;
           margin-left: 4px;
-          margin-right: 4px;
         }
         .icon-mv {
           color: $theme-color;
