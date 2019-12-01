@@ -7,6 +7,7 @@ import videoRoutes from '@/router/modules/video.js'
 import songListDetailRoutes from '@/router/modules/songListDetail.js'
 import radioRoutes from '@/router/modules/radio.js'
 import hotComments from '@/router/modules/hotComments.js'
+import singerRoutes from '@/router/modules/singer.js'
 import Login from '@/views/login/login.vue'
 const routes = [
   {
@@ -23,7 +24,8 @@ const routes = [
       ...videoRoutes,
       ...songListDetailRoutes,
       ...radioRoutes,
-      ...hotComments
+      ...hotComments,
+      ...singerRoutes
     ]
   },
   { path: '/login', component: Login }

@@ -77,3 +77,29 @@ export const getSingerList = ({cat = 5001, limit = 20, page = 1, initial = -1} =
 */
 
 export const getHotSingerList = ({limit = 20, page = 1} = {}) => axios.get('/top/artists', {params: {limit, offset: (page - 1) * limit, cat: 6001}})
+
+
+/*
+### 歌手热门50首歌曲
+
+说明 : 调用此接口,可获取
+
+**必选参数 :**
+
+`id` : 歌手 id
+*/
+
+export const getSingerHotMusic = id => axios('/artist/top/song', {params: {id}})
+
+/*
+
+### 获取歌手单曲
+
+说明 : 调用此接口 , 传入歌手 id, 可获得歌手部分信息和热门歌曲
+
+**必选参数 :** `id`: 歌手 id, 可由搜索接口获得
+
+**接口地址 :** `/artists`
+*/
+
+export const getSingerMusic = id => axios.get('/artists', {params: {id}})

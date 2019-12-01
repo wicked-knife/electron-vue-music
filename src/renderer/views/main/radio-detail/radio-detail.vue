@@ -295,6 +295,7 @@ export default {
   padding: 0 4px;
   height: 20px;
   cursor: pointer;
+  flex-shrink: 0; 
   &:hover{
     filter: brightness(1.3);
   }

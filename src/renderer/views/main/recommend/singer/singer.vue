@@ -13,7 +13,7 @@
       <v-divider />
     </v-row>
     <v-row class="d-flex justify-space-between" v-loading='loading'>
-      <base-singer-cover v-for="singer in singerList" :key="singer.id" :singer="singer" width="15.38%"/>
+      <base-singer-cover v-for="singer in singerList" :key="singer.id" :singer="singer" width="15.38%" @click.native="$router.push('/main/singer/' + singer.id)"/>
       <div :style="{width: fillGap(singerList, 6, 15.38)}"></div>
     </v-row>
   </v-container>
