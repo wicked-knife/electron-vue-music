@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row class="d-flex pl-7 pr-7 mb-6" v-show="artist">
+    <v-row class="d-flex pl-7 pr-7 mb-6" v-if="artist">
       <div class="singer-image-cover mr-8">
         <img :src="artist.picUrl + '?param=200y200'" class="singer-image"/>
         <v-btn class="singer-link subtitle-3" color="rgba(0,0,0,.53)" rounded height="24px"><i class="iconfont icon-user"></i> 个人主页 <i class="iconfont icon-enter"></i></v-btn>
@@ -26,21 +26,52 @@
         </div>
       </div>
     </v-row>
+    <v-row class="d-flex align-center flex-nowrap pl-8 pr-8 border-b">
+      <v-tabs height="40px" background-color="transparent" v-model="currentTab">
+        <v-tab class="tab-item">专辑</v-tab>
+        <v-tab class="tab-item">MV</v-tab>
+        <v-tab class="tab-item">歌手详情</v-tab>
+        <v-tab class="tab-item">相似歌手</v-tab>
+      </v-tabs>
+    </v-row>
+    <v-container fluid v-show="currentTab === 2">
+      <h4 class="mb-4" v-if="currentTab === 2">
+        {{artist.name}}简介
+      </h4>
+      <p class="grey--text subtitle-2 mb-8 briefDesc">
+        {{briefDesc}}
+      </p>
+      <div v-for="(intro, index) in introduction" :key="index" class="mb-4">
+        <h4 class="mb-4">
+        {{intro.ti}}
+        </h4>
+        <pre class="grey--text paragraph subtitle-2 mb-4">
+          {{intro.txt}}
+        </pre>
+      </div>
+    </v-container>
   </v-container>
 </template>
 
 <script>
-import { getSingerHotMusic, getSingerMusic } from '@/API/singer.js'
+import { getSingerHotMusic, getSingerMusic, getSingerDesc } from '@/API/singer.js'
 export default {
   data() {
     return {
-      artist:null
+      artist:null,
+      currentTab: 0,
+      briefDesc: '',
+      introduction: []
     }
   },
   created() {
     const { id } = this.$route.params
     getSingerHotMusic(id).then(data => console.log(data))
     getSingerMusic(id).then(({artist}) => this.artist = artist)
+    getSingerDesc(id).then(({briefDesc, introduction}) => {
+      this.briefDesc = briefDesc
+      this.introduction = introduction.map(intro => ({...intro, txt: intro.txt.trim()}))
+    })
   }
 }
 </script>
@@ -83,5 +114,15 @@ export default {
 }
 .icon-addfile{
   font-size: 20px;
+}
+.briefDesc{
+  text-indent: 2em;
+  line-height: 2;
+}
+.paragraph{
+  line-height: 2;
+  white-space: pre-wrap;
+  text-indent: -4em;
+  padding-left: 2em;
 }
 </style>

@@ -103,3 +103,15 @@ export const getSingerHotMusic = id => axios('/artist/top/song', {params: {id}})
 */
 
 export const getSingerMusic = id => axios.get('/artists', {params: {id}})
+
+/*
+### 获取歌手描述
+
+说明 : 调用此接口 , 传入歌手 id, 可获得歌手描述
+
+**必选参数 :** `id`: 歌手 id
+
+**接口地址 :** `/artist/desc`
+*/
+
+export const getSingerDesc = id => axios.get('/artist/desc', {params: {id}})
