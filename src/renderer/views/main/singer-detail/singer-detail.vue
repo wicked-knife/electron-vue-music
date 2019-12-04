@@ -1,8 +1,8 @@
 <template>
   <v-container fluid>
-    <v-row class="d-flex pl-7 pr-7 mb-6">
+    <v-row class="d-flex pl-7 pr-7 mb-6" v-show="artist">
       <div class="singer-image-cover mr-8">
-        <img src="https://p2.music.126.net/sxyGTra05rFof5i9w3PXzQ==/109951163710520009.jpg?param=200y200" class="singer-image"/>
+        <img :src="artist.picUrl + '?param=200y200'" class="singer-image"/>
         <v-btn class="singer-link subtitle-3" color="rgba(0,0,0,.53)" rounded height="24px"><i class="iconfont icon-user"></i> 个人主页 <i class="iconfont icon-enter"></i></v-btn>
       </div>
       <div class="singer-info">
@@ -11,18 +11,18 @@
             歌手
           </span>
           <div class="name-wrapper">
-            <div class="name d-flex justify-space-between align-center mb-2">蔡健雅 <v-btn color="#25272b" height="26px" class="subtitle-3" depressed> <i class="iconfont icon-addfile"></i> 收藏 </v-btn></div>
-            <div class="alia subtitle-3">Tanya Chua</div>
+            <div class="name d-flex justify-space-between align-center mb-2">{{artist.name}} <v-btn color="#25272b" height="26px" class="subtitle-3" depressed> <i class="iconfont icon-addfile"></i> {{artist.followed ? '已' : ''}}收藏</v-btn></div>
+            <div class="alia subtitle-3">{{artist.alias[0]}}</div>
           </div>
         </div>
         <div class="song-count subtitle-3">
-          <i class="iconfont icon-music grey--text mr-1"></i> 单曲数: 123
+          <i class="iconfont icon-music grey--text mr-1"></i> 单曲数: {{artist.musicSize}}
         </div>
         <div class="album-count subtitle-3">
-           <i class="iconfont icon-disc grey--text mr-1"></i>  专辑数: 231
+           <i class="iconfont icon-disc grey--text mr-1"></i>  专辑数: {{artist.albumSize}}
         </div>
         <div class="mv-count subtitle-3">
-          <i class="iconfont icon-mv grey--text mr-1"></i> MV: 1234
+          <i class="iconfont icon-mv grey--text mr-1"></i> MV: {{artist.mvSize}}
         </div>
       </div>
     </v-row>
@@ -33,12 +33,14 @@
 import { getSingerHotMusic, getSingerMusic } from '@/API/singer.js'
 export default {
   data() {
-    return {}
+    return {
+      artist:null
+    }
   },
   created() {
     const { id } = this.$route.params
     getSingerHotMusic(id).then(data => console.log(data))
-    getSingerMusic(id).then(data => console.log(data))
+    getSingerMusic(id).then(({artist}) => this.artist = artist)
   }
 }
 </script>
