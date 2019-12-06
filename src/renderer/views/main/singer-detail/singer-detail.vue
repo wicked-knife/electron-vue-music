@@ -38,16 +38,16 @@
       <h4 class="mb-4" v-if="currentTab === 2">
         {{artist.name}}简介
       </h4>
-      <p class="grey--text subtitle-2 mb-8 briefDesc">
+      <p class="grey--text subtitle-2 mb-8 paragraph">
         {{briefDesc}}
       </p>
       <div v-for="(intro, index) in introduction" :key="index" class="mb-4">
-        <h4 class="mb-4">
+        <h4 class="mb-4 mt-8">
         {{intro.ti}}
         </h4>
-        <pre class="grey--text paragraph subtitle-2 mb-4">
-          {{intro.txt}}
-        </pre>
+        <p class="grey--text subtitle-2 mb-4 paragraph" v-for='(p, index) in intro.txt' :key="index">
+          {{p}}
+        </p>
       </div>
     </v-container>
   </v-container>
@@ -70,7 +70,7 @@ export default {
     getSingerMusic(id).then(({artist}) => this.artist = artist)
     getSingerDesc(id).then(({briefDesc, introduction}) => {
       this.briefDesc = briefDesc
-      this.introduction = introduction.map(intro => ({...intro, txt: intro.txt.trim()}))
+      this.introduction = introduction.map(intro => ({...intro, txt: intro.txt.trim().split(/[\r\n]/g)}))
     })
   }
 }
@@ -115,14 +115,8 @@ export default {
 .icon-addfile{
   font-size: 20px;
 }
-.briefDesc{
+.paragraph{
   text-indent: 2em;
   line-height: 2;
-}
-.paragraph{
-  line-height: 2;
-  white-space: pre-wrap;
-  text-indent: -4em;
-  padding-left: 2em;
 }
 </style>
