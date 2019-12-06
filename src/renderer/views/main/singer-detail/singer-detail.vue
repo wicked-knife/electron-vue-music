@@ -34,6 +34,13 @@
         <v-tab class="tab-item">相似歌手</v-tab>
       </v-tabs>
     </v-row>
+
+    <v-container fluid v-show="currentTab === 0">
+      0
+    </v-container>
+    <v-container fluid v-show="currentTab === 1">
+      1
+    </v-container>
     <v-container fluid v-show="currentTab === 2">
       <h4 class="mb-4" v-if="currentTab === 2">
         {{artist.name}}简介
@@ -50,28 +57,48 @@
         </p>
       </div>
     </v-container>
+    <v-row fluid v-show="currentTab === 3" class="flex-wrap pt-6">
+      <base-singer-cover v-for="singer in similarSinger" :key="singer.id" :singer='singer' class="ml-4 mr-4" @click.native="$router.push('/main/singer/' + singer.id)"/>
+    </v-row>
   </v-container>
 </template>
 
 <script>
-import { getSingerHotMusic, getSingerMusic, getSingerDesc } from '@/API/singer.js'
+import { getSingerHotMusic, getSingerMusic, getSingerDesc, getSimilarSinger } from '@/API/singer.js'
+import BaseSingerCover from '@/base/singer-cover/base-singer-cover.vue'
 export default {
   data() {
     return {
       artist:null,
       currentTab: 0,
       briefDesc: '',
-      introduction: []
+      introduction: [],
+      similarSinger: []
     }
   },
+  components: {
+    BaseSingerCover
+  },
   created() {
-    const { id } = this.$route.params
-    getSingerHotMusic(id).then(data => console.log(data))
-    getSingerMusic(id).then(({artist}) => this.artist = artist)
-    getSingerDesc(id).then(({briefDesc, introduction}) => {
-      this.briefDesc = briefDesc
-      this.introduction = introduction.map(intro => ({...intro, txt: intro.txt.trim().split(/[\r\n]/g)}))
-    })
+    this.initData()
+  },
+  methods: {
+    initData(){
+      const { id } = this.$route.params
+      getSingerHotMusic(id).then(data => console.log(data))
+      getSingerMusic(id).then(({artist}) => this.artist = artist)
+      getSingerDesc(id).then(({briefDesc, introduction}) => {
+        this.briefDesc = briefDesc
+        this.introduction = introduction.map(intro => ({...intro, txt: intro.txt.trim().split(/[\r\n]/g)}))
+      })
+      getSimilarSinger(id).then(({artists}) => this.similarSinger = artists)
+    }
+  },
+  watch: {
+    '$route'(){
+      this.initData()
+      this.currentTab = 0
+    }
   }
 }
 </script>

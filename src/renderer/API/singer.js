@@ -115,3 +115,15 @@ export const getSingerMusic = id => axios.get('/artists', {params: {id}})
 */
 
 export const getSingerDesc = id => axios.get('/artist/desc', {params: {id}})
+
+/*
+### 获取相似歌手
+
+说明 : 调用此接口 , 传入歌手 id, 可获得相似歌手
+
+**必选参数 :** `id`: 歌手 id
+
+**接口地址 :** `/simi/artist`
+*/
+
+export const getSimilarSinger = id => axios.get('/simi/artist', {params: {id}})
