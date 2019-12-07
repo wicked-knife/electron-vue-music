@@ -38,9 +38,11 @@
     <v-container fluid v-show="currentTab === 0">
       0
     </v-container>
-    <v-container fluid v-show="currentTab === 1">
-      1
-    </v-container>
+    <v-row fluid v-show="currentTab === 1" class="flex-wrap pt-6 ">
+      <div class="responsive" v-for="MV in MVlist" :key="MV.id">   
+        <base-video-cover  :video='MV'  width="160px"/>
+      </div>
+    </v-row>
     <v-container fluid v-show="currentTab === 2">
       <h4 class="mb-4" v-if="currentTab === 2">
         {{artist.name}}简介
@@ -64,40 +66,67 @@
 </template>
 
 <script>
-import { getSingerHotMusic, getSingerMusic, getSingerDesc, getSimilarSinger } from '@/API/singer.js'
+import { getSingerHotMusic, getSingerMusic, getSingerDesc, getSimilarSinger, getSingerMV } from '@/API/singer.js'
 import BaseSingerCover from '@/base/singer-cover/base-singer-cover.vue'
+import BaseVideoCover from '@/base/video-cover/base-video-cover.vue'
+import bus from '@/common/bus.js'
 export default {
   data() {
     return {
+      id: '',
       artist:null,
       currentTab: 0,
       briefDesc: '',
       introduction: [],
-      similarSinger: []
+      similarSinger: [],
+      MVlist: [],
+      MVPage: 1,
+      moreMV: true
     }
   },
   components: {
-    BaseSingerCover
+    BaseSingerCover,
+    BaseVideoCover
   },
   created() {
     this.initData()
+    bus.on('scroll:reachBottom', this.getSingerMv)
+  },
+  destroyed(){
+    bus.off('scroll:reachBottom', this.getSingerMv)
   },
   methods: {
     initData(){
-      const { id } = this.$route.params
-      getSingerHotMusic(id).then(data => console.log(data))
-      getSingerMusic(id).then(({artist}) => this.artist = artist)
-      getSingerDesc(id).then(({briefDesc, introduction}) => {
+      this.id = this.$route.params.id
+      getSingerHotMusic(this.id).then(data => console.log(data))
+      getSingerMusic(this.id).then(({artist}) => this.artist = artist)
+      getSingerDesc(this.id).then(({briefDesc, introduction}) => {
         this.briefDesc = briefDesc
         this.introduction = introduction.map(intro => ({...intro, txt: intro.txt.trim().split(/[\r\n]/g)}))
       })
-      getSimilarSinger(id).then(({artists}) => this.similarSinger = artists)
+      getSimilarSinger(this.id).then(({artists}) => this.similarSinger = artists)
+      this.getSingerMv()
+    },
+    getSingerMv(){
+      console.log('到底了')
+      if(!this.moreMV) return
+      getSingerMV({id: this.id, page: this.MVPage}).then(({mvs, hasMore}) => {
+        this.MVlist.push(...mvs)
+        this.moreMV = hasMore
+      })
+      this.MVPage++
+    },
+    handleSingerChange(){
+      this.currentTab = 0
+      this.MVPage = 1
+      this.MVlist = []
+      this.moreMV = true
     }
   },
   watch: {
     '$route'(){
+      this.handleSingerChange()
       this.initData()
-      this.currentTab = 0
     }
   }
 }
@@ -137,6 +166,25 @@ export default {
   }
   .name{
     font-size: 20px;
+  }
+}
+.responsive{
+  display: flex;
+  justify-content: center;
+  @media screen and (min-width: 1740px) {
+    width: 12.5%;
+  }
+  @media screen and (min-width: 1550px) and (max-width: 1740px) {
+    width: 14.28%;
+  }
+  @media screen and (min-width: 1360px) and (max-width: 1550px){
+    width: 16.66%;
+  }
+  @media screen and (min-width: 1170px) and (max-width: 1360px){
+    width: 20%;
+  }
+  @media screen and (min-width: 1020px) and (max-width: 1170px){
+    width: 25%;
   }
 }
 .icon-addfile{

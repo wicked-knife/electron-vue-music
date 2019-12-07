@@ -127,3 +127,18 @@ export const getSingerDesc = id => axios.get('/artist/desc', {params: {id}})
 */
 
 export const getSimilarSinger = id => axios.get('/simi/artist', {params: {id}})
+
+
+/*
+
+### 获取歌手 mv
+
+说明 : 调用此接口 , 传入歌手 id, 可获得歌手 mv 信息 , 具体 mv 播放地址可调
+用`/mv`传入此接口获得的 mvid 来拿到 , 如 :
+`/artist/mv?id=6452`,`/mv?mvid=5461064`
+
+**必选参数 :** `id`: 歌手 id, 可由搜索接口获得
+
+**接口地址 :** `/artist/mv`
+*/
+export const getSingerMV = ({id, page = 1, limit = 40}) => axios.get('/artist/mv', {params: {id, limit, offset: (page - 1) * limit}})

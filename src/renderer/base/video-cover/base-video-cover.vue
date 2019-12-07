@@ -2,7 +2,7 @@
   <div class="wrapper" :style="{width}">
     <div :class="['img-wrapper mb-2', video.copywriter && video.copywriter.length > 4 ? '__active-hover' : '']">
       <img
-        :src="(video.picUrl || video.coverUrl || video.cover) + '?param=250y140'"
+        :src="(video.picUrl || video.coverUrl || video.cover || video.imgurl) + '?param=250y140'"
         class="cover"
         draggable="false"
       />
