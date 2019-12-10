@@ -108,7 +108,6 @@ export default {
       this.getSingerMv()
     },
     getSingerMv(){
-      console.log('到底了')
       if(!this.moreMV) return
       getSingerMV({id: this.id, page: this.MVPage}).then(({mvs, hasMore}) => {
         this.MVlist.push(...mvs)

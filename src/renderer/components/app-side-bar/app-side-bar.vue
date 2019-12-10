@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer app permanent clipped class="app-side-bar" width="200px">
+    <v-navigation-drawer app clipped  class="app-side-bar" width="200px" :value="sidebarVisibility" stateless hide-overlay>
       <v-list class="mt-n2">
         <v-subheader dark class="subheader grey--text text--darken-1">
           推荐
@@ -22,10 +22,38 @@
 
 <script>
 import { VNavigationDrawer, VSubheader} from 'vuetify/lib'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   components: {
     VNavigationDrawer,
     VSubheader
+  },
+  data(){
+    return {
+      routesShouldHideSidebar: [/\/main\/video\/play/]
+    }
+  },
+  computed:{
+    ...mapGetters('app', {
+      sidebarVisibility: 'sidebarVisibility'
+    })
+  },
+  methods: {
+    ...mapMutations('app', {
+      showSideBar: 'showSideBar',
+      hideSideBar: 'hideSideBar'
+    })
+  },
+  watch:{
+    $route($route){
+      for(let route of this.routesShouldHideSidebar) {
+        if(typeof route === 'string') {
+          return route === $route.path ? this.hideSideBar() : this.showSideBar()
+        } else {
+          return route.test($route.path) ? this.hideSideBar() : this.showSideBar()
+        }
+      }
+    }
   }
 }
 </script>

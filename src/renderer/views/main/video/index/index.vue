@@ -28,7 +28,7 @@
       <base-tag-list :list='hotTag' v-model="currentCate"/>
     </v-row>
     <v-row class="d-flex justify-space-between">
-      <base-video-cover v-for="video in videoList" :key="video.id" :video="video" width='24.03%'/>
+      <base-video-cover v-for="video in videoList" :key="video.id" :video="video" width='24.03%' @click.native="$router.push('/main/video/play/' + video.vid)"/>
       <div :style="{width: fillGap(videoList, 4, 24.03)}"></div>
     </v-row>
   </v-container>
