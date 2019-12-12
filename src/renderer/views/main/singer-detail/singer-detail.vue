@@ -3,7 +3,7 @@
     <v-row class="d-flex pl-7 pr-7 mb-6" v-if="artist">
       <div class="singer-image-cover mr-8">
         <img :src="artist.picUrl + '?param=200y200'" class="singer-image"/>
-        <v-btn class="singer-link subtitle-3" color="rgba(0,0,0,.53)" rounded height="24px"><i class="iconfont icon-user"></i> 个人主页 <i class="iconfont icon-enter"></i></v-btn>
+        <v-btn class="singer-link subtitle-3" color="rgba(0,0,0,.53)" rounded height="24px" v-if="artist.accountId"><i class="iconfont icon-user"></i> 个人主页 <i class="iconfont icon-enter"></i></v-btn>
       </div>
       <div class="singer-info">
         <div class="singer-name-wrapper d-flex mb-5">
