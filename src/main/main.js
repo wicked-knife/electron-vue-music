@@ -50,6 +50,10 @@ function registerLoginWindowEvens(mainWindow) {
     loginWindow.close()
   })
 
+  ipcMain.on('loginWindow:close', () => {
+    loginWindow.close()
+  })
+
 
 }
 

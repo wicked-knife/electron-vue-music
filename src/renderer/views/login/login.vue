@@ -76,7 +76,8 @@ import {
 } from 'vuetify/lib'
 import {ipcRenderer} from 'electron'
 import {loginByEmail, loginByCellphone} from '@/API/login.js'
-import {isObject, emailValidReg, phoneNumberValidReg} from '@/common/utils.js'
+import {isObject} from '@/common/utils.js'
+import {validatePhoneNumber, validateEmail} from '@/common/validate.js'
 import {persistUserInfo} from '@/store/persist/userInfo.js'
 export default {
   components: {
@@ -95,11 +96,11 @@ export default {
       password: '',
       phonenumberRules: [
         v => !!v || '请输入电话号码',
-        v => phoneNumberValidReg.test(v) || '电话号码不合法'
+        v => validatePhoneNumber(v) || '电话号码不合法'
       ],
       emailRules: [
         v => !!v || '请输入邮箱',
-        v => emailValidReg.test(v) || '邮箱不合法'
+        v => validateEmail(v) || '邮箱不合法'
       ],
       passwordRules: [
         v => !!v || '请输入密码',
