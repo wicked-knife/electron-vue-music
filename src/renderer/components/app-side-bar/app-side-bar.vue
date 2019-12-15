@@ -30,7 +30,9 @@ export default {
   },
   data(){
     return {
-      routesShouldHideSidebar: [/\/main\/video\/play/]
+      routesShouldHideSidebar: {
+        'video-play': true
+      }
     }
   },
   computed:{
@@ -46,13 +48,7 @@ export default {
   },
   watch:{
     $route($route){
-      for(let route of this.routesShouldHideSidebar) {
-        if(typeof route === 'string') {
-          return route === $route.path ? this.hideSideBar() : this.showSideBar()
-        } else {
-          return route.test($route.path) ? this.hideSideBar() : this.showSideBar()
-        }
-      }
+      $route.name && this.routesShouldHideSidebar[$route.name] ? this.hideSideBar() : this.showSideBar()
     }
   }
 }
