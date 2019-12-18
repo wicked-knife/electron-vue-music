@@ -31,7 +31,8 @@ export default {
   data(){
     return {
       routesShouldHideSidebar: {
-        'video-play': true
+        'video-play': true,
+        'MV-play': true
       }
     }
   },

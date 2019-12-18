@@ -1,6 +1,6 @@
 <template>
   <div>
-    视频播放页
+    MV播放页
   </div>
 </template>
 

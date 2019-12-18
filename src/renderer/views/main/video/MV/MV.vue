@@ -6,7 +6,7 @@
       <base-tag-list title="排序" :list="sortList" v-model="currentSort"/>
     </v-row>
     <v-row class="d-flex justify-space-between">
-      <base-video-cover  v-for="video in videoList" width="24.03%" :video="video" :key="video.id"/>
+      <base-video-cover  v-for="video in videoList" width="24.03%" :video="video" :key="video.id" @click.native="$router.push('/main/MV/play/' + video.id)"/>
     </v-row>
   </v-container>
 </template>
