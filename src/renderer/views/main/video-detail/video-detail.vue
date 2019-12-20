@@ -1,17 +1,60 @@
 <template>
-  <div>
-    视频播放页
-  </div>
+  <v-container fluid class="container-1040 d-flex" v-if="video">
+    <div class="left mr-4 ">
+      <v-row class="flex align-center">
+        <i class="iconfont icon-return pl-1 pr-1" @click="$router.back()"></i>
+        <div class="subtitle-1 text-ellipsis">{{video.title}}</div>
+        <div class="caption ml-4">by {{video.creator.nickname}}</div>
+      </v-row>
+    </div>
+    <div class="right ">
+      <base-title text="视频介绍" />
+      <v-row class="d-flex justify-space-between mb-4">
+        <span class="caption grey--text text--darken-1">发布时间 {{video.publishTime}}</span>
+        <span class="caption grey--text text--darken-1">播放次数 {{video.playTime}}</span>
+      </v-row>
+      <v-row>
+        <div class="caption grey--text text--darken-1">
+          标签: {{video.videoGroup.map(i => i.name).join(' / ')}}
+        </div>
+      </v-row>
+    </div>
+  </v-container>
 </template>
 
 <script>
+import {getVideoData} from '@/API/video.js'
+import BaseTitle from '@/base/title/base-title.vue'
+import dayjs from '@/common/day.js'
 export default {
+  data: () => ({
+    id: '',
+    video: null
+  }),
+  components: {
+    BaseTitle
+  },
   created(){
-    console.log(this.$route)
+    this.id = this.$route.params.id
+    getVideoData(this.id).then(({data: video}) => {
+      this.video = {...video, ...{publishTime: dayjs(video.publishTime).format('YYYY-MM-DD')}}
+    })
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
+.icon-return{
+  font-size: 20px;
+  cursor: pointer;
+}
+.left{
+  width: 700px;
+  .title{
+    max-width: 60%;
+  }
+}
+.right{
+  width: calc(100% - 720px);
+}
 </style>
