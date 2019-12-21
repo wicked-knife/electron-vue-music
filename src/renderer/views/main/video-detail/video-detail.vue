@@ -6,8 +6,11 @@
         <div class="subtitle-1 text-ellipsis">{{video.title}}</div>
         <div class="caption ml-4">by {{video.creator.nickname}}</div>
       </v-row>
+      <div class="mt-1">
+        <div ref="player"></div>
+      </div>
     </div>
-    <div class="right ">
+    <div class="right ml-4">
       <base-title text="视频介绍" />
       <v-row class="d-flex justify-space-between mb-4">
         <span class="caption grey--text text--darken-1">发布时间 {{video.publishTime}}</span>
@@ -23,9 +26,10 @@
 </template>
 
 <script>
-import {getVideoData} from '@/API/video.js'
+import {getVideoData, getVideoPlayURL} from '@/API/video.js'
 import BaseTitle from '@/base/title/base-title.vue'
 import dayjs from '@/common/day.js'
+import Player from 'xgplayer'
 export default {
   data: () => ({
     id: '',
@@ -36,9 +40,26 @@ export default {
   },
   created(){
     this.id = this.$route.params.id
-    getVideoData(this.id).then(({data: video}) => {
-      this.video = {...video, ...{publishTime: dayjs(video.publishTime).format('YYYY-MM-DD')}}
+    getVideoPlayURL(this.id).then(({urls}) => {
+      const [source] = urls
+      getVideoData(this.id).then(({data: video}) => {
+        this.video = {...video, ...{publishTime: dayjs(video.publishTime).format('YYYY-MM-DD')}}
+        this.$nextTick(() => {
+          new Player({
+            el: this.$refs['player'],
+            url: source.url,
+            fluid: true,
+            videoInit: true,
+            lang: 'zh-cn'
+          })
+        })
+      })
     })
+  },
+  methods: {
+    initVideo(){
+
+    }
   }
 }
 </script>
