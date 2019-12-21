@@ -35,6 +35,9 @@ export default {
   },
   methods: {
     handleScroll(ev){
+      if(!ev.target || !ev.target.firstElementChild) {
+        return 
+      }
       if(ev.target.scrollTop + ev.target.offsetHeight - Padding === ev.target.firstElementChild.offsetHeight) {
         bus.emit('scroll:reachBottom')
       }
