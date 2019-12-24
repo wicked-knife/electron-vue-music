@@ -3,7 +3,7 @@
     <div class="left mr-7 pr-4">
       <v-row class="flex align-center">
         <i class="iconfont icon-return pr-1" @click="$router.back()"></i>
-        <div class="subtitle-1 text-ellipsis">{{video.title}}</div>
+        <div class="subtitle-1 text-ellipsis video-title">{{video.title}}</div>
         <div class="caption ml-4">by {{video.creator.nickname}}</div>
       </v-row>
       <v-row class="mt-1">
@@ -138,5 +138,8 @@ export default {
 }
 .icon-share {
   transform: translateY(1px);
+}
+.video-title{
+  max-width: 60%;
 }
 </style>
