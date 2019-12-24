@@ -1,4 +1,5 @@
 <template>
+<div v-loading="loading">
   <v-container fluid class="container-1040 d-flex" v-if="video">
     <div class="left mr-7 pr-4">
       <v-row class="flex align-center">
@@ -53,6 +54,7 @@
       </v-row>
     </div>
   </v-container>
+  </div>
 </template>
 
 <script>
@@ -70,7 +72,8 @@ export default {
     page: 1,
     comments: [],
     hotComments: [],
-    moreHot: false
+    moreHot: false,
+    loading: true
   }),
   components: {
     BaseTitle,
@@ -82,6 +85,7 @@ export default {
     getVideoPlayURL(this.id).then(({ urls }) => {
       const [source] = urls
       getVideoData(this.id).then(({ data: video }) => {
+        this.loading = false
         this.video = {
           ...video,
           ...{ publishTime: dayjs(video.publishTime).format('YYYY-MM-DD') }
