@@ -1,7 +1,7 @@
 <template>
 <div v-loading="loading">
   
-  <v-container fluid class="container-1040 d-flex" v-if="mv">
+  <v-container fluid class="container-980 d-flex" v-if="mv">
     <div class="left mr-7 pr-4">
       <v-row class="flex align-center">
         <i class="iconfont icon-return pr-1" @click="$router.back()"></i>
@@ -115,18 +115,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container-980{
+  max-width: 980px;
+}
 .icon-return {
   font-size: 20px;
   cursor: pointer;
 }
 .left {
-  width: 686px;
+  width: 70%;
   .title {
     max-width: 60%;
   }
 }
 .right {
-  width: 294px;
+  width: 26%;
 }
 .icon-praise,.icon-praise_fill{
   font-size: 20px;
