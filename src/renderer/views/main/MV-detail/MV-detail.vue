@@ -5,7 +5,8 @@
     <div class="left mr-7 pr-4">
       <v-row class="flex align-center">
         <i class="iconfont icon-return pr-1" @click="$router.back()"></i>
-        <div class="subtitle-1 text-ellipsis video-title">{{mv.name}}</div>
+        <div class="subtitle-1 text-ellipsis video-title">
+          <span class="tag mr-1">MV</span>{{mv.name}}</div>
         <div class="caption ml-4">by {{mv.artistName}}</div>
       </v-row>
       <v-row class="mt-1">
@@ -117,6 +118,12 @@ export default {
 <style lang="scss" scoped>
 .container-980{
   max-width: 980px;
+}
+.tag {
+  color: $theme-color;
+  border: 1px solid $theme-color;
+  font-size: 13px;
+  padding: 0 4px;
 }
 .icon-return {
   font-size: 20px;
