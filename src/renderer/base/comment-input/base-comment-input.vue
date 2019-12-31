@@ -8,7 +8,7 @@
         <i class="iconfont icon-eit"></i>
         <i class="iconfont icon-topic"></i>
       </div>
-      <v-btn height="26px" min-width="42px" width="42px" class="subtitle-3" color="#2b2c31">评论</v-btn>
+      <v-btn height="26px" min-width="42px" width="42px" class="subtitle-3" color="#2b2c31" @click="handleSubmit">评论</v-btn>
     </div>
   </v-row>
 </template>
@@ -23,6 +23,17 @@ export default {
   computed:{
     restInputCount(){
       return 140 - this.value.length
+    }
+  },
+  methods:{
+    handleSubmit(){
+      if(!this.value) {
+        return
+      }
+      this.$emit('submit-comment', this.value)
+    },
+    clearInput(){
+      this.value = ''
     }
   }
 }

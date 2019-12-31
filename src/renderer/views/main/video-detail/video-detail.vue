@@ -26,7 +26,7 @@
       </v-row>
       <base-title text="评论" />
       <v-container fluid class="pl-0 pr-0">
-        <base-comment-input class="mb-4"/>
+        <base-comment-input class="mb-4" @submit-comment="handleSubmitComment" ref="commentInput"/>
         <base-title text="精彩评论" v-if="page === 1 && hotComments.length !== 0"/>
         <v-row v-if="page === 1 && hotComments.length !== 0">
           <base-comment-item v-for="comment in hotComments" :key="comment.commentId" :comment="comment"/>
@@ -59,7 +59,7 @@
 
 <script>
 import { getVideoData, getVideoPlayURL } from '@/API/video.js'
-import {getVideoComments} from '@/API/comment.js'
+import {getVideoComments, submitComment} from '@/API/comment.js'
 import BaseCommentInput from '@/base/comment-input/base-comment-input.vue'
 import BaseTitle from '@/base/title/base-title.vue'
 import BaseCommentItem from '@/base/comment-item/base-comment-item.vue'
@@ -109,6 +109,12 @@ export default {
         this.comments = comments
         this.hotComments = hotComments
         this.moreHot = moreHot
+      })
+    },
+    handleSubmitComment(content){
+      submitComment({type: 5, id: this.id, content}).then(() => {
+        this.$alert('发布成功')
+        this.$refs['commentInput'].clearInput()
       })
     }
   },
