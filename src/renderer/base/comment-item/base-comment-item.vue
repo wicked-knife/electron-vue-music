@@ -21,7 +21,7 @@
           <span class="report border-r">
             举报
           </span>
-          <span class="d-flex align-center">
+          <span class="d-flex align-center"  @click="togglePraiseComment">
             <i :class="['iconfont icon-praise', comment.liked ? 'red--text' : '']"></i>({{comment.likedCount}})
           </span>
           <span class="border-l border-r">分享</span>
@@ -34,16 +34,31 @@
 
 <script>
 import dayjs from '@/common/day.js'
+import {togglePraiseComment} from '@/API/comment.js'
 export default {
   props: {
     comment: {
       type: Object,
       required: true
+    },
+    type: {
+      type: Number,
+      required: true,
+      validator: v => [0,1,2,3,4,5,6].indexOf(v) !== -1
     }
   },
   computed:{
     date(){
       return dayjs(1573216793480).format('M月D日 HH:mm')
+    }
+  },
+  methods: {
+    togglePraiseComment(){
+      togglePraiseComment({cid: this.comment.commentId, type: this.type, t: this.comment.liked ? 0 : 1, id: this.$parent.id})
+        .then(() => {
+          this.comment.liked = !this.comment.liked
+          this.comment.liked ? this.comment.likedCount++ : this.comment.likedCount--
+        })
     }
   }
 }

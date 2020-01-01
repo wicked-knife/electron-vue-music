@@ -29,14 +29,14 @@
         <base-comment-input class="mb-4" @submit-comment="handleSubmitComment" ref="commentInput"/>
         <base-title text="精彩评论" v-if="page === 1 && hotComments.length !== 0"/>
         <v-row v-if="page === 1 && hotComments.length !== 0">
-          <base-comment-item v-for="comment in hotComments" :key="comment.commentId" :comment="comment"/>
+          <base-comment-item v-for="comment in hotComments" :key="comment.commentId" :comment="comment" :type="5"/>
         </v-row>
         <v-btn block text v-if="page === 1 && hotComments.length !== 0 && moreHot" class="mt-2 mb-4"
         @click='$router.push({name: "hot-comments", params: {type: 5, id}})'
         >查看更多精彩评论 <i class="iconfont icon-enter" ></i></v-btn>
         <base-title text="最新评论"/>
         <v-row>
-          <base-comment-item v-for="comment in comments" :key="comment.commentId" :comment="comment"/>
+          <base-comment-item v-for="comment in comments" :key="comment.commentId" :comment="comment" :type="5"/>
         </v-row>
         <v-row>
           <v-pagination v-if="video && video.commentCount > 50" v-model="page" total-visible="9" :length="Math.floor(video.commentCount / 50)" color="#b82525"/>

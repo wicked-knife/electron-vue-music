@@ -76,10 +76,10 @@
     </v-row>
 
     <v-container v-show="currentTab === 1" class="pl-4 pr-4" ref="comment-wrapper">
-      <base-comment-input class="mb-4"/>
+      <base-comment-input class="mb-4" @submit-comment="handleSubmitComment" ref="commentInput"/>
       <base-title text="精彩评论" v-if="commentPage === 1 && hotCommentList.length !== 0"/>
       <v-row v-if="commentPage === 1 && hotCommentList.length !== 0">
-        <base-comment-item v-for="comment in hotCommentList" :key="comment.commentId" :comment="comment"/>
+        <base-comment-item v-for="comment in hotCommentList" :key="comment.commentId" :comment="comment" :type="2"/>
       </v-row>
       <v-btn block text v-if="commentPage === 1 && hotCommentList.length !== 0 && moreHot" class="mt-2 mb-4"
       @click='$router.push({name: "hot-comments", params: {type: 2, id: $route.params.id}})'
@@ -114,7 +114,7 @@
 
 <script>
 import { getSongListDetail, getSongListSubscribers } from '@/API/songList.js'
-import { getSongListComment } from '@/API/comment.js'
+import { getSongListComment, submitComment } from '@/API/comment.js'
 import BaseInput from '@/base/input/base-input.vue'
 import BaseCommentInput from '@/base/comment-input/base-comment-input.vue'
 import BaseCommentItem from '@/base/comment-item/base-comment-item.vue'
@@ -132,6 +132,7 @@ export default {
   },
   data() {
     return {
+      id: '',
       songList: null,
       loading: true,
       expanded: false,
@@ -152,7 +153,8 @@ export default {
     }
   },
   created() {
-    getSongListDetail(this.$route.params.id).then(({ playlist }) => {
+    this.id = this.$route.params.id
+    getSongListDetail(this.id).then(({ playlist }) => {
       playlist.tracks.forEach(song => {
         let minutes = Math.floor(song.dt / 1000 / 60)
         let seconds = Math.floor(song.dt / 1000 % 60)
@@ -173,12 +175,12 @@ export default {
       this.shouldShowExpand = this.$refs['desc'].offsetHeight !== 18
     },
     getSongListSubscribers(){
-      getSongListSubscribers({id: this.$route.params.id, limit: 66, page: this.subscribersPage}).then(({subscribers}) => {
+      getSongListSubscribers({id: this.id, limit: 66, page: this.subscribersPage}).then(({subscribers}) => {
         this.subscribers = subscribers
       })
     },
     getCommentList(){
-      getSongListComment({id: this.$route.params.id, limit: 50, page: this.commentPage}).then(({hotComments, comments, moreHot}) => {
+      getSongListComment({id: this.id, limit: 50, page: this.commentPage}).then(({hotComments, comments, moreHot}) => {
         !this.hotCommentList.length && (this.hotCommentList = hotComments || [])
         this.commentList = comments
         this.moreHot = moreHot
@@ -190,6 +192,12 @@ export default {
             document.querySelector('.__fix-viewport').scrollTo(0, commentOffsetTop)
           }
         })
+      })
+    },
+    handleSubmitComment(content){
+      submitComment({type: 2, id: this.id, content}).then(() => {
+        this.$alert('发布成功')
+        this.$refs['commentInput'].clearInput()
       })
     }
   },

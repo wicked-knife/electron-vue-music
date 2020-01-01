@@ -28,17 +28,17 @@
       </v-row>
       <base-title text="评论" />
       <v-container fluid class="pl-0 pr-0">
-        <base-comment-input class="mb-4"/>
+        <base-comment-input class="mb-4" @submit-comment="handleSubmitComment" ref="commentInput"/>
         <base-title text="精彩评论" v-if="page === 1 && hotComments.length !== 0"/>
         <v-row v-if="page === 1 && hotComments.length !== 0">
-          <base-comment-item v-for="comment in hotComments" :key="comment.commentId" :comment="comment"/>
+          <base-comment-item v-for="comment in hotComments" :key="comment.commentId" :comment="comment" :type="1"/>
         </v-row>
         <v-btn block text v-if="page === 1 && hotComments.length !== 0 && moreHot" class="mt-2 mb-4"
         @click='$router.push({name: "hot-comments", params: {type: 5, id}})'
         >查看更多精彩评论 <i class="iconfont icon-enter" ></i></v-btn>
         <base-title text="最新评论"/>
         <v-row>
-          <base-comment-item v-for="comment in comments" :key="comment.commentId" :comment="comment"/>
+          <base-comment-item v-for="comment in comments" :key="comment.commentId" :comment="comment" :type="1"/>
         </v-row>
         <v-row>
           <v-pagination v-if="mv && mv.commentCount > 50" v-model="page" total-visible="9" :length="Math.floor(mv.commentCount / 50)" color="#b82525"/>
@@ -59,7 +59,7 @@
 
 <script>
 import { getMVData, getMVPlayURL } from '@/API/video.js'
-import {getMVComments} from '@/API/comment.js'
+import {getMVComments, submitComment} from '@/API/comment.js'
 import BaseCommentInput from '@/base/comment-input/base-comment-input.vue'
 import BaseTitle from '@/base/title/base-title.vue'
 import BaseCommentItem from '@/base/comment-item/base-comment-item.vue'
@@ -104,6 +104,12 @@ export default {
         this.comments = comments
         this.hotComments = hotComments
         this.moreHot = moreHot
+      })
+    },
+    handleSubmitComment(content){
+      submitComment({type: 1, id: this.id, content}).then(() => {
+        this.$alert('发布成功')
+        this.$refs['commentInput'].clearInput()
       })
     }
   },
