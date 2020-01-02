@@ -223,3 +223,7 @@ export const togglePraiseComment = ({cid, t, type, id}) => {
 export const submitComment = ({type, id, content}) => {
   return axios.get('/comment', {params: {type, id, content, t: 1}})
 }
+
+export const replyComment = ({type, id, content, commentId}) => {
+  return axios.get('/comment', {params: {type, id, content, commentId}})
+}
