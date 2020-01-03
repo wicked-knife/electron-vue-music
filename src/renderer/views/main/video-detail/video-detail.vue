@@ -10,7 +10,7 @@
       <v-row class="mt-1">
         <div ref="player"></div>
       </v-row>
-      <v-row class="mt-3 mb-12">
+      <v-row class="mt-4 mb-10">
         <v-btn color="#25272b" height="26px" class="subtitle-3 pl-2 pr-2">
           <i class="iconfont icon-praise grey--text mr-1"></i>
           赞({{video.praisedCount}})
@@ -24,24 +24,7 @@
           分享({{video.shareCount}})
         </v-btn>
       </v-row>
-      <base-title text="评论" />
-      <v-container fluid class="pl-0 pr-0">
-        <base-comment-input class="mb-4" @submit-comment="handleSubmitComment" ref="commentInput"/>
-        <base-title text="精彩评论" v-if="page === 1 && hotComments.length !== 0"/>
-        <v-row v-if="page === 1 && hotComments.length !== 0">
-          <base-comment-item v-for="comment in hotComments" :key="comment.commentId" :comment="comment" :type="5"/>
-        </v-row>
-        <v-btn block text v-if="page === 1 && hotComments.length !== 0 && moreHot" class="mt-2 mb-4"
-        @click='$router.push({name: "hot-comments", params: {type: 5, id}})'
-        >查看更多精彩评论 <i class="iconfont icon-enter" ></i></v-btn>
-        <base-title text="最新评论"/>
-        <v-row>
-          <base-comment-item v-for="comment in comments" :key="comment.commentId" :comment="comment" :type="5"/>
-        </v-row>
-        <v-row>
-          <v-pagination v-if="video && video.commentCount > 50" v-model="page" total-visible="9" :length="Math.floor(video.commentCount / 50)" color="#b82525"/>
-        </v-row>
-      </v-container>
+      <app-comment :resourceID="id" :resourceType="5"/>
     </div>
     <div class="right pl-4">
       <base-title text="视频介绍" />
@@ -59,26 +42,19 @@
 
 <script>
 import { getVideoData, getVideoPlayURL } from '@/API/video.js'
-import {getVideoComments, submitComment} from '@/API/comment.js'
-import BaseCommentInput from '@/base/comment-input/base-comment-input.vue'
+import AppComment from '@/components/app-comment/app-comment.vue'
 import BaseTitle from '@/base/title/base-title.vue'
-import BaseCommentItem from '@/base/comment-item/base-comment-item.vue'
 import dayjs from '@/common/day.js'
 import Player from 'xgplayer'
 export default {
   data: () => ({
     id: '',
     video: null,
-    page: 1,
-    comments: [],
-    hotComments: [],
-    moreHot: false,
     loading: true
   }),
   components: {
     BaseTitle,
-    BaseCommentInput,
-    BaseCommentItem
+    AppComment
   },
   created() {
     this.id = this.$route.params.id
@@ -101,27 +77,6 @@ export default {
         })
       })
     })
-    this.getVideoComments()
-  },
-  methods: {
-    getVideoComments(){
-      getVideoComments({id: this.id, page: this.page}).then(({comments, hotComments, moreHot}) => {
-        this.comments = comments
-        this.hotComments = hotComments
-        this.moreHot = moreHot
-      })
-    },
-    handleSubmitComment(content){
-      submitComment({type: 5, id: this.id, content}).then(() => {
-        this.$alert('发布成功')
-        this.$refs['commentInput'].clearInput()
-      })
-    }
-  },
-  watch: {
-    page(){
-      this.getVideoComments()
-    }
   }
 }
 </script>

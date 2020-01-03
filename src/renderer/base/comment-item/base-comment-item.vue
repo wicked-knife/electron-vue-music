@@ -41,7 +41,7 @@ export default {
       type: Object,
       required: true
     },
-    type: {
+    resourceType: {
       type: Number,
       required: true,
       validator: v => [0,1,2,3,4,5,6].indexOf(v) !== -1
@@ -49,12 +49,13 @@ export default {
   },
   computed:{
     date(){
-      return dayjs(1573216793480).format('M月D日 HH:mm')
+      return dayjs(this.comment.time).format('M月D日 HH:mm')
     }
   },
   methods: {
     togglePraiseComment(){
-      togglePraiseComment({cid: this.comment.commentId, type: this.type, t: this.comment.liked ? 0 : 1, id: this.$parent.id})
+      console.log(this.$parent)
+      togglePraiseComment({cid: this.comment.commentId, type: this.resourceType, t: this.comment.liked ? 0 : 1, id: this.$parent.resourceID})
         .then(() => {
           this.comment.liked = !this.comment.liked
           this.comment.liked ? this.comment.likedCount++ : this.comment.likedCount--

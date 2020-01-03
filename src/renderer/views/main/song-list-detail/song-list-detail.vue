@@ -76,21 +76,8 @@
     </v-row>
 
     <v-container v-show="currentTab === 1" class="pl-4 pr-4" ref="comment-wrapper">
-      <base-comment-input class="mb-4" @submit-comment="handleSubmitComment" ref="commentInput"/>
-      <base-title text="精彩评论" v-if="commentPage === 1 && hotCommentList.length !== 0"/>
-      <v-row v-if="commentPage === 1 && hotCommentList.length !== 0">
-        <base-comment-item v-for="comment in hotCommentList" :key="comment.commentId" :comment="comment" :type="2"/>
-      </v-row>
-      <v-btn block text v-if="commentPage === 1 && hotCommentList.length !== 0 && moreHot" class="mt-2 mb-4"
-      @click='$router.push({name: "hot-comments", params: {type: 2, id: $route.params.id}})'
-      >查看更多精彩评论 <i class="iconfont icon-enter" ></i></v-btn>
-      <base-title text="最新评论"/>
-      <v-row>
-        <base-comment-item v-for="comment in commentList" :key="comment.commentId" :comment="comment"/>
-      </v-row>
-      <v-row>
-        <v-pagination v-if="songList && songList.commentCount > 50" v-model="commentPage" total-visible="9" :length="Math.floor(songList.commentCount / 50)" color="#b82525"/>
-      </v-row>
+
+    <app-comment :resourceID="id" :resourceType="2" />
     </v-container>
 
     <v-container fluid v-show="currentTab === 2" class="pa-0">
@@ -114,21 +101,15 @@
 
 <script>
 import { getSongListDetail, getSongListSubscribers } from '@/API/songList.js'
-import { getSongListComment, submitComment } from '@/API/comment.js'
+import AppComment from '@/components/app-comment/app-comment.vue'
 import BaseInput from '@/base/input/base-input.vue'
-import BaseCommentInput from '@/base/comment-input/base-comment-input.vue'
-import BaseCommentItem from '@/base/comment-item/base-comment-item.vue'
-import BaseTitle from '@/base/title/base-title.vue'
 import BaseMusicTable from '@/base/music-table/base-music-table.vue'
 import dayjs from '@/common/day.js'
-let commentOffsetTop = 0
 export default {
   components:{
     BaseInput,
-    BaseCommentInput,
-    BaseTitle,
-    BaseCommentItem,
-    BaseMusicTable
+    BaseMusicTable,
+    AppComment
   },
   data() {
     return {
@@ -146,10 +127,6 @@ export default {
       ],
       subscribers: [], // 收藏者
       subscribersPage: 1, // 收藏者当前页
-      commentList: [],
-      hotCommentList: [],
-      commentPage: 1,
-      moreHot: false
     }
   },
   created() {
@@ -168,7 +145,6 @@ export default {
       this.songList.description && this.$nextTick(this.__checkShouldExpand)
     })
     this.getSongListSubscribers()
-    this.getCommentList()
   },
   methods: {
     __checkShouldExpand() {
@@ -179,34 +155,10 @@ export default {
         this.subscribers = subscribers
       })
     },
-    getCommentList(){
-      getSongListComment({id: this.id, limit: 50, page: this.commentPage}).then(({hotComments, comments, moreHot}) => {
-        !this.hotCommentList.length && (this.hotCommentList = hotComments || [])
-        this.commentList = comments
-        this.moreHot = moreHot
-        this.$nextTick(() => {
-          if(this.currentTab === 1) {
-            if(!commentOffsetTop) {
-              commentOffsetTop = this.$refs['comment-wrapper'].offsetTop
-            }
-            document.querySelector('.__fix-viewport').scrollTo(0, commentOffsetTop)
-          }
-        })
-      })
-    },
-    handleSubmitComment(content){
-      submitComment({type: 2, id: this.id, content}).then(() => {
-        this.$alert('发布成功')
-        this.$refs['commentInput'].clearInput()
-      })
-    }
   },
   watch: {
     subscribersPage(){
       this.getSongListSubscribers()
-    },
-    commentPage(){
-      this.getCommentList()
     }
   },
   computed: {

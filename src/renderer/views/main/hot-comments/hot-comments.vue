@@ -2,7 +2,7 @@
   <v-container fluid class="pl-8 pr-7">
     <base-title text="精彩评论" class="mb-4"/>
     <v-row>
-      <base-comment-item v-for="comment in commentList" :key="comment.id" :comment="comment"/>
+      <base-comment-item v-for="comment in commentList" :key="comment.id" :comment="comment" :resourceType="resourceType"/>
     </v-row>
   </v-container>
 </template>
@@ -21,14 +21,14 @@ export default {
     return {
       commentList: [],
       more: true,
-      type: this.$route.params.type,
-      id: this.$route.params.id,
+      resourceType: this.$route.params.type,
+      resourceID: this.$route.params.id,
       page: 1
     }
   },
   methods: {
     getHotComments(){
-      this.more && getHotComments({type: this.type, id: this.id, page: this.page}).then(({hotComments, hasMore}) => {
+      this.more && getHotComments({type: this.resourceType, id: this.resourceID, page: this.page}).then(({hotComments, hasMore}) => {
         this.commentList.push(...hotComments)
         this.more = hasMore
         this.page++
@@ -36,6 +36,7 @@ export default {
     }
   },
   created(){
+    console.log(this.resourceType)
     bus.on('scroll:reachBottom', this.getHotComments)
     this.getHotComments()
   },
