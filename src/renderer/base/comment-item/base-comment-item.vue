@@ -25,7 +25,7 @@
             <i :class="['iconfont icon-praise', comment.liked ? 'red--text' : '']"></i>({{comment.likedCount}})
           </span>
           <span class="border-l border-r">分享</span>
-          <span>回复</span>
+          <span @click="handleReplyComment">回复</span>
         </div>
       </div>
     </div>
@@ -60,6 +60,9 @@ export default {
           this.comment.liked = !this.comment.liked
           this.comment.liked ? this.comment.likedCount++ : this.comment.likedCount--
         })
+    },
+    handleReplyComment(){
+      this.$emit('reply-comment', this.comment)
     }
   }
 }

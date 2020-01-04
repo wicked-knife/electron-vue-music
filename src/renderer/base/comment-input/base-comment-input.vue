@@ -1,6 +1,6 @@
 <template>
   <v-row class="input-wrapper flex-column">
-    <textarea rows="3" class="comment-input beautify-scrollbar" maxlength="140" v-model="value"></textarea>
+    <textarea rows="3" class="comment-input beautify-scrollbar" maxlength="140" v-model="value" ref="input"></textarea>
     <div :class="['input-count subtitle-3', restInputCount === 0 ? 'red--text' : '']">{{restInputCount}}</div>
     <div class="d-flex justify-space-between align-center mt-2">
       <div class="d-flex justify-space-between align-center">
@@ -17,12 +17,13 @@
 export default {
   data(){
     return {
-      value: ''
+      value: '',
+      comment: null
     }
   },
   computed:{
     restInputCount(){
-      return 140 - this.value.length
+      return this.comment ? 140 - this.value.replace(this.comment.replyFlag, '').length : 140 - this.value.length
     }
   },
   methods:{
@@ -30,10 +31,23 @@ export default {
       if(!this.value) {
         return
       }
-      this.$emit('submit-comment', this.value)
+      if(!this.comment) {
+        this.$emit('submit-comment', this.value)
+      } else  {
+        if(this.value.indexOf(this.comment.replyFlag) === 0) {
+          const content = this.value.replace(this.comment.replyFlag, '')
+          content && this.$emit('submit-reply-comment', {...this.comment, content})
+        }
+      }
     },
     clearInput(){
       this.value = ''
+    },
+    setReplyContent(comment){
+      if(!comment) return
+      this.comment = {...comment, replyFlag: '回复' + comment.user.nickname + '：'}
+      this.value = this.comment.replyFlag
+      this.$refs['input'].focus()
     }
   }
 }

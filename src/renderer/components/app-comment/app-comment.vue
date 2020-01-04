@@ -1,7 +1,8 @@
 <template>
   <v-container fluid class="pl-0 pr-0">
     <base-title text="评论" />
-    <base-comment-input class="mb-4" @submit-comment="handleSubmitComment" ref="commentInput" />
+    <base-comment-input class="mb-4" @submit-comment="handleSubmitComment" ref="commentInput" 
+    @submit-reply-comment="handleSubmitReplyComment"/>
     <base-title text="精彩评论" v-if="page === 1 && hotComments.length !== 0" />
     <v-row v-if="page === 1 && hotComments.length !== 0">
       <base-comment-item
@@ -9,6 +10,7 @@
         :key="comment.commentId"
         :comment="comment"
         :resourceType="resourceType"
+        @reply-comment="handleReplyComment"
       />
     </v-row>
     <v-btn
@@ -26,6 +28,7 @@
         :key="comment.commentId"
         :comment="comment"
         :resourceType="resourceType"
+        @reply-comment="handleReplyComment"
       />
     </v-row>
     <v-row>
@@ -38,7 +41,7 @@
 import BaseCommentInput from '@/base/comment-input/base-comment-input.vue'
 import BaseTitle from '@/base/title/base-title.vue'
 import BaseCommentItem from '@/base/comment-item/base-comment-item.vue'
-import {submitComment, getVideoComments, getMVComments, getSongListComment} from '@/API/comment.js'
+import {submitComment, getVideoComments, getMVComments, getSongListComment, replyComment} from '@/API/comment.js'
 export default {
   props: {
     resourceID: {
@@ -89,6 +92,14 @@ export default {
     },
     toHotComments(){
       this.$router.push({name: 'hot-comments', params: {type: this.resourceType, id: this.resourceID}})
+    },
+    handleReplyComment(comment){
+      this.$refs['commentInput'].setReplyContent(comment)
+    },
+    handleSubmitReplyComment(comment){
+      replyComment({type: this.resourceType, id: this.resourceID, commentId: comment.commentId, content: comment.content}).then(() => {
+        this.$alert('回复成功')
+      })
     }
   },
   watch: {

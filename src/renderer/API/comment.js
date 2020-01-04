@@ -225,5 +225,5 @@ export const submitComment = ({type, id, content}) => {
 }
 
 export const replyComment = ({type, id, content, commentId}) => {
-  return axios.get('/comment', {params: {type, id, content, commentId}})
+  return axios.get('/comment', {params: {type, id, content, commentId, t: 2}})
 }
