@@ -247,7 +247,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      font-size: 12px;
     }
     .icon-addfile {
       font-size: 20px;

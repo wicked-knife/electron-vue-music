@@ -4,7 +4,7 @@
     <app-top-bar />
     <v-content class="app-content">
       <v-container fluid class='pl-0 pr-0 __fix-viewport beautify-scrollbar' ref='scroll-wrapper'>
-        <keep-alive :include="['recommend', 'music-video']">
+        <keep-alive :include="['recommend', 'music-video', 'personal-fm']">
             <router-view />
         </keep-alive>
       </v-container>
