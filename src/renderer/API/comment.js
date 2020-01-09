@@ -20,6 +20,24 @@ import axios from './base.js'
 
 export const getSongListComment = ({id, limit = 20, page = 1, before}) => axios.get('/comment/playlist', {params: {id, limit, offset: (page - 1) * limit, before}})
 
+/*
+### 歌曲评论
+
+说明 : 调用此接口 , 传入音乐 id 和 limit 参数 , 可获得该音乐的所有评论 ( 不需要
+登录 )
+
+**必选参数 :** `id`: 音乐 id
+
+**可选参数 :** `limit`: 取出评论数量 , 默认为 20
+
+`offset`: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)\*20, 其中 20 为 limit 的值  
+
+`before`: 分页参数,取上一页最后一项的 `time` 获取下一页数据(获取超过5000条评论的时候需要用到)
+
+**接口地址 :** `/comment/music`
+*/
+
+export const getSongComment = ({id, limit = 20, page = 1, before}) => axios.get('/comment/music', {params: {id, limit, offset: (page - 1) * limit, before}})
 
 /*
 ### 热门评论
@@ -138,6 +156,7 @@ export const getMVComments = ({id, page = 1, limit = 50}) => axios.get('/comment
 注意： 动态点赞不需要传入 id 参数，需要传入动态的 `threadId`  参数,如：`/comment/like?type=6&cid=1419532712&threadId=A_EV_2_6559519868_32953014&t=0`， `threadId` 可通过 `/event`，`/user/event` 接口获取
 
 */
+
 
 export const togglePraiseComment = ({cid, t, type, id}) => {
   return axios.get('/comment/like', {params: {cid, t, type, id}})

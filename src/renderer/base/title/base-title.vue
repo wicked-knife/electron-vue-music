@@ -1,6 +1,11 @@
 <template>
   <v-row class="d-flex justify-space-between align-center __title pb-1">
-    <span class="subtitle-1">{{text}}</span>
+    <div>
+      <span class="subtitle-1">{{text}}</span>
+      <span class="subtitle-3 grey--text text--darken-2 ml-4">
+        <slot name="subtitle"></slot>
+      </span>
+    </div>
       <router-link :to='to' tag='span' class="caption grey--text d-flex align-center" v-if="to">
         更多<i class="iconfont icon-enter"></i>
       </router-link>

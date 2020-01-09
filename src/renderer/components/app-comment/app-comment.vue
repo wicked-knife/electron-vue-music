@@ -1,6 +1,10 @@
 <template>
   <v-container fluid class="pl-0 pr-0">
-    <base-title text="评论" />
+    <base-title text="评论" >
+      <template v-slot:subtitle v-if="showTotal">
+        (已有评论{{total}}条)
+      </template>
+    </base-title>
     <base-comment-input class="mb-4" @submit-comment="handleSubmitComment" ref="commentInput" 
     @submit-reply-comment="handleSubmitReplyComment"/>
     <base-title text="精彩评论" v-if="page === 1 && hotComments.length !== 0" />
@@ -41,18 +45,23 @@
 import BaseCommentInput from '@/base/comment-input/base-comment-input.vue'
 import BaseTitle from '@/base/title/base-title.vue'
 import BaseCommentItem from '@/base/comment-item/base-comment-item.vue'
-import {submitComment, getVideoComments, getMVComments, getSongListComment, replyComment} from '@/API/comment.js'
+import {submitComment, getVideoComments, getMVComments, getSongListComment, getSongComment, replyComment} from '@/API/comment.js'
 export default {
   props: {
     resourceID: {
       // 评论的资源ID
-      type: String,
+      type: [String, Number],
       required: true
     },
     resourceType: {
       // 评论的资源类型 0: 歌曲 1: mv 2: 歌单 3：专辑 4:电台 5: 视频 6: 动态
       type: Number,
       required: true
+    },
+    showTotal: {
+      // 是否展示评论总数
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -62,6 +71,7 @@ export default {
     total: 0,
     page: 1,
     resourceTypeToFunc: {
+      0: getSongComment,
       1: getMVComments,
       2: getSongListComment,
       5: getVideoComments
