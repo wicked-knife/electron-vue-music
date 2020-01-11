@@ -10,4 +10,4 @@ import axios from './base'
 **调用例子 :** `/personal_fm`
 */
 
-export const getPersonalFM = () => axios.get('/personal_fm')
+export const getPersonalFM = () => axios.get('/personal_fm', {params: {t: new Date().getTime()}})
