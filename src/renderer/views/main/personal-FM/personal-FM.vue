@@ -14,9 +14,6 @@ export default {
     currentSong(){
       return this.songQueue[this.currentIndex]
     },
-    prevSong(){
-      return this.songQueue[this.currentIndex - 1]
-    },
     nextSong(){
       return this.songQueue[this.currentIndex + 1]
     }
@@ -24,59 +21,74 @@ export default {
   created(){
     getPersonalFM().then(({data}) => {
       this.songQueue = data
+      this.$nextTick(this.initSongSlide)
     })
   },
   mounted(){
-    console.log(this.$refs['song-container'])
-    console.log(document.getElementById('song-container'))
+  },
+  watch:{
+    songQueue(){
+      console.log(this.songQueue.map(s => s.name))
+    }
   },
   methods: {
     playNextSong(){
       if(this.currentIndex === 0) {
         this.currentIndex++
+        this.updateSlide()
       } else {
         if(this.songQueue.length <= 3) {
           getPersonalFM().then(({data}) => {
-            this.songQueue.push(...data)
             this.songQueue.shift()
+            this.songQueue.push(...data)
+            this.updateSlide()
           })
         } else {
           this.songQueue.shift()
+          
+          this.updateSlide()
         }
       }
     },
-    dynamicClassName(i) {
-      if(i === this.currentIndex) {
-        return 'current'
+    initSongSlide(){
+      const $currentSlide = this.createSongSlide('current', this.currentSong.album.picUrl + '?param=300y300')
+      const $next = this.createSongSlide('next', this.nextSong.album.picUrl + '?param=300y300')
+      this.$refs['song-container'].appendChild($currentSlide)
+      this.$refs['song-container'].appendChild($next)
+    },
+    createSongSlide(className, imageUrl){
+      const $div = document.createElement('div')
+      const $img = new Image()
+      $div.classList.add('song-cover', className)
+      $img.src = imageUrl
+      $div.appendChild($img)
+      return $div
+    },
+    updateSlide(){
+      const $container = this.$refs['song-container']
+      const $next = $container.querySelector('.next')
+      const $current = $container.querySelector('.current')
+      const $prev = $container.querySelector('.prev')
+      $next.setAttribute('class', 'song-cover current')
+      $current.setAttribute('class', 'song-cover prev')
+      if($prev) {
+        $prev.setAttribute('class', 'song-cover remove')
+        setTimeout(() => {
+          $prev.remove()
+        }, 300)
       }
-      if(i === this.currentIndex - 1) {
-        return 'prev'
-      }
-      if(i === this.currentIndex + 1) {
-        return 'next'
-      }
+      const $$next = this.createSongSlide('next', this.nextSong.album.picUrl + '?param=300y300')
+      $container.appendChild($$next)
     }
   },
   render(){
-    const {currentSong, prevSong, nextSong} = this
+    const {currentSong} = this
     return (
       <v-container class="container-760" fluid>
-        {currentSong ? <div class="main-container d-flex justify-end">
+        {currentSong ? <div class="personalFM-container d-flex justify-end">
           <div class="left mr-10 mt-12">
-            <div class="cover-container mb-8" ref="song-container" id="song-container">
-              {
-                prevSong ? <div class="prev song-cover" >
-                  <img src={prevSong.album.picUrl + '?param=300y300'} />
-                </div> : null
-              }
-              {currentSong ?  <div class="current song-cover">
-                <img src={currentSong.album.picUrl + '?param=300y300'} />
-              </div> : null}
-              {
-                nextSong ? <div class="next song-cover">
-                  <img src={nextSong.album.picUrl + '?param=300y300'} />
-                </div> : null
-              }
+            <div class="cover-container mb-8" ref="song-container">
+
             </div>
             <div class="action-group d-flex align-center justify-space-between pl-3 pr-3">
               <i class="grey--text iconfont icon-like action-item d-flex align-center justify-center"></i>
@@ -114,8 +126,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.main-container{
+<style lang="scss">
+.personalFM-container{
   .left{
     width: 300px;
     .cover-container{
@@ -127,23 +139,33 @@ export default {
         font-size: 0px;
         width: 100%;
         height: 100%;
-        transition: transform 0.6s ease;
+        transition: all 0.6s ease;
         img{
           width: 100%;
         }
         &.current{
           left: 0;
           top: 0;
+          opacity: 1;
+          transform: translate3d(0,0,0);
         }
         &.prev{
           left: 0;
           top: 0;
           transform: scale(0.85) translate3d(-20%, 0, 0);
+          opacity: 1;
         }
         &.next{
           left: 0;
           top: 0;
+          opacity: 0;
           transform: translate3d(100%, 0, 0)
+        }
+        &.remove{
+          left: 0;
+          top: 0;
+          transform: scale(0.7) translate3d(-40%, 0, 0);
+          opacity: 0;
         }
       }
     }
@@ -151,37 +173,45 @@ export default {
   .right{
     width: 350px;
   }
-}
-.link{
-  &:hover{
-    color:#1e88e5 !important;
-  }
-}
-.tag {
-  color: $theme-color;
-  border: 1px solid $theme-color;
-  font-size: 10px;
-  padding: 0 2px;
-  margin-top: -4px;
-  &:hover{
-    filter: brightness(1.3);
-  }
-}
-.song-info > div{
-  width: 50%;
-}
-.action-group{
-  box-sizing: border-box;
-  .action-item{
-    background-color: #26272b;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    font-size: 26px;
-    cursor: pointer;
-    &:hover{
-      filter: brightness(1.2)
+  .link {
+    &:hover {
+      color: #1e88e5 !important;
     }
   }
+
+  .tag {
+    color: $theme-color;
+    border: 1px solid $theme-color;
+    font-size: 10px;
+    padding: 0 2px;
+    margin-top: -4px;
+
+    &:hover {
+      filter: brightness(1.3);
+    }
+  }
+
+  .song-info>div {
+    width: 50%;
+  }
+
+  .action-group {
+    box-sizing: border-box;
+
+    .action-item {
+      background-color: #26272b;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      font-size: 26px;
+      cursor: pointer;
+
+      &:hover {
+        filter: brightness(1.2)
+      }
+    }
+  }
+
 }
+
 </style>
