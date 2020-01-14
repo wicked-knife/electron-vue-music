@@ -62,6 +62,7 @@ export default {
       $div.classList.add('song-cover', className)
       $img.src = imageUrl
       $div.appendChild($img)
+      $div.addEventListener('click', this.handleSlidePrev, true)
       return $div
     },
     updateSlide(){
@@ -74,11 +75,26 @@ export default {
       if($prev) {
         $prev.setAttribute('class', 'song-cover remove')
         setTimeout(() => {
+          $prev.removeEventListener('click', this.handleSlidePrev)
           $prev.remove()
         }, 300)
       }
       const $$next = this.createSongSlide('next', this.nextSong.album.picUrl + '?param=300y300')
       $container.appendChild($$next)
+    },
+    handleSlidePrev(ev){
+      const targetElement = ev.target.parentElement
+      if(targetElement.classList.contains('prev')) {
+        const $container = this.$refs['song-container']
+        const $next = $container.querySelector('.next')
+        const $current = $container.querySelector('.current')
+        const $prev = $container.querySelector('.prev')
+        $next.removeEventListener('click', this.handleSlidePrev)
+        $next.remove()
+        $current.setAttribute('class', 'song-cover next')
+        $prev.setAttribute('class', 'song-cover current')
+        this.currentIndex--
+      }
     }
   },
   render(){
@@ -154,6 +170,7 @@ export default {
           top: 0;
           transform: scale(0.85) translate3d(-20%, 0, 0);
           opacity: 1;
+          cursor: pointer;
         }
         &.next{
           left: 0;
