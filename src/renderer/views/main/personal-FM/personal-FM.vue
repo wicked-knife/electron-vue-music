@@ -9,6 +9,7 @@ export default {
   data:() => ({
     currentIndex: 0,
     songQueue: [],
+    playingState: false
   }),
   computed:{
     currentSong(){
@@ -98,13 +99,14 @@ export default {
     }
   },
   render(){
-    const {currentSong} = this
+    const {currentSong, playingState} = this
     return (
       <v-container class="container-760" fluid>
         {currentSong ? <div class="personalFM-container d-flex justify-end">
           <div class="left mr-10 mt-12">
             <div class="cover-container mb-8" ref="song-container">
-
+              <i class={'iconfont play-icon d-flex align-center justify-center ' + (playingState ? 'icon-play playing' : 'icon-pause pause')} 
+                {...{on: {click: () => this.playingState = !playingState}}}></i>
             </div>
             <div class="action-group d-flex align-center justify-space-between pl-3 pr-3">
               <i class="grey--text iconfont icon-like action-item d-flex align-center justify-center"></i>
@@ -150,6 +152,31 @@ export default {
       position: relative;
       width: 100%;
       padding-top: 100%;
+      .play-icon{
+        position: absolute;
+        width: 45px;
+        height: 45px;
+        font-size: 28px;
+        border-radius: 50%;
+        border: 1px solid #f5f5f5;
+        background-color: rgba(0,0,0,0.5);
+        left: 50%;
+        top: 50%;
+        transition: all 0.3s ease;
+        &.playing{
+          transform: translate3d(-50%, -50%, 0);
+        }
+        &.pause{
+          left: 100%;
+          top: 100%;
+          transform: translate3d(-110%, -110%, 0)
+        }
+        cursor: pointer;
+        z-index: 1;
+        &:hover{
+          background-color: rgba(0,0,0,0.75);
+        }
+      }
       .song-cover{
         position: absolute;
         font-size: 0px;
