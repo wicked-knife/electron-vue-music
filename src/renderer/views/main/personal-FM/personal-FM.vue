@@ -1,6 +1,8 @@
 <script>
 import {getPersonalFM} from '@/API/personal-fm.js'
+import {getLyric} from '@/API/lyric.js'
 import AppComment from '@/components/app-comment/app-comment.vue'
+import LyricParser from '@/common/lyricParser.js'
 export default {
   name: 'personal-fm',
   components:{
@@ -28,8 +30,10 @@ export default {
   mounted(){
   },
   watch:{
-    songQueue(){
-      console.log(this.songQueue.map(s => s.name))
+    currentSong(){
+      getLyric(this.currentSong.id).then(({lrc, tlyric}) => {
+        new LyricParser(lrc.lyric, tlyric.lyric)
+      })
     }
   },
   methods: {
