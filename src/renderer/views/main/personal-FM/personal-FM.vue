@@ -32,7 +32,7 @@ export default {
   watch:{
     currentSong(){
       getLyric(this.currentSong.id).then(({lrc, tlyric}) => {
-        new LyricParser(lrc.lyric, tlyric.lyric)
+        lrc && new LyricParser(lrc.lyric, tlyric ? tlyric.lyric : '')
       })
     }
   },
