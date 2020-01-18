@@ -1,5 +1,5 @@
 <template>
-  <div class="lyric-scroller beautify-scrollbar pt-5 pb-5" :style="{height: _height}">
+  <div class="lyric-scroller beautify-scrollbar pt-5 pb-5" :style="{height: _height}" ref="scroller">
       <div class="lyric-line subtitle-2 mt-3 mb-3 grey--text text--darken-1" v-for="item in lyric" :key="item.time">
         <div class="lyric-raw">{{item.lyric}}</div>
         <div class="lyrci-tranlated" v-if="item.tLyric">{{item.tLyric}}</div>
@@ -23,6 +23,11 @@ export default {
     _height(){
       return typeof this.height === 'string' ? this.height : (this.height + 'px')
     }
+  },
+  watch: {
+    lyric(){
+      this.$refs.scroller.scrollTo(0, 0)
+    }
   }
 }
 </script>
@@ -33,5 +38,6 @@ export default {
   overflow-y: scroll;
   box-sizing: border-box;
   border-right: 1px solid #2c2e32;
+  scroll-behavior: smooth;
 }
 </style>
