@@ -1,6 +1,5 @@
-
 class LyricParser {
-  constructor(rawLyric, rawTranslatedLyric){
+  constructor(rawLyric, rawTranslatedLyric = ''){
     this.rawLyric = rawLyric
     this.rawTranslatedLyric = rawTranslatedLyric || ''
     this.parsedLyric = this._parseLyric(this.rawLyric, this.rawTranslatedLyric)
@@ -36,6 +35,20 @@ class LyricParser {
 
   getLyric(){
     return this.parsedLyric
+  }
+
+  seek(milliseconds){
+    for(let i = 0; i < this.parsedLyric.length; i++) {
+      if(i === this.parsedLyric.length - 1) {
+        if(i === this.parsedLyric.length - 1 && milliseconds >= this.parsedLyric[i].time) {
+          return this.parsedLyric[i]
+        }
+      } else {
+        if(milliseconds >= this.parsedLyric[i].time && milliseconds < this.parsedLyric[i + 1].time) {
+          return this.parsedLyric[i]
+        }
+      }
+    }
   }
 }
 

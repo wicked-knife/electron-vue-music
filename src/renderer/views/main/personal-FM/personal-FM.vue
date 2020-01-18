@@ -3,15 +3,18 @@ import {getPersonalFM} from '@/API/personal-fm.js'
 import {getLyric} from '@/API/lyric.js'
 import AppComment from '@/components/app-comment/app-comment.vue'
 import LyricParser from '@/common/lyricParser.js'
+import LyricScroller from '@/base/lyric-scroller/base-lyric-scroller.vue'
 export default {
   name: 'personal-fm',
   components:{
-    AppComment
+    AppComment,
+    LyricScroller
   },
   data:() => ({
     currentIndex: 0,
     songQueue: [],
-    playingState: false
+    playingState: false,
+    lyric: []
   }),
   computed:{
     currentSong(){
@@ -32,7 +35,10 @@ export default {
   watch:{
     currentSong(){
       getLyric(this.currentSong.id).then(({lrc, tlyric}) => {
-        lrc && new LyricParser(lrc.lyric, tlyric ? tlyric.lyric : '')
+        if(lrc) {
+          const lyricParser = new LyricParser(lrc.lyric, tlyric.lyric ? tlyric.lyric : '')
+          this.lyric = lyricParser.getLyric()
+        }
       })
     }
   },
@@ -50,7 +56,6 @@ export default {
           })
         } else {
           this.songQueue.shift()
-          
           this.updateSlide()
         }
       }
@@ -106,7 +111,7 @@ export default {
     const {currentSong, playingState} = this
     return (
       <v-container class="container-760" fluid>
-        {currentSong ? <div class="personalFM-container d-flex justify-end">
+        {currentSong ? <div class="personalFM-container d-flex justify-end mb-12">
           <div class="left mr-10 mt-12">
             <div class="cover-container mb-8" ref="song-container">
               <i class={'iconfont play-icon d-flex align-center justify-center ' + (playingState ? 'icon-play playing' : 'icon-pause pause')} 
@@ -123,7 +128,7 @@ export default {
             <div class="title mb-2">{currentSong.name}
               {currentSong.mvid ? <router-link class="tag ml-2" to={'/main/MV/play/' + currentSong.mvid} >MV</router-link> : ''}
             </div>
-            <div class="subtitle-3 song-info d-flex grey--text">
+            <div class="subtitle-3 song-info d-flex grey--text mb-5">
               <div class="text-ellipsis mr-2">
                专辑: <router-link to="/" class="blue--text text--darken-3 link ml-1 mr-1">{currentSong.album.name}</router-link>
               </div>
@@ -139,6 +144,7 @@ export default {
               }
               </div>
             </div>
+            <lyric-scroller lyric={this.lyric}/>
           </div>
         </div> : null}
         {currentSong && <app-comment resourceType={0} resourceID={currentSong.id} show-total></app-comment>}
@@ -207,7 +213,8 @@ export default {
           left: 0;
           top: 0;
           opacity: 0;
-          transform: translate3d(100%, 0, 0)
+          transform: translate3d(100%, 0, 0);
+          pointer-events: none;
         }
         &.remove{
           left: 0;
