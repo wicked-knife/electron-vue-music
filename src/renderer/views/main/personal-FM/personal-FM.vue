@@ -4,6 +4,7 @@ import {getLyric} from '@/API/lyric.js'
 import AppComment from '@/components/app-comment/app-comment.vue'
 import LyricParser from '@/common/lyricParser.js'
 import LyricScroller from '@/base/lyric-scroller/base-lyric-scroller.vue'
+import MusicPlayer from '@/common/player.js'
 export default {
   name: 'personal-fm',
   components:{
@@ -31,6 +32,7 @@ export default {
     })
   },
   mounted(){
+    new MusicPlayer({music:[{url: 'http://h5player.bytedance.com/video/music/audio.mp3'}], autoPlay: false})
   },
   watch:{
     currentSong(){
