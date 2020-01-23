@@ -1,6 +1,7 @@
 <script>
 import {getPersonalFM} from '@/API/personal-fm.js'
 import {getLyric} from '@/API/lyric.js'
+import {getSongURL} from '@/API/song.js'
 import AppComment from '@/components/app-comment/app-comment.vue'
 import LyricParser from '@/common/lyricParser.js'
 import LyricScroller from '@/base/lyric-scroller/base-lyric-scroller.vue'
@@ -15,7 +16,8 @@ export default {
     currentIndex: 0,
     songQueue: [],
     playingState: false,
-    lyric: []
+    lyric: [], 
+    player: null
   }),
   computed:{
     currentSong(){
@@ -31,10 +33,8 @@ export default {
       this.$nextTick(this.initSongSlide)
     })
   },
-  mounted(){
-    new MusicPlayer({music:[{url: 'http://h5player.bytedance.com/video/music/audio.mp3'}], autoPlay: false})
-  },
   watch:{
+    // 当前歌曲改变时获取当前歌曲的歌词及真实播放地址
     currentSong(){
       getLyric(this.currentSong.id).then(({lrc, tlyric}) => {
         if(lrc) {
@@ -42,6 +42,20 @@ export default {
           this.lyric = lyricParser.getLyric()
         }
       })
+      getSongURL(this.currentSong.id).then(({data: musicData}) => {
+        if(!this.player) {
+          this.player = new MusicPlayer({
+            music: musicData,
+            autoPlay: this.playingState,
+            onprogress: this.handleMusicPlaying
+          })
+        } else {
+          this.player.add(musicData)
+        }
+      })
+    },
+    playingState(value){
+      value ? this.player.play() : this.player.pause()
     }
   },
   methods: {
@@ -71,10 +85,11 @@ export default {
     createSongSlide(className, imageUrl){
       const $div = document.createElement('div')
       const $img = new Image()
+      $img.draggable = false
       $div.classList.add('song-cover', className)
       $img.src = imageUrl
       $div.appendChild($img)
-      $div.addEventListener('click', this.handleSlidePrev, true)
+      $div.addEventListener('click', this.handleSlidePrev)
       return $div
     },
     updateSlide(){
@@ -107,6 +122,9 @@ export default {
         $prev.setAttribute('class', 'song-cover current')
         this.currentIndex--
       }
+    },
+    handleMusicPlaying(ev){
+      
     }
   },
   render(){
@@ -116,7 +134,7 @@ export default {
         {currentSong ? <div class="personalFM-container d-flex justify-end mb-12">
           <div class="left mr-10 mt-12">
             <div class="cover-container mb-8" ref="song-container">
-              <i class={'iconfont play-icon d-flex align-center justify-center ' + (playingState ? 'icon-play playing' : 'icon-pause pause')} 
+              <i class={'iconfont play-icon d-flex align-center justify-center ' + (playingState ? 'icon-pause pause' : 'icon-play playing')} 
                 {...{on: {click: () => this.playingState = !playingState}}}></i>
             </div>
             <div class="action-group d-flex align-center justify-space-between pl-3 pr-3">

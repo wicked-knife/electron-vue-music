@@ -1,24 +1,36 @@
+function noop() {
+  
+}
+
 const defaults = {
   autoPlay: false,
   volume: 1,
-  music: []
+  music: [],
+  onprogress:noop
 }
 
 class BaseMusicPlayer {
   constructor(config){
-    console.log(config)
-    const {volume, music, autoPlay} = Object.assign(defaults, config)
+    const {volume, music, autoPlay, onprogress} = Object.assign(defaults, config)
     this.audio = document.createElement('audio')
     this.volume = volume
     this.music = music
+    this.handleProgress = onprogress
     this._init(autoPlay)
   }
   _init(autoPlayFlag){
     this.audio.addEventListener('canplay', () => autoPlayFlag && this.audio.play())
+    this.audio.addEventListener('progress', this.handleProgress)
     this.audio.src = this.music[0].url
   }
   pause(){
     this.audio.pause()
+  }
+  play(){
+    this.audio.play()
+  }
+  add(songData){
+    Array.isArray(songData) ? this.music.push(...songData) : this.music.push(songData)
   }
 }
 
@@ -36,7 +48,7 @@ const MusicPlayer = new Proxy(BaseMusicPlayer, {
         target[prop] = value
       },
       get(target, prop){
-        return prop.indexOf('_') === 0 ? undefined : target[prop]
+        return typeof prop === 'string' ? prop.indexOf('_') === 0 ? undefined : target[prop] : target[prop]
       }
     })
   }
