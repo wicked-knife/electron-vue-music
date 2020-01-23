@@ -3,34 +3,44 @@ function noop() {
 }
 
 const defaults = {
-  autoPlay: false,
   volume: 1,
   music: [],
-  onprogress:noop
+  onTimeupdate:noop
 }
 
 class BaseMusicPlayer {
   constructor(config){
-    const {volume, music, autoPlay, onprogress} = Object.assign(defaults, config)
+    const {volume, music, onTimeupdate} = Object.assign(defaults, config)
     this.audio = document.createElement('audio')
     this.volume = volume
     this.music = music
-    this.handleProgress = onprogress
-    this._init(autoPlay)
+    this.handleTimeupdate = onTimeupdate
+    this.playingState = false
+    this.index = 0
+    this._init()
   }
-  _init(autoPlayFlag){
-    this.audio.addEventListener('canplay', () => autoPlayFlag && this.audio.play())
-    this.audio.addEventListener('progress', this.handleProgress)
-    this.audio.src = this.music[0].url
+  _init(){
+    this.audio.addEventListener('canplay', () => {this.playingState && this.audio.play()})
+    this.audio.addEventListener('timeupdate', this.handleTimeupdate)
+    this.audio.src = this.music[this.index].url
   }
   pause(){
+    this.playingState = false
     this.audio.pause()
   }
   play(){
+    this.playingState = true
     this.audio.play()
   }
   add(songData){
     Array.isArray(songData) ? this.music.push(...songData) : this.music.push(songData)
+  }
+  next(){
+    if(this.index + 1 >= this.music.length){
+      this.index = 0
+    } else {
+      this.index++
+    }
   }
 }
 
@@ -42,10 +52,14 @@ const MusicPlayer = new Proxy(BaseMusicPlayer, {
         case 'volume':
           target['audio'].volume = value
           break
+        case 'index':
+          target['audio'].src = target['music'][value].url
+          break
         default:
           break
         }
         target[prop] = value
+        return true
       },
       get(target, prop){
         return typeof prop === 'string' ? prop.indexOf('_') === 0 ? undefined : target[prop] : target[prop]

@@ -47,10 +47,11 @@ export default {
           this.player = new MusicPlayer({
             music: musicData,
             autoPlay: this.playingState,
-            onprogress: this.handleMusicPlaying
+            onTimeupdate: this.handleMusicTimeupdate
           })
         } else {
           this.player.add(musicData)
+          this.player.next()
         }
       })
     },
@@ -123,8 +124,8 @@ export default {
         this.currentIndex--
       }
     },
-    handleMusicPlaying(ev){
-      
+    handleMusicTimeupdate(ev){
+      console.log(ev.target.currentTime)
     }
   },
   render(){
