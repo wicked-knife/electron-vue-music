@@ -12,6 +12,7 @@ class BaseMusicPlayer {
   constructor(config){
     const {volume, music, onTimeupdate} = Object.assign(defaults, config)
     this.audio = document.createElement('audio')
+    this.audio.preload = 'auto'
     this.volume = volume
     this.music = music
     this.handleTimeupdate = onTimeupdate
