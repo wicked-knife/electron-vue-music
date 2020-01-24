@@ -43,7 +43,10 @@ class BaseMusicPlayer {
     this.audio.play()
   }
   add(songData){
-    Array.isArray(songData) ? this.music.push(...songData) : this.music.push(songData)
+    const musicMap = {}
+    const songDataArr = Array.isArray(songData) ? songData : [songData]
+    this.music.forEach(m => musicMap[m.md5] = m)
+    songDataArr.forEach(m => !musicMap[m.md5] && this.music.push(m))
   }
   next(){
     if(this.index + 1 >= this.music.length){
@@ -51,6 +54,16 @@ class BaseMusicPlayer {
     } else {
       this.index++
     }
+  }
+  prev(){
+    if(this.index === 0) {
+      this.index = this.music.length - 1
+    } else {
+      this.index--
+    }
+  }
+  has(md5){
+    return !!this.music.find(m => m.md5 === md5)
   }
 }
 

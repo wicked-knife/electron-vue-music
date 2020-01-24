@@ -36,7 +36,7 @@ export default {
   },
   watch:{
     // 当前歌曲改变时获取当前歌曲的歌词及真实播放地址
-    currentSong(){
+    currentSong(newVal, oldVal){
       getLyric(this.currentSong.id).then(({lrc, tlyric}) => {
         if(lrc) {
           const lyricParser = new LyricParser(lrc.lyric, tlyric.lyric ? tlyric.lyric : '')
@@ -52,8 +52,16 @@ export default {
             onPause: this.handleMusicPause
           })
         } else {
-          this.player.add(musicData)
-          this.player.next()
+          if(!this.player.has(musicData[0].md5)) {
+            this.player.add(musicData)
+          }
+          const lastIndex = this.songQueue.findIndex(m => oldVal.id === m.id)
+          const newIndex = this.songQueue.findIndex(m => newVal.id === m.id)
+          if(newIndex > lastIndex) {
+            this.player.next()
+          } else {
+            this.player.prev()
+          }
         }
       })
     },
