@@ -5,24 +5,33 @@ function noop() {
 const defaults = {
   volume: 1,
   music: [],
-  onTimeupdate:noop
+  onTimeupdate:noop,
+  onPause: noop
 }
 
 class BaseMusicPlayer {
   constructor(config){
-    const {volume, music, onTimeupdate} = Object.assign(defaults, config)
+    this._config = Object.assign(defaults, config)
+    const {volume, music} = this._config
     this.audio = document.createElement('audio')
     this.audio.preload = 'auto'
     this.volume = volume
     this.music = music
-    this.handleTimeupdate = onTimeupdate
     this.playingState = false
     this.index = 0
     this._init()
   }
   _init(){
     this.audio.addEventListener('canplay', () => {this.playingState && this.audio.play()})
-    this.audio.addEventListener('timeupdate', this.handleTimeupdate)
+    this.audio.addEventListener('timeupdate', this._config.onTimeupdate)
+    this.audio.addEventListener('pause', this._config.onPause)
+    this.audio.addEventListener('ended', () => {
+      if(this.index === this.music.length - 1) {
+        this.pause()
+      } else {
+        this.next()
+      }
+    })
     this.audio.src = this.music[this.index].url
   }
   pause(){

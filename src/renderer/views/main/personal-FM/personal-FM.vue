@@ -48,7 +48,8 @@ export default {
           this.player = new MusicPlayer({
             music: musicData,
             autoPlay: this.playingState,
-            onTimeupdate: this.handleMusicTimeupdate
+            onTimeupdate: this.handleMusicTimeupdate,
+            onPause: this.handleMusicPause
           })
         } else {
           this.player.add(musicData)
@@ -127,6 +128,9 @@ export default {
     },
     handleMusicTimeupdate(ev){
       this.currentTime = ev.target.currentTime
+    },
+    handleMusicPause(){
+      console.log('暂停了')
     }
   },
   render(){
