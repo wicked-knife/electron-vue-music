@@ -17,7 +17,8 @@ export default {
     songQueue: [],
     playingState: false,
     lyric: [], 
-    player: null
+    player: null,
+    currentTime: 0
   }),
   computed:{
     currentSong(){
@@ -125,7 +126,7 @@ export default {
       }
     },
     handleMusicTimeupdate(ev){
-      console.log(ev.target.currentTime)
+      this.currentTime = ev.target.currentTime
     }
   },
   render(){
@@ -165,7 +166,7 @@ export default {
               }
               </div>
             </div>
-            <lyric-scroller lyric={this.lyric}/>
+            <lyric-scroller lyric={this.lyric} currentTime={this.currentTime}/>
           </div>
         </div> : null}
         {currentSong && <app-comment resourceType={0} resourceID={currentSong.id} show-total></app-comment>}

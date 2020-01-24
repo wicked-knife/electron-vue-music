@@ -1,6 +1,7 @@
 <template>
   <div class="lyric-scroller beautify-scrollbar pt-5 pb-5" :style="{height: _height}" ref="scroller">
-      <div class="lyric-line subtitle-2 mt-3 mb-3 grey--text text--darken-1" v-for="item in lyric" :key="item.time">
+      <div v-for="(item, index) in lyric"
+      :class="['lyric-line subtitle-2 mt-3 mb-3 ', currentLine === index ? 'white--text' : 'grey--text text--darken-1']"  :key="item.time" ref="lyric-line">
         <div class="lyric-raw">{{item.lyric}}</div>
         <div class="lyrci-tranlated" v-if="item.tLyric">{{item.tLyric}}</div>
       </div>
@@ -17,6 +18,10 @@ export default {
     lyric:{
       type: Array,
       required: true
+    },
+    currentTime: {
+      type: Number,
+      required: true
     }
   },
   computed:{
@@ -24,9 +29,30 @@ export default {
       return typeof this.height === 'string' ? this.height : (this.height + 'px')
     }
   },
+  data(){
+    return {
+      currentLine: -1
+    }
+  },
   watch: {
     lyric(){
       this.$refs.scroller.scrollTo(0, 0)
+      this.currentLine = -1
+    },
+    currentTime(v){
+      for(let i = 0; i < this.lyric.length; i++) {
+        if(v >= this.lyric[i].time && v < this.lyric[i + 1].time) {
+          this.currentLine = i
+          return 
+        }
+        if(i === this.lyric.length - 1 && v >= this.lyric[i].time) {
+          this.currentLine = i
+          return 
+        }
+      }
+    },
+    currentLine(v){
+      // v > -1 && this.$refs['lyric-line'][v].scrollIntoView(true)
     }
   }
 }

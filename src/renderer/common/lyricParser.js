@@ -16,7 +16,7 @@ class LyricParser {
         continue
       }
       const [timeStr, minutes, seconds, milliseconds] = matchedTime
-      const time = (+minutes) * 60 * 1000 + (+seconds) * 1000 + (+milliseconds)
+      const time = (+minutes) * 60 + (+seconds) + (+milliseconds) * 0.001
       const lyricStr = lyric.replace(timeStr, '').trim() 
       lyricMap[time] = lyricMap[time] || {time, lyric: lyricStr}
     }
@@ -26,7 +26,7 @@ class LyricParser {
         continue
       }
       const [timeStr, minutes, seconds, milliseconds] = matchedTime
-      const time = (+minutes) * 60 * 1000 + (+seconds) * 1000 + (+milliseconds)
+      const time = (+minutes) * 60 + (+seconds) + (+milliseconds) * 0.001
       const lyricStr = lyric.replace(timeStr, '').trim() 
       lyricMap[time] = lyricMap[time] ? {...lyricMap[time], tLyric: lyricStr} : {time, tLyric: lyricStr}
     }
