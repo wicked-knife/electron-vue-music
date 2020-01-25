@@ -35,3 +35,27 @@ export const getSongDetail = ids => axios.get('/song/detail', {params: {ids: Arr
 */
 
 export const getSongURL = id => axios.get('/song/url', {params: {id: Array.isArray(id) ? id.join(',') : id}})
+
+
+
+/*
+### 喜欢音乐
+
+说明 : 调用此接口 , 传入音乐 id, 可喜欢该音乐
+
+**必选参数 :** `id`: 歌曲 id
+
+**可选参数 :** `like`: 布尔值 , 默认为 true 即喜欢 , 若传 false, 则取消喜欢
+
+**接口地址 :** `/like`
+
+**调用例子 :** `/like?id=347230`
+
+返回数据如下图 :
+
+![喜欢成功](https://raw.githubusercontent.com/Binaryify/NeteaseCloudMusicApi/master/static/like.png)
+
+喜欢成功则返回数据的 code 为 200, 其余为失败
+*/
+
+export const toggleLikeSong = (id, flag)=> axios.get('/like', {params: {like: !!flag, id}})

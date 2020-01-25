@@ -1,7 +1,7 @@
 <script>
 import {getPersonalFM} from '@/API/personal-fm.js'
 import {getLyric} from '@/API/lyric.js'
-import {getSongURL} from '@/API/song.js'
+import {getSongURL, toggleLikeSong} from '@/API/song.js'
 import AppComment from '@/components/app-comment/app-comment.vue'
 import LyricParser from '@/common/lyricParser.js'
 import LyricScroller from '@/base/lyric-scroller/base-lyric-scroller.vue'
@@ -18,7 +18,8 @@ export default {
     playingState: false,
     lyric: [], 
     player: null,
-    currentTime: 0
+    currentTime: 0,
+    starred: false
   }),
   computed:{
     currentSong(){
@@ -37,6 +38,7 @@ export default {
   watch:{
     // 当前歌曲改变时获取当前歌曲的歌词及真实播放地址
     currentSong(newVal, oldVal){
+      this.starred = newVal.starred
       if(oldVal === newVal) {
         return
       }
@@ -172,6 +174,12 @@ export default {
       } else {
         _updateSlide()
       }
+    },
+    toggleLikeSong(){
+      toggleLikeSong(this.currentSong.id, !this.starred).then(data => {
+        this.starred = !this.starred
+        this.currentSong.starred = this.starred
+      })
     }
   },
   render(){
@@ -185,7 +193,8 @@ export default {
                 {...{on: {click: () => this.playingState = !playingState}}}></i>
             </div>
             <div class="action-group d-flex align-center justify-space-between pl-3 pr-3">
-              <i class="grey--text iconfont icon-like action-item d-flex align-center justify-center"></i>
+              <i class={'grey--text iconfont action-item d-flex align-center justify-center ' + (this.starred ? 'icon-like_fill' : 'icon-like')}
+                {...{on: {click: this.toggleLikeSong}}}></i>
               <i class="grey--text iconfont icon-delete action-item d-flex align-center justify-center" {...{on: {click: this.handleDislike}}}></i>
               <i class="grey--text iconfont icon-next action-item d-flex align-center justify-center" {...{on: {click: this.playNextSong}}}></i>
               <i class="grey--text iconfont icon-more action-item d-flex align-center justify-center"></i>
@@ -327,7 +336,9 @@ export default {
       border-radius: 50%;
       font-size: 26px;
       cursor: pointer;
-
+      &.icon-like_fill{
+        color: #b82525 !important;
+      }
       &:hover {
         filter: brightness(1.2)
       }
