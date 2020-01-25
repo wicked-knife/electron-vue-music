@@ -37,6 +37,9 @@ export default {
   watch:{
     // 当前歌曲改变时获取当前歌曲的歌词及真实播放地址
     currentSong(newVal, oldVal){
+      if(oldVal === newVal) {
+        return
+      }
       getLyric(this.currentSong.id).then(({lrc, tlyric}) => {
         if(lrc) {
           const lyricParser = new LyricParser(lrc.lyric, tlyric.lyric ? tlyric.lyric : '')
@@ -56,8 +59,11 @@ export default {
             this.player.add(musicData)
           }
           const lastIndex = this.songQueue.findIndex(m => oldVal.id === m.id)
+          if(lastIndex === -1) {
+            return this.player.next()
+          }
           const newIndex = this.songQueue.findIndex(m => newVal.id === m.id)
-          if(newIndex > lastIndex) {
+          if(newIndex >= lastIndex) {
             this.player.next()
           } else {
             this.player.prev()
@@ -139,6 +145,33 @@ export default {
     },
     handleMusicPause(){
       console.log('暂停了')
+    },
+    handleDislike(){
+      const $container = this.$refs['song-container']
+      const $current = $container.querySelector('.current')
+      const $next = $container.querySelector('.next')
+
+      const _updateSlide = () => {
+        const $$next = this.createSongSlide('next', this.nextSong.album.picUrl + '?param=300y300')
+        $current.setAttribute('class', 'song-cover remove')
+        $next.setAttribute('class', 'song-cover current')
+        $container.appendChild($$next)
+      }
+
+      if(this.currentIndex === 0) {
+        this.songQueue.shift()
+      }
+      if(this.currentIndex === 1) {
+        this.songQueue.splice(1, 1)
+      }
+      if(this.songQueue.length <= 3) {
+        getPersonalFM().then(({data}) => {
+          this.songQueue.push(...data)
+          _updateSlide()
+        })
+      } else {
+        _updateSlide()
+      }
     }
   },
   render(){
@@ -153,7 +186,7 @@ export default {
             </div>
             <div class="action-group d-flex align-center justify-space-between pl-3 pr-3">
               <i class="grey--text iconfont icon-like action-item d-flex align-center justify-center"></i>
-              <i class="grey--text iconfont icon-delete action-item d-flex align-center justify-center"></i>
+              <i class="grey--text iconfont icon-delete action-item d-flex align-center justify-center" {...{on: {click: this.handleDislike}}}></i>
               <i class="grey--text iconfont icon-next action-item d-flex align-center justify-center" {...{on: {click: this.playNextSong}}}></i>
               <i class="grey--text iconfont icon-more action-item d-flex align-center justify-center"></i>
             </div>
