@@ -10,7 +10,7 @@
       </v-container>
     </v-content>
     <v-footer app height="50px">
-      底部播放器容器
+      <app-bottom-player />
     </v-footer>
   </v-app>
 </template>
@@ -18,6 +18,7 @@
 <script>
 import AppTopBar from '@/components/app-top-bar/app-top-bar'
 import AppSideBar from '@/components/app-side-bar/app-side-bar'
+import AppBottomPlayer from '@/components/app-bottom-player/app-bottom-player'
 import {VApp, VContent, VFooter} from 'vuetify/lib'
 import bus from '@/common/bus.js'
 import {throttle} from '@/common/utils.js'
@@ -31,7 +32,8 @@ export default {
     AppTopBar,
     VContent,
     AppSideBar,
-    VFooter
+    VFooter,
+    AppBottomPlayer
   },
   methods: {
     handleScroll(ev){
