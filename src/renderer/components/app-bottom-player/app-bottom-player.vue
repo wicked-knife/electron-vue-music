@@ -8,11 +8,11 @@
     <div class="player-right">
       <div class="progress-container d-flex align-center justify-space-between">
         <span class="subtitle-3">00:01</span>
-        <div class="progress ml-3 mr-3">
-          <div class="inner">
+        <div class="progress ml-3 mr-3" @click="handleControlProgress" ref="progress">
+          <div class="inner" :style="{width: offsetLeft + 'px'}">
             
           </div>
-          <div class="control-ball">
+          <div class="control-ball" :style="{left: offsetLeft + 'px'}" ref="ball">
             <div class="dot"></div>
           </div>
         </div>
@@ -23,8 +23,23 @@
 </template>
 
 <script>
+const BALL_WIDTH = 7
 export default {
-  
+  data(){
+    return {
+      totalWidth: 0,
+      offsetLeft: 0
+    }
+  },
+  methods: {
+    handleControlProgress(ev){
+      if(ev.target === this.$refs.ball || this.$refs.ball.contains(ev.target)) return
+      this.offsetLeft = ev.offsetX - BALL_WIDTH
+    }
+  },
+  mounted(){
+    this.totalWidth = this.$refs.progress.offsetWidth
+  }
 }
 </script>
 
@@ -61,6 +76,7 @@ export default {
     height: 5px;
     border-radius: 10px;
     background-color: #45454f;
+    cursor: pointer;
   }
   .inner{
     position: absolute;
@@ -72,7 +88,6 @@ export default {
     background-color: $theme-color;
   }
   .control-ball{
-    left: 30px;
     top: 50%;
     transform: translateY(-50%);
     position: absolute;
