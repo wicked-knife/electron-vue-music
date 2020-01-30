@@ -53,6 +53,7 @@ class LyricParser {
    * @returns
    * @memberof LyricParser
    */
+  
   seek(milliseconds){
     for(let i = 0; i < this.parsedLyric.length; i++) {
       if(i === this.parsedLyric.length - 1) {
