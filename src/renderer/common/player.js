@@ -16,12 +16,14 @@ class BaseMusicPlayer {
     this.audio = document.createElement('audio')
     this.audio.preload = 'auto'
     this.volume = volume
-    this.music = music
+    this.music = music || []
     this.playingState = false
     this.index = 0
+    this.musicMap = {}
     this._init()
   }
   _init(){
+    this.music.forEach(m => this.musicMap[m.md5] = m)
     this.audio.addEventListener('canplay', () => {this.playingState && this.audio.play()})
     this.audio.addEventListener('timeupdate', this._config.onTimeupdate)
     this.audio.addEventListener('pause', this._config.onPause)
@@ -32,7 +34,9 @@ class BaseMusicPlayer {
         this.next()
       }
     })
-    this.audio.src = this.music[this.index].url
+    if(this.music.length) {
+      this.audio.src = this.music[this.index].url
+    }
   }
   pause(){
     this.playingState = false
@@ -43,10 +47,13 @@ class BaseMusicPlayer {
     this.audio.play()
   }
   add(songData){
-    const musicMap = {}
     const songDataArr = Array.isArray(songData) ? songData : [songData]
-    this.music.forEach(m => musicMap[m.md5] = m)
-    songDataArr.forEach(m => !musicMap[m.md5] && this.music.push(m))
+    songDataArr.forEach(m => {
+      if(!this.musicMap[m.md5]) {
+        this.music.push(m)
+        this.musicMap[m.md5] = m
+      }
+    })
   }
   next(){
     if(this.index + 1 >= this.music.length){
@@ -83,9 +90,6 @@ const MusicPlayer = new Proxy(BaseMusicPlayer, {
         }
         target[prop] = value
         return true
-      },
-      get(target, prop){
-        return typeof prop === 'string' ? prop.indexOf('_') === 0 ? undefined : target[prop] : target[prop]
       }
     })
   }
