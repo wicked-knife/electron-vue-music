@@ -1,41 +1,76 @@
 <template>
   <div class="bottom-player d-flex align-center">
-    <div class="player-left d-flex align-center justify-space-around mr-4">
-      <i class="iconfont icon-prev d-flex align-center justify-center"></i>
-      <i class="iconfont icon-play_fill d-flex align-center justify-center"></i>
+    <div :class="['player-left d-flex align-center justify-space-around', isFM ? 'fm' : '']">
+      <i class="iconfont icon-prev d-flex align-center justify-center" v-if="!isFM"></i>
+      <i :class="['iconfont d-flex align-center justify-center ', player.playingState ? 'icon-pause' : 'icon-play_fill']" @click="togglePlayingState"></i>
       <i class="iconfont icon-next d-flex align-center justify-center"></i>
     </div>
     <div class="player-right">
       <div class="progress-container d-flex align-center justify-space-between">
-        <span class="subtitle-3">00:01</span>
+        <span class="subtitle-3">{{currentTime}}</span>
         <div class="progress ml-3 mr-3" @click="handleControlProgress" ref="progress">
-          <div class="inner" :style="{width: offsetLeft + 'px'}">
+          <div class="inner" :style="{width: activeWidth + 'px'}">
             
           </div>
           <div class="control-ball" :style="{left: offsetLeft + 'px'}" ref="ball">
             <div class="dot"></div>
           </div>
         </div>
-        <span class="subtitle-3">04:30</span>
+        <span class="subtitle-3">{{duration}}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 const BALL_WIDTH = 7
 export default {
   data(){
     return {
       totalWidth: 0,
-      offsetLeft: 0
+      offsetLeft: -BALL_WIDTH,
+      currentTime: '00:00',
+      duration: '00:00'
+    }
+  },
+  computed:{
+    ...mapGetters({
+      player: 'player'
+    }),
+    isFM(){
+      return this.$route.path === '/main/personal-FM'
+    },
+    activeWidth(){
+      return this.offsetLeft + BALL_WIDTH
     }
   },
   methods: {
     handleControlProgress(ev){
       if(ev.target === this.$refs.ball || this.$refs.ball.contains(ev.target)) return
-      this.offsetLeft = ev.offsetX - BALL_WIDTH
+      const left = ev.offsetX
+      const {duration} = this.player.audio
+      const currentTime = left / this.totalWidth * duration
+      this.player.setTime(currentTime)
+    },
+    togglePlayingState(){
+      this.player.playingState ? this.player.pause() : this.player.play()
+    },
+    handleMusicTimeupdate(ev){
+      const {currentTime, duration} = ev.target
+      this.offsetLeft = currentTime / duration * this.totalWidth - BALL_WIDTH
+      this.currentTime = this._formatTime(currentTime)
+      this.duration = isNaN(duration) ? '00:00' : this._formatTime(duration)
+    },
+    _formatTime(time){
+      const s = Math.floor(time % 60)
+      const m = Math.floor(time / 60)
+      const h = Math.floor(time / 3600)
+      return `${h ? h < 10 ? '0' + h + ':' : h + ':' : ''}${m < 10 ? '0' + m  : m}:${s < 10 ? '0' + s : s}`
     }
+  },
+  created(){
+    this.player.on('timeupdate', this.handleMusicTimeupdate)
   },
   mounted(){
     this.totalWidth = this.$refs.progress.offsetWidth
@@ -50,6 +85,11 @@ export default {
 }
 .player-left{
   width: 170px;
+  margin-right: 16px;
+  &.fm{
+    width: 120px;
+    margin-right: 20px;
+  }
 }
 .icon-prev, .icon-pause, .icon-next, .icon-play_fill{
   font-size: 20px;

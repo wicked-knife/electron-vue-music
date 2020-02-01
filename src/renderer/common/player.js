@@ -75,6 +75,12 @@ class BaseMusicPlayer extends Events {
   has(md5){
     return !!this.music.find(m => m.md5 === md5)
   }
+  setTime(time) {
+    if(typeof time !== 'number') {
+      throw new Error('Parameter time must be type of number.')
+    }
+    this.audio.currentTime = time
+  }
 }
 
 const MusicPlayer = new Proxy(BaseMusicPlayer, {
@@ -87,6 +93,7 @@ const MusicPlayer = new Proxy(BaseMusicPlayer, {
           break
         case 'index':
           target['audio'].src = target['music'][value].url
+          target.emit('change')
           break
         default:
           break

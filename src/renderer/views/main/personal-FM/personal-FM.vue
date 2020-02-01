@@ -19,6 +19,14 @@ export default {
     currentTime: 0,
     starred: false
   }),
+  deactivated(){
+    this.player.off('timeupdate', this.handleMusicTimeupdate)
+    this.player.off('pause', this.handleMusicPause)
+  },
+  activated(){
+    this.player.on('timeupdate', this.handleMusicTimeupdate)
+    this.player.on('pause', this.handleMusicPause)
+  },
   computed:{
     ...mapGetters({
       player: 'player'
@@ -51,8 +59,6 @@ export default {
       })
       getSongURL(this.currentSong.id).then(({data: musicData}) => {
         this.player.add(musicData)
-        this.player.on('timeupdate', this.handleMusicTimeupdate)
-        this.player.on('pause', this.handleMusicPause)
         const lastIndex = this.songQueue.findIndex(m => oldVal && oldVal.id === m.id)
         if(lastIndex === -1) {
           return this.player.next()
