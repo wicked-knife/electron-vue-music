@@ -20,7 +20,7 @@ export default {
     starred: false
   }),
   computed:{
-    ...mapGetters('player', {
+    ...mapGetters({
       player: 'player'
     }),
     currentSong(){
