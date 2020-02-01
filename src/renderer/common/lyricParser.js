@@ -39,7 +39,7 @@ class LyricParser {
       const lyricStr = lyric.replace(timeStr, '').trim() 
       lyricMap[time] = lyricMap[time] ? {...lyricMap[time], tLyric: lyricStr} : {time, tLyric: lyricStr}
     }
-    return Object.values(lyricMap)
+    return Object.values(lyricMap).sort((a,b) => a.time - b.time)
   }
 
   getLyric(){

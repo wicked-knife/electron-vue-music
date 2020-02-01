@@ -1,3 +1,5 @@
+import Events from 'events'
+
 function noop() {
   
 }
@@ -9,8 +11,9 @@ const defaults = {
   onPause: noop
 }
 
-class BaseMusicPlayer {
+class BaseMusicPlayer extends Events {
   constructor(config){
+    super()
     this._config = Object.assign(defaults, config)
     const {volume, music} = this._config
     this.audio = document.createElement('audio')
@@ -25,8 +28,8 @@ class BaseMusicPlayer {
   _init(){
     this.music.forEach(m => this.musicMap[m.md5] = m)
     this.audio.addEventListener('canplay', () => {this.playingState && this.audio.play()})
-    this.audio.addEventListener('timeupdate', this._config.onTimeupdate)
-    this.audio.addEventListener('pause', this._config.onPause)
+    this.audio.addEventListener('timeupdate', (ev) => {this.emit('timeupdate', ev)})
+    this.audio.addEventListener('pause', (ev) => {this.emit('pause'), ev})
     this.audio.addEventListener('ended', () => {
       if(this.index === this.music.length - 1) {
         this.pause()

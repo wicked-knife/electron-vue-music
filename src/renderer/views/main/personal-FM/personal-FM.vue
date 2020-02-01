@@ -5,7 +5,7 @@ import {getSongURL, toggleLikeSong} from '@/API/song.js'
 import AppComment from '@/components/app-comment/app-comment.vue'
 import LyricParser from '@/common/lyricParser.js'
 import LyricScroller from '@/base/lyric-scroller/base-lyric-scroller.vue'
-import MusicPlayer from '@/common/player.js'
+import {mapGetters} from 'vuex'
 export default {
   name: 'personal-fm',
   components:{
@@ -15,13 +15,14 @@ export default {
   data:() => ({
     currentIndex: 0,
     songQueue: [],
-    playingState: false,
     lyric: [], 
-    player: null,
     currentTime: 0,
     starred: false
   }),
   computed:{
+    ...mapGetters('player', {
+      player: 'player'
+    }),
     currentSong(){
       return this.songQueue[this.currentIndex]
     },
@@ -49,32 +50,20 @@ export default {
         }
       })
       getSongURL(this.currentSong.id).then(({data: musicData}) => {
-        if(!this.player) {
-          this.player = new MusicPlayer({
-            music: musicData,
-            autoPlay: this.playingState,
-            onTimeupdate: this.handleMusicTimeupdate,
-            onPause: this.handleMusicPause
-          })
+        this.player.add(musicData)
+        this.player.on('timeupdate', this.handleMusicTimeupdate)
+        this.player.on('pause', this.handleMusicPause)
+        const lastIndex = this.songQueue.findIndex(m => oldVal && oldVal.id === m.id)
+        if(lastIndex === -1) {
+          return this.player.next()
+        }
+        const newIndex = this.songQueue.findIndex(m => newVal.id === m.id)
+        if(newIndex >= lastIndex) {
+          this.player.next()
         } else {
-          if(!this.player.has(musicData[0].md5)) {
-            this.player.add(musicData)
-          }
-          const lastIndex = this.songQueue.findIndex(m => oldVal.id === m.id)
-          if(lastIndex === -1) {
-            return this.player.next()
-          }
-          const newIndex = this.songQueue.findIndex(m => newVal.id === m.id)
-          if(newIndex >= lastIndex) {
-            this.player.next()
-          } else {
-            this.player.prev()
-          }
+          this.player.prev()
         }
       })
-    },
-    playingState(value){
-      value ? this.player.play() : this.player.pause()
     }
   },
   methods: {
@@ -176,21 +165,24 @@ export default {
       }
     },
     toggleLikeSong(){
-      toggleLikeSong(this.currentSong.id, !this.starred).then(data => {
+      toggleLikeSong(this.currentSong.id, !this.starred).then(() => {
         this.starred = !this.starred
         this.currentSong.starred = this.starred
       })
+    },
+    togglePlayingState(){
+      this.player.playingState ? this.player.pause() : this.player.play()
     }
   },
   render(){
-    const {currentSong, playingState} = this
+    const {currentSong, player} = this
     return (
       <v-container class="container-760" fluid>
         {currentSong ? <div class="personalFM-container d-flex justify-end mb-12">
           <div class="left mr-10 mt-12">
             <div class="cover-container mb-8" ref="song-container">
-              <i class={'iconfont play-icon d-flex align-center justify-center ' + (playingState ? 'icon-pause pause' : 'icon-play playing')} 
-                {...{on: {click: () => this.playingState = !playingState}}}></i>
+              <i class={'iconfont play-icon d-flex align-center justify-center ' + (player.playingState ? 'icon-pause pause' : 'icon-play playing')} 
+                {...{on: {click: this.togglePlayingState}}}></i>
             </div>
             <div class="action-group d-flex align-center justify-space-between pl-3 pr-3">
               <i class={'grey--text iconfont action-item d-flex align-center justify-center ' + (this.starred ? 'icon-like_fill' : 'icon-like')}

@@ -39,11 +39,13 @@ export default {
     this.offsetTop = this.$refs.scroller.offsetTop
   },
   watch: {
-    lyric(){
+    lyric(v){
+      console.log(v)
       this.$refs.scroller.scrollTo(0, 0)
       this.currentLine = -1
     },
     currentTime(v){
+      console.log(v)
       for(let i = 0; i < this.lyric.length; i++) {
         if(i === this.lyric.length - 1 && v >= this.lyric[i].time) {
           this.currentLine = i
