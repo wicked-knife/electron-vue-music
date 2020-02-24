@@ -56,7 +56,7 @@ export default {
     togglePlayingState(){
       this.player.playingState ? this.player.pause() : this.player.play()
     },
-    handleMusicTimeupdate(ev){
+    handleMusicTimeUpdate(ev){
       const {currentTime, duration} = ev.target
       this.offsetLeft = currentTime / duration * this.totalWidth - BALL_WIDTH
       this.currentTime = this._formatTime(currentTime)
@@ -70,7 +70,7 @@ export default {
     }
   },
   created(){
-    this.player.on('timeupdate', this.handleMusicTimeupdate)
+    this.player.on('timeupdate', this.handleMusicTimeUpdate)
   },
   mounted(){
     this.totalWidth = this.$refs.progress.offsetWidth
