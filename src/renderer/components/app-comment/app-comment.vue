@@ -115,6 +115,9 @@ export default {
   watch: {
     page(){
       this.loadComments()
+    },
+    resourceID(){
+      this.loadComments()
     }
   }
 }
