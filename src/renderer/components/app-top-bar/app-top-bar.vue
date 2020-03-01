@@ -10,20 +10,20 @@
               <i class="iconfont icon-return grey--text" @click="$router.go(-1)"></i>
               <i class="iconfont icon-enter grey--text"></i>
             </div>
-            <BaseInput placeholder='搜索音乐、视频、歌词、电台' class="no-drag"/>
+            <base-input placeholder='搜索音乐、视频、歌词、电台' class="no-drag"/>
             </v-row>
           </v-col>
           <div class="login-wrapper grey--text no-drag mr-4" v-if="!loginState" @click="showLoginWindow">
             <i class="iconfont icon-user"></i>
             <span class="tip ml-2 mr-2">请登录</span>
           </div>
-          <div class="user-wrapper grey--text no-drag mr-4"  v-if="loginState" @click="userInfoVisiable = !userInfoVisiable" ref="attached-dialog-wrapper">
+          <div class="user-wrapper grey--text no-drag mr-4"  v-if="loginState" @click="userInfoVisibility = !userInfoVisibility" ref="attached-dialog-wrapper">
             <v-avatar width="26" height="26" class="avatar">
               <img :src="userInfo.avatarUrl" >
             </v-avatar>
             <span class="username mr-2">{{userInfo.nickname}}</span>
             <i class="iconfont icon-sort-down"></i>
-            <base-attached-dialog position='bottom' :value='userInfoVisiable' @click:outside="handleClickOutside">
+            <base-attached-dialog position='bottom' :value='userInfoVisibility' @click:outside="handleClickOutside">
             <div class="info-wrapper">
               <v-container fluid class="mt-2 border-b">
                 <v-row align="center">
@@ -93,7 +93,7 @@ export default {
   },
   data() {
     return {
-      userInfoVisiable: false
+      userInfoVisibility: false
     }
   },
   methods: {
@@ -141,7 +141,7 @@ export default {
     },
     handleClickOutside(ev){
       if(!this.$refs['attached-dialog-wrapper'].contains(ev.target)) {
-        this.userInfoVisiable = false
+        this.userInfoVisibility = false
       }
     }
   },
