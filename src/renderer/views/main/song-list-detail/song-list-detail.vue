@@ -69,10 +69,10 @@
         <v-tab class="tab-item">评论({{songList ? songList.commentCount : ''}})</v-tab>
         <v-tab class="tab-item">收藏者</v-tab>
       </v-tabs>
-      <base-input background-color='#202226' placeholder="搜索歌单音乐" v-show="currentTab === 0"/>
+      <base-input background-color='#202226' placeholder="搜索歌单音乐" v-show="currentTab === 0" v-model="searchInput"/>
     </v-row>
     <v-row v-show="currentTab === 0">
-      <base-music-table :headers='tableHeaders' :items='songList.tracks' v-if="songList"/>
+      <base-music-table :headers='tableHeaders' :items='songList.tracks' v-if="songList" ref="songList-table"/>
     </v-row>
 
     <v-container v-show="currentTab === 1" class="pl-4 pr-4" ref="comment-wrapper">
@@ -127,6 +127,7 @@ export default {
       ],
       subscribers: [], // 收藏者
       subscribersPage: 1, // 收藏者当前页
+      searchInput: '', //搜索关键字
     }
   },
   created() {
@@ -159,6 +160,9 @@ export default {
   watch: {
     subscribersPage(){
       this.getSongListSubscribers()
+    },
+    searchInput(v){
+      this.$refs['songList-table'].search(v)
     }
   },
   computed: {

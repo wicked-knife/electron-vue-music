@@ -13,7 +13,8 @@ export default {
   data() {
     return {
       $headers: [],
-      activatedIndex: -1
+      activatedIndex: -1,
+      renderItems: [] // 用于列表渲染的数据
     }
   },
   render(){
@@ -35,7 +36,7 @@ export default {
         </tr>
       </thead>
       <tbody class="border-t">
-        {this.items.map((item, index) => (
+        {this.renderItems.map((item, index) => (
           <tr key={item.id} {...{on: {click: this.__handleItemClick.bind(this, index)}}} class={this.activatedIndex === index ? 'active' : ''}>
             <td class="text-center">{index + 1}</td>
             <td class="text-center">
@@ -57,6 +58,7 @@ export default {
   },
   created() {
     this.$headers = this.headers.map(h => ({ ...h, sortType: 0 }))
+    this.renderItems = this.items.slice()
   },
   methods: {
     __handleTheadClick(head, index) {
@@ -103,6 +105,14 @@ export default {
         return (<span>{item[key]}</span>)
       default:
         return item[key]
+      }
+    },
+    search(keywords){
+      const matchReg = new RegExp(keywords, 'i')
+      if(!keywords) {
+        this.renderItems = this.items
+      } else {
+        this.renderItems = this.items.filter(item => item.album.includes(keywords) || item.artists.some(_item => matchReg.test(_item) || item.name.some(_item => matchReg.test(_item))))
       }
     }
   }

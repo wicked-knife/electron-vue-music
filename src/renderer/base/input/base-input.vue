@@ -1,13 +1,21 @@
 <template>
   <div class="input-wrapper" :style="{width: _width, backgroundColor}">
-    <input type="text" :placeholder="placeholder" class="mr-1">
+    <input type="text" :placeholder="placeholder" class="mr-1" v-model="inputValue">
     <i class="iconfont icon-search mr-2 grey--text"></i>
   </div>
 </template>
 
 <script>
 export default {
+  model: {
+    prop: 'value',
+    event: 'update:search-input'
+  },
+  data: () => ({
+    inputValue: ''
+  }),
   props: {
+    value: String,
     placeholder: {
       type: String,
       default: ''
@@ -23,6 +31,11 @@ export default {
   computed: {
     _width(){
       return typeof this.width === 'number' ? (this.width + 'px') : this.width
+    }
+  },
+  watch: {
+    inputValue(v){
+      this.$emit('update:search-input', v)
     }
   }
 }

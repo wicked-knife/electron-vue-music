@@ -18,7 +18,7 @@ import { VDialog } from 'vuetify/lib'
 export default {
   model: {
     prop: 'value',
-    event: 'update:dialog-visiable'
+    event: 'update:dialog-visibility'
   },
   components: {
     VDialog
@@ -36,10 +36,10 @@ export default {
   },
   methods: {
     handleClickOutside() {
-      this.$emit('update:dialog-visiable', false)
+      this.$emit('update:dialog-visibility', false)
     },
     handleCancelClick(){
-      this.$emit('update:dialog-visiable', false)
+      this.$emit('update:dialog-visibility', false)
       this.$emit('dialog:cancel')
     },
     handleConfirmClick(){
