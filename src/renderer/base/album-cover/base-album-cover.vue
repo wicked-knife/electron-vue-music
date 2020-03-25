@@ -3,8 +3,8 @@
     <div class="img-wrapper mb-2">
       <img :src="album.picUrl + '?param=160y160'" class="cover" draggable="false" />
     </div>
-    <div class="name">{{album.name}} <span v-if="album.transNames" class="grey--text">({{album.transNames[0]}})</span> </div>
-    <div class="artist grey--text subtitle-2">
+    <div class="name text-clip-2">{{album.name}} <span v-if="album.transNames" class="grey--text">({{album.transNames[0]}})</span> </div>
+    <div class="artist grey--text subtitle-3 text-ellipsis">
       {{album.artist.name}}
     </div>
   </div>
@@ -49,6 +49,9 @@ export default {
   }
   .artist{
     cursor: pointer;
+    &:hover{
+      filter: brightness(1.3);
+    }
   }
 }
 </style>

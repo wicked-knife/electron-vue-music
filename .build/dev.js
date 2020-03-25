@@ -26,7 +26,7 @@ function startElectron(){
   })
   electronProcess.on('close', () => {
     console.log('dev process exit')
-   process.exit()
+    process.exit()
   })
 }
 
