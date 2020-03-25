@@ -23,6 +23,7 @@
 <script>
 import {getLatestAlbum} from '@/API/latest-song.js'
 import BaseAlbumCover from '@/base/album-cover/base-album-cover.vue'
+import bus from '@/common/bus.js'
 export default {
   name: 'new-disc',
   components:{
@@ -31,11 +32,26 @@ export default {
   data() {
     return {
       value: 0,
-      albumList: []
+      albumList: [],
+      page: 1
+    }
+  },
+  methods: {
+    getLatestAlbum(){
+      getLatestAlbum(this.page).then(({albums}) => {
+        this.albumList.push(...albums)
+        this.page++
+      })
     }
   },
   created(){
-    getLatestAlbum().then(({albums}) => this.albumList = albums)
+    this.getLatestAlbum()
+  },
+  activated(){
+    bus.on('scroll:reachBottom', this.getLatestAlbum)
+  },
+  deactivated(){
+    bus.off('scroll:reachBottom', this.getLatestAlbum)
   }
 }
 </script>
