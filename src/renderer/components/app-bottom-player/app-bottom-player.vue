@@ -86,10 +86,14 @@ export default {
 .player-left{
   width: 170px;
   margin-right: 16px;
+  flex-shrink: 0;
   &.fm{
     width: 120px;
     margin-right: 20px;
   }
+}
+.player-right{
+  width: 100%;
 }
 .icon-prev, .icon-pause, .icon-next, .icon-play_fill{
   font-size: 20px;
