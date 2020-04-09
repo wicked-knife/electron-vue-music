@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const electron = require('electron')
 const WebpackDevServer = require('webpack-dev-server')
+const path = require('path')
 const devConf = require('../webpack.dev.js')
 const {spawn} = require('child_process')
 
@@ -16,7 +17,7 @@ function startDevServer(){
 
 
 function startElectron(){
-  const electronProcess = spawn(electron, ['.', '--disable-gpu'], {
+  const electronProcess = spawn(electron, [path.join(__dirname, '../src/main/main.js'), '--disable-gpu'], {
     env: {
       NODE_ENV: 'development'
     }
