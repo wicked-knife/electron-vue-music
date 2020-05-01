@@ -92,3 +92,16 @@ export const getRecommendMV = () => axios.get('/personalized/mv')
 */
 
 export const getRecommendRadio = (limit = 6) => axios.get('/dj/hot', {params: {limit}})
+
+
+/*
+### 获取每日推荐歌曲
+
+说明 : 调用此接口 , 可获得每日推荐歌曲 ( 需要登录 )
+
+**接口地址 :** `/recommend/songs`
+
+**调用例子 :** `/recommend/songs`
+*/
+
+export const getRecommendSongWithLogin = () => axios.get('/recommend/songs')

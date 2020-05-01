@@ -46,3 +46,8 @@ function registerAlert(_Vue) {
 
 
 export default registerAlert
+
+
+export {
+  showAlert
+}

@@ -114,6 +114,7 @@ export default {
 }
 .progress-container{
   min-width: 480px;
+  max-width: 50%;
   .progress{
     position: relative;
     width: 100%;

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {showAlert} from '@/base/alert/alert'
 
 axios.defaults.baseURL = 'http://localhost:3000'
 
@@ -11,6 +12,7 @@ axios.interceptors.response.use(response => {
     return Promise.reject(response.data)
   }
 }, err => {
+  showAlert(err.response.data.msg)
   return Promise.reject(err)
 })
 

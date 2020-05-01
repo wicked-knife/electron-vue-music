@@ -5,6 +5,7 @@ import personalFMRoutes from '@/router/modules/personalFM.js'
 import personalizedContentRoutes from '@/router/modules/personalizedContent.js'
 import videoRoutes from '@/router/modules/video.js'
 import songListDetailRoutes from '@/router/modules/songListDetail.js'
+import dailySongRoutes from '@/router/modules/dailySong.js'
 import radioRoutes from '@/router/modules/radio.js'
 import hotComments from '@/router/modules/hotComments.js'
 import singerRoutes from '@/router/modules/singer.js'
@@ -27,7 +28,8 @@ const routes = [
       ...radioRoutes,
       ...hotComments,
       ...singerRoutes,
-      ...videoDetailRoutes
+      ...videoDetailRoutes,
+      ...dailySongRoutes
     ]
   },
   { path: '/login', component: Login }

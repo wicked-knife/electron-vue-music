@@ -91,7 +91,7 @@ export default {
             <div>
               <base-title text="推荐歌单" to="/main/recommend/song-list" />
               <v-row class="d-flex justify-space-between">
-                <div class="daily-wrapper" style={{ width: '18.46%' }}>
+                <div class="daily-wrapper" style={{ width: '18.46%' }} {...{on: {click: this.handleDailySongClick}}}>
                   <div class="inner">
                     <div class="day grey--text text--darken-2">{this.day}</div>
                     <div class="date">{this.date}</div>
@@ -227,6 +227,12 @@ export default {
     },
     handleRadioClick(radio){
       this.$router.push('/main/radio/' + radio.id )
+    },
+    handleDailySongClick(){
+      if(!this.loginState) {
+        return this.$alert('请先登录')
+      }
+      this.$router.push({name: 'daily-song'})
     }
   },
   render() {
