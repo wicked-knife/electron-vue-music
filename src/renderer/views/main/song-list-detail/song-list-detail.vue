@@ -139,6 +139,7 @@ export default {
         song.duration = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
         song.name = [song.name, ...song.alia, ...(song.tns ? song.tns : [])]
         song.artists = song.ar
+        song.album = song.al
       })
       this.songList = playlist
       this.loading = false

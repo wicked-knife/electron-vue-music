@@ -53,17 +53,7 @@ export default {
   created(){
     getRecommendSongWithLogin()
       .then(({recommend}) => {
-        /*
-        
-               let minutes = Math.floor(song.dt / 1000 / 60)
-        let seconds = Math.floor(song.dt / 1000 % 60)
-        song.duration = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
-        song.name = [song.name, ...song.alia, ...(song.tns ? song.tns : [])]
-        song.artists = song.ar.map(artist => artist.name)
-        song.album = song.al.name
-        */
         recommend.forEach(song => {
-
           let minutes = Math.floor(song.duration / 1000 / 60)
           let seconds = Math.floor(song.duration / 1000 % 60)
           song.duration = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`
