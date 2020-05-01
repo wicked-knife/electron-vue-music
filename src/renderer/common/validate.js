@@ -6,3 +6,10 @@ const phoneNumberValidReg = /^(?:\+?86)?1(?:3\d{3}|5[^4\D]\d{2}|8\d{3}|7(?:[3567
 export const validatePhoneNumber = phoneNumber => phoneNumberValidReg.test(phoneNumber)
 
 export const validateEmail = email => emailValidReg.test(email)
+
+const createTypeValidator = ctor => p => Object.prototype.toString.call(p) === `[object ${ctor.name}]`
+
+
+export const isObject = createTypeValidator(Object)
+
+export const isArray = createTypeValidator(Array)

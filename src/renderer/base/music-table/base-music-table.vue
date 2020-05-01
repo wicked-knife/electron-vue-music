@@ -86,7 +86,7 @@ export default {
     __dynamicContent(item, key){
       switch(key) {
       case 'artists':{
-        const items = item[key].map(artist =>  <span>{artist}</span>)
+        const items = item[key].map(artist =>  <span {...{on: {click: this.handleArtistClick.bind(this, artist)}}}>{ artist.name }</span>)
         for(let i = 0; i < items.length; i++) {
           if(items[i + 1]) {
             i++
@@ -102,7 +102,7 @@ export default {
           {item.mv ? <i class="iconfont icon-mv"></i> : ''}
         </div>)
       case 'album':
-        return (<span>{item[key]}</span>)
+        return (<span>{item[key].name}</span>)
       default:
         return item[key]
       }
@@ -114,6 +114,9 @@ export default {
       } else {
         this.renderItems = this.items.filter(item => item.album.includes(keywords) || item.artists.some(_item => matchReg.test(_item) || item.name.some(_item => matchReg.test(_item))))
       }
+    },
+    handleArtistClick(artist) {
+      this.$router.push('/main/singer/' + artist.id)
     }
   }
 }
