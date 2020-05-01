@@ -1,6 +1,6 @@
 <template>
   <v-container class="pt-0" fluid>
-    <v-row>
+    <v-row class="pl-6 pr-6">
       <v-tabs background-color="transparent" centered height='42px' class="tabs" center-active>
         <v-tab to='/main/recommend/index'>个性推荐</v-tab>
         <v-tab to='/main/recommend/song-list'>歌单</v-tab>
