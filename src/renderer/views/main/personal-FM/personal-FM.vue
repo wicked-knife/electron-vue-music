@@ -209,7 +209,7 @@ export default {
               <div class="text-ellipsis">
                 歌手: {
                 currentSong.artists.reduce((acc, artist, index) => {
-                  acc.push(<router-link to="/" class="blue--text text--darken-3 link ml-1 mr-1">{artist.name}</router-link>)
+                  acc.push(<router-link to={'/main/singer/' + artist.id} class="blue--text text--darken-3 link ml-1 mr-1">{artist.name}</router-link>)
                   if(currentSong.artists.length !== 1 && index !== currentSong.artists.length - 1) {
                     acc.push('/')
                   }
