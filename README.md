@@ -14,20 +14,24 @@
 
 ## 项目目录
 ```
-├─main
-└─renderer
-    ├─API
-    ├─base
-    ├─common
-    ├─components
-    ├─iconfont
-    ├─mixins
-    ├─router
-    ├─scss
-    ├─store
-    └─views
+├─server
+└─src
+    ├─main
+    └─renderer
+        ├─API
+        ├─base
+        ├─common
+        ├─components
+        ├─iconfont
+        ├─mixins
+        ├─router
+        ├─scss
+        ├─store
+        └─views
 ```
 
+* server: 存放项目的接口服务相关代码。
+* src: 存放项目的客户端代码。
 * main: 存放项目主进程的相关代码。主要用来进行主进程、渲染进程之间的通信。
 * renderer: 存放项目的渲染进程相关代码。项目目前包含两个渲染进程，用来渲染主应用和登录界面。
 * API: 存放项目的所有接口。按照其不同的功能所属，进行划分。
