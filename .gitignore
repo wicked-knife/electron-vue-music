@@ -58,6 +58,5 @@ typings/
 .env
 
 # other
-package-lock.json
 dist/
 build/
