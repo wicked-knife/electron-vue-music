@@ -72,7 +72,8 @@
       <base-input background-color='#202226' placeholder="搜索歌单音乐" v-show="currentTab === 0" v-model="searchInput"/>
     </v-row>
     <v-row v-show="currentTab === 0">
-      <base-music-table :headers='tableHeaders' :items='songList.tracks' v-if="songList" ref="songList-table"/>
+      <base-music-table :headers='tableHeaders' :items='songList.tracks' v-if="songList" ref="songList-table"
+      @song-dblclick="handleSongDoubleClick"/>
     </v-row>
 
     <v-container v-show="currentTab === 1" class="pl-4 pr-4" ref="comment-wrapper">
@@ -101,6 +102,7 @@
 
 <script>
 import { getSongListDetail, getSongListSubscribers } from '@/API/songList.js'
+import {getSongURL} from '@/API/song.js'
 import AppComment from '@/components/app-comment/app-comment.vue'
 import BaseInput from '@/base/input/base-input.vue'
 import BaseMusicTable from '@/base/music-table/base-music-table.vue'
@@ -150,6 +152,12 @@ export default {
   methods: {
     __checkShouldExpand() {
       this.shouldShowExpand = this.$refs['desc'].offsetHeight !== 18
+    },
+    handleSongDoubleClick(song){
+      getSongURL(song.id)
+        .then(data => {
+          console.log(data)
+        })
     },
     getSongListSubscribers(){
       getSongListSubscribers({id: this.id, limit: 66, page: this.subscribersPage}).then(({subscribers}) => {

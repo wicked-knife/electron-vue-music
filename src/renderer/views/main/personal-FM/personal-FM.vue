@@ -69,6 +69,10 @@ export default {
         } else {
           this.player.prev()
         }
+
+        if(this.player.music.length > 3) {
+          this.player.remove(this.player.music[0])
+        }
       })
     }
   },

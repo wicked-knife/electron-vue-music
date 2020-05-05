@@ -22,12 +22,12 @@
         </v-subheader>
         <v-list-item-group >
           <v-list-item to="/main/my-music" active-class="route-active" class="nav-item" >
-            <i class="iconfont icon-local-music mr-2"></i> 我的音乐
+            <i class="iconfont icon-local-music mr-2"></i> 本地音乐
           </v-list-item>
           <v-list-item to='/main/download-manage' active-class="route-active" class="nav-item" >
             <i class="iconfont icon-download mr-2"></i> 下载管理
           </v-list-item>
-          <v-list-item to='/main/my-collection' active-class="route-active" class="nav-item" >
+          <v-list-item to='/main/my-collection' active-class="route-active" class="nav-item" v-if="loginState">
             <i class="iconfont icon-my-collection mr-2"></i> 我的收藏
           </v-list-item>
         </v-list-item-group>
@@ -53,6 +53,9 @@ export default {
     }
   },
   computed:{
+    ...mapGetters('user', {
+      loginState: 'loginState'
+    }),
     ...mapGetters('app', {
       sidebarVisibility: 'sidebarVisibility'
     })

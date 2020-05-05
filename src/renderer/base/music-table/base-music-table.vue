@@ -37,7 +37,9 @@ export default {
       </thead>
       <tbody class="border-t">
         {this.renderItems.map((item, index) => (
-          <tr key={item.id} {...{on: {click: this.__handleItemClick.bind(this, index)}}} class={this.activatedIndex === index ? 'active' : ''}>
+          <tr key={item.id} 
+            {...{on: {click: this.__handleItemClick.bind(this, index)}}} class={this.activatedIndex === index ? 'active' : ''}
+            {...{on: {dblclick: this.__handleItemDoubleClick.bind(this, item)}}}>
             <td class="text-center">{index + 1}</td>
             <td class="text-center">
               <div class="d-flex justify-space-around">
@@ -79,6 +81,9 @@ export default {
     },
     __handleItemClick(index){
       this.activatedIndex = index
+    },
+    __handleItemDoubleClick(songItem){
+      this.$emit('song-dblclick', songItem, this.items)
     },
     __dynamicIcon(sortType) {
       return ['icon-sort', 'icon-sort-down', 'icon-sort-up'][sortType]
