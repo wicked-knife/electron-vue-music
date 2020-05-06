@@ -3,7 +3,7 @@
     <div :class="['player-left d-flex align-center justify-space-around', isFM ? 'fm' : '']">
       <i class="iconfont icon-prev d-flex align-center justify-center" v-if="!isFM"></i>
       <i :class="['iconfont d-flex align-center justify-center ', player.playingState ? 'icon-pause' : 'icon-play_fill']" @click="togglePlayingState"></i>
-      <i class="iconfont icon-next d-flex align-center justify-center"></i>
+      <i class="iconfont icon-next d-flex align-center justify-center" @click="playNext"></i>
     </div>
     <div class="player-right">
       <div class="progress-container d-flex align-center justify-space-between">
@@ -24,6 +24,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import bus from '@/common/bus'
 const BALL_WIDTH = 7
 export default {
   data(){
@@ -36,7 +37,8 @@ export default {
   },
   computed:{
     ...mapGetters({
-      player: 'player'
+      player: 'player',
+      playType: 'playType'
     }),
     isFM(){
       return this.$route.path === '/main/personal-FM'
@@ -62,12 +64,17 @@ export default {
       this.currentTime = this._formatTime(currentTime)
       this.duration = isNaN(duration) ? '00:00' : this._formatTime(duration)
     },
+    playNext(){
+      if(this.playType === 'fm') {
+        bus.emit('fm:play-next')
+      }
+    },
     _formatTime(time){
       const s = Math.floor(time % 60)
       const m = Math.floor(time / 60)
       const h = Math.floor(time / 3600)
       return `${h ? h < 10 ? '0' + h + ':' : h + ':' : ''}${m < 10 ? '0' + m  : m}:${s < 10 ? '0' + s : s}`
-    }
+    },
   },
   created(){
     this.player.on('timeupdate', this.handleMusicTimeUpdate)

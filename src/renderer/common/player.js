@@ -105,7 +105,6 @@ const MusicPlayer = new Proxy(BaseMusicPlayer, {
           target['audio'].volume = value
           break
         case 'index':
-          console.log(target.music)
           target['audio'].src = target['music'][value].url
           target.emit('change')
           break

@@ -5,7 +5,8 @@ import {getSongURL, toggleLikeSong} from '@/API/song.js'
 import AppComment from '@/components/app-comment/app-comment.vue'
 import LyricParser from '@/common/lyricParser.js'
 import LyricScroller from '@/base/lyric-scroller/base-lyric-scroller.vue'
-import {mapGetters} from 'vuex'
+import bus from '@/common/bus'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'personal-fm',
   components:{
@@ -43,6 +44,9 @@ export default {
       this.songQueue = data
       this.$nextTick(this.initSongSlide)
     })
+    bus.on('fm:play-next', () => {
+      this.playNextSong()
+    })
   },
   watch:{
     // 当前歌曲改变时获取当前歌曲的歌词及真实播放地址
@@ -77,6 +81,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      setPlayType: 'setPlayType'
+    }),
     playNextSong(){
       if(this.currentIndex === 0) {
         this.currentIndex++
@@ -182,6 +189,7 @@ export default {
     },
     togglePlayingState(){
       this.player.playingState ? this.player.pause() : this.player.play()
+      this.setPlayType('fm')
     }
   },
   render(){

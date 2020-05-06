@@ -4,14 +4,23 @@ import app from './modules/app'
 import MusicPlayer from '@/common/player'
 
 const state = {
-  player: new MusicPlayer()
+  player: new MusicPlayer(),
+  playType: 'normal' // normal: 普通模式 fm: 私人fm
 }
 
 const getters = {
-  player: state => state.player
+  player: state => state.player,
+  playType: state => state.playType
 }
 
-const mutations = {}
+const mutations = {
+  setPlayType: (state, playType) => {
+    if(!['normal', 'fm'].includes(playType)) {
+      throw new Error('playType must be "normal" or "fm"')
+    }
+    state.playType = playType
+  }
+}
 
 const actions = {}
 
