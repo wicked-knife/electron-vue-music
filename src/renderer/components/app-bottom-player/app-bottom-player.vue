@@ -24,6 +24,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
+import {throttle} from '@/common/utils'
 import bus from '@/common/bus'
 const BALL_WIDTH = 7
 export default {
@@ -78,6 +79,10 @@ export default {
   },
   created(){
     this.player.on('timeupdate', this.handleMusicTimeUpdate)
+    // 页面尺寸改变时，重新获取一下进度条总长
+    window.addEventListener('resize', throttle(() => {
+      this.totalWidth = this.$refs.progress.offsetWidth
+    }, 50))
   },
   mounted(){
     this.totalWidth = this.$refs.progress.offsetWidth
