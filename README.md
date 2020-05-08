@@ -14,7 +14,9 @@
 
 ## 项目目录
 ```
-├─server
+├─.build
+└─build
+├─dist
 └─src
     ├─main
     └─renderer
@@ -29,7 +31,9 @@
         ├─store
         └─views
 ```
-
+* .build: 存放项目工作流相关代码。
+* build: 存放electron打包后的代码。
+* dist: 存放使用webpack打包后的前端代码。
 * server: 存放项目的接口服务相关代码。
 * src: 存放项目的客户端代码。
 * main: 存放项目主进程的相关代码。主要用来进行主进程、渲染进程之间的通信。
