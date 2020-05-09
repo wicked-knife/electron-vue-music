@@ -1,4 +1,5 @@
 import Events from 'events'
+import { getSongURL } from '@/API/song'
 
 function noop() {
 
@@ -19,26 +20,26 @@ class BaseMusicPlayer extends Events {
     this.audio = document.createElement('audio')
     this.audio.preload = 'auto'
     this.volume = volume
-    this.music = music || []
+    this.playList = music || []
     this.playingState = false
     this.index = 0
     this.musicMap = {}
     this._init()
   }
   _init() {
-    this.music.forEach((m, i) => this.musicMap[m.id] = [m, i])
+    this.playList.forEach((m, i) => this.musicMap[m.id] = [m, i])
     this.audio.addEventListener('canplay', () => { this.playingState && this.audio.play() })
     this.audio.addEventListener('timeupdate', (ev) => { this.emit('timeupdate', ev) })
     this.audio.addEventListener('pause', (ev) => { this.emit('pause'), ev })
     this.audio.addEventListener('ended', () => {
-      if (this.index === this.music.length - 1) {
+      if (this.index === this.playList.length - 1) {
         this.pause()
       } else {
         this.next()
       }
     })
-    if (this.music.length) {
-      this.audio.src = this.music[this.index].url
+    if (this.playList.length) {
+      this.audio.src = this.playList[this.index].url
     }
   }
   pause() {
@@ -53,13 +54,13 @@ class BaseMusicPlayer extends Events {
     const songDataArr = Array.isArray(songData) ? songData : [songData]
     songDataArr.forEach(m => {
       if (!this.musicMap[m.id]) {
-        this.music.push(m)
+        this.playList.push(m)
         this.musicMap[m.id] = m
       }
     })
   }
   next() {
-    if (this.index + 1 >= this.music.length) {
+    if (this.index + 1 >= this.playList.length) {
       this.index = 0
     } else {
       this.index++
@@ -67,7 +68,7 @@ class BaseMusicPlayer extends Events {
   }
   prev() {
     if (this.index === 0) {
-      this.index = this.music.length - 1
+      this.index = this.playList.length - 1
     } else {
       this.index--
     }
@@ -77,14 +78,14 @@ class BaseMusicPlayer extends Events {
   }
   remove(song) {
     const id = typeof song === 'string' ? song : song.id
-    if(!this.has(id)) {
+    if (!this.has(id)) {
       return
     }
-    const index = this.music.findIndex(m => m.id === id)
+    const index = this.playList.findIndex(m => m.id === id)
     delete this.musicMap[song.id]
-    this.music.splice(index, 1)
+    this.playList.splice(index, 1)
     // 如果在播放的歌曲前方删除了歌曲，将索引-1
-    if(index < this.index) {
+    if (index < this.index) {
       this.index--
     }
   }
@@ -94,6 +95,11 @@ class BaseMusicPlayer extends Events {
     }
     this.audio.currentTime = time
   }
+
+  setPlayList() {
+
+  }
+
 }
 
 const MusicPlayer = new Proxy(BaseMusicPlayer, {
@@ -105,8 +111,22 @@ const MusicPlayer = new Proxy(BaseMusicPlayer, {
           target['audio'].volume = value
           break
         case 'index':
-          target['audio'].src = target['music'][value].url
-          target.emit('change')
+          {
+            let currentSong = target['playList'][value]
+            if (currentSong.url) {
+              target['audio'].src = currentSong.url
+              target.emit('change')
+            } else {
+              getSongURL(currentSong.id)
+                .then(({ data }) => {
+                  currentSong = Object.assign(target['playList'][value], data)
+                  target['playList'][value] = currentSong
+                  target['audio'].src = currentSong.url
+                  target.emit('change')
+                })
+            }
+
+          }
           break
         default:
           break

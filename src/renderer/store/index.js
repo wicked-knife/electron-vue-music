@@ -5,12 +5,14 @@ import MusicPlayer from '@/common/player'
 
 const state = {
   player: new MusicPlayer(),
-  playType: 'normal' // normal: 普通模式 fm: 私人fm
+  playType: 'normal', // normal: 普通模式 fm: 私人fm
+  FMPlayList: []
 }
 
 const getters = {
   player: state => state.player,
-  playType: state => state.playType
+  playType: state => state.playType,
+  FMPlayList: state => state.FMPlayList
 }
 
 const mutations = {
@@ -19,6 +21,10 @@ const mutations = {
       throw new Error('playType must be "normal" or "fm"')
     }
     state.playType = playType
+  },
+  // 设置FM播放列表
+  setFMPlayList: (state, playList) => {
+    state.FMPlayList = playList
   }
 }
 

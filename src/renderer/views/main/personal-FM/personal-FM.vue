@@ -75,7 +75,7 @@ export default {
         }
 
         if(this.player.music.length > 3) {
-          this.player.remove(this.player.music[0])
+          this.player.remove(this.player.playList[0])
         }
       })
     }
