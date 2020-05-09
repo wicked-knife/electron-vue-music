@@ -1,7 +1,7 @@
 <script>
 import {getPersonalFM} from '@/API/personal-fm.js'
 import {getLyric} from '@/API/lyric.js'
-import {getSongURL, toggleLikeSong} from '@/API/song.js'
+import {toggleLikeSong} from '@/API/song.js'
 import AppComment from '@/components/app-comment/app-comment.vue'
 import LyricParser from '@/common/lyricParser.js'
 import LyricScroller from '@/base/lyric-scroller/base-lyric-scroller.vue'
@@ -30,7 +30,8 @@ export default {
   },
   computed:{
     ...mapGetters({
-      player: 'player'
+      player: 'player',
+      FMPlayList: 'FMPlayList'
     }),
     currentSong(){
       return this.songQueue[this.currentIndex]
@@ -61,28 +62,15 @@ export default {
           this.lyric = lyricParser.getLyric()
         }
       })
-      getSongURL(this.currentSong.id).then(({data: musicData}) => {
-        this.player.add(musicData)
-        const lastIndex = this.songQueue.findIndex(m => oldVal && oldVal.id === m.id)
-        if(lastIndex === -1) {
-          return this.player.next()
-        }
-        const newIndex = this.songQueue.findIndex(m => newVal.id === m.id)
-        if(newIndex >= lastIndex) {
-          this.player.next()
-        } else {
-          this.player.prev()
-        }
-
-        if(this.player.music.length > 3) {
-          this.player.remove(this.player.playList[0])
-        }
-      })
+      this.setFMPlayList(this.songQueue)
+      this.player.setPlayList(this.FMPlayList)
+      this.player.seekMusic(newVal.id)
     }
   },
   methods: {
     ...mapMutations({
-      setPlayType: 'setPlayType'
+      setPlayType: 'setPlayType',
+      setFMPlayList: 'setFMPlayList'
     }),
     playNextSong(){
       if(this.currentIndex === 0) {
@@ -188,8 +176,12 @@ export default {
       })
     },
     togglePlayingState(){
-      this.player.playingState ? this.player.pause() : this.player.play()
-      this.setPlayType('fm')
+      if(this.player.playingState) {
+        this.player.pause()
+      } else {
+        this.player.play()
+        this.setPlayType('fm')
+      }
     }
   },
   render(){

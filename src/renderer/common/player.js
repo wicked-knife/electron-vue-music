@@ -96,8 +96,32 @@ class BaseMusicPlayer extends Events {
     this.audio.currentTime = time
   }
 
-  setPlayList() {
+  setPlayList(playList) {
+    this.playList = playList
+    this.musicMap = {}
+    this.playList.forEach(m => {
+      if (!this.musicMap[m.id]) {
+        this.musicMap[m.id] = m
+      }
+    })
+  }
 
+  // 指定歌曲索引、歌曲id或传入歌曲对象
+  // 播放指定歌曲
+  seekMusic(music){
+    // 歌曲索引和歌曲id 均为number类型
+    if(typeof music === 'number') {
+      if(music < this.playList.length) {
+        // 此时认为传入的是歌曲索引
+        return this.index = music
+      }
+      // 此时认为传入的是歌曲id
+      const musicIndex = this.playList.findIndex(m => m.id === music)
+      return this.index = musicIndex
+    }
+    // 此时为传入的歌曲对象
+    const musicIndex = this.playList.findIndex(m => m.id === music.id)
+    this.index = musicIndex
   }
 
 }
@@ -119,7 +143,7 @@ const MusicPlayer = new Proxy(BaseMusicPlayer, {
             } else {
               getSongURL(currentSong.id)
                 .then(({ data }) => {
-                  currentSong = Object.assign(target['playList'][value], data)
+                  currentSong = Object.assign(target['playList'][value], ...data)
                   target['playList'][value] = currentSong
                   target['audio'].src = currentSong.url
                   target.emit('change')
