@@ -18,6 +18,9 @@
         </div>
         <span class="subtitle-3">{{duration}}</span>
       </div>
+      <div class="player-btn-group">
+
+      </div>
     </div>
   </div>
 </template>
@@ -126,7 +129,7 @@ export default {
 }
 .progress-container{
   min-width: 480px;
-  max-width: 50%;
+  width: calc(100% - 340px);
   .progress{
     position: relative;
     width: 100%;
@@ -167,5 +170,8 @@ export default {
       transform: translate3d(-50%, -50%, 0)
     }
   }
+}
+.player-btn-group{
+  width: 340px;
 }
 </style>
