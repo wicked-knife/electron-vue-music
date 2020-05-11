@@ -110,13 +110,20 @@ export default {
         }
         return items
       }
-      case 'name':
-        return (<div class="name-wrapper">
+      case 'name':{
+        // 根据图标数量预留出对应的padding
+        // 一个图标预留20px
+        // 目前有两种图标， mv图标和vip图标
+        const iconPadding = [!!item.mv, item.fee === 1].reduce((prev, cur) => prev + (Number(cur) * 20), 0)
+        return (<div class="name-wrapper" style={'padding-right:' + (iconPadding + 5) + 'px'}>
           {item[key][0]}
           {item[key][1] ? <span class="alia">{item[key][1]}</span> : ''}
-          {item.mv ? <i class="iconfont icon-mv"></i> : ''}
-          {item.fee === 1 ? <i class="iconfont icon-vip"></i> : ''}
+          <div class="icon-wrapper d-flex justify-space-around align-center" style={'width:' + iconPadding + 'px'}>          
+            {item.mv ? <i class="iconfont icon-mv"></i> : ''}
+            {item.fee === 1 ? <i class="iconfont icon-vip"></i> : ''}
+          </div>
         </div>)
+      }
       case 'album':
         return (<span>{item[key].name}</span>)
       default:
@@ -242,8 +249,13 @@ export default {
           overflow: hidden;
           white-space: nowrap;
           box-sizing: border-box;
-          padding-right: 20px;
           position: relative;
+        }
+        .icon-wrapper{
+          position: absolute;
+          height: 100%;
+          right: 0;
+          top: 0;
         }
         .alia {
           position: relative;
@@ -253,9 +265,6 @@ export default {
         .icon-mv {
           color: $theme-color;
           cursor: pointer;
-          position: absolute;
-          right: 0;
-          top: -2px;
           &:hover {
             filter: brightness(1.3);
           }
@@ -263,9 +272,6 @@ export default {
         .icon-vip{
           color: #d15400;
           cursor: pointer;
-          position: absolute;
-          right: 0;
-          top: -2px;
           &:hover {
             filter: brightness(1.3);
           }
