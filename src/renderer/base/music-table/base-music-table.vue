@@ -1,4 +1,5 @@
 <script>
+import {getSongURL} from '@/API/song'
 export default {
   props: {
     headers: {
@@ -39,7 +40,7 @@ export default {
         {this.renderItems.map((item, index) => (
           <tr key={item.id} 
             {...{on: {click: this.__handleItemClick.bind(this, index)}}} class={this.activatedIndex === index ? 'active' : ''}
-            {...{on: {dblclick: this.__handleItemDoubleClick.bind(this, item)}}}>
+            {...{on: {dblclick: this.__handleItemDoubleClick.bind(this, item, index)}}}>
             <td class="text-center">{index + 1}</td>
             <td class="text-center">
               <div class="d-flex justify-space-around">
@@ -82,8 +83,17 @@ export default {
     __handleItemClick(index){
       this.activatedIndex = index
     },
-    __handleItemDoubleClick(songItem){
-      this.$emit('song-dblclick', songItem, this.items)
+    __handleItemDoubleClick(songItem, songIndex){
+      if(songItem.fee === 1) {
+        return getSongURL(songItem.id)
+          .then(({data}) => {
+            const [source] = data
+            if(!source.url) {
+              this.$alert({text:'请先充值Vip', color: 'blue'})
+            }
+          })
+      }
+      this.$emit('song-dblclick', songItem, songIndex, this.items)
     },
     __dynamicIcon(sortType) {
       return ['icon-sort', 'icon-sort-down', 'icon-sort-up'][sortType]
@@ -105,6 +115,7 @@ export default {
           {item[key][0]}
           {item[key][1] ? <span class="alia">{item[key][1]}</span> : ''}
           {item.mv ? <i class="iconfont icon-mv"></i> : ''}
+          {item.fee === 1 ? <i class="iconfont icon-vip"></i> : ''}
         </div>)
       case 'album':
         return (<span>{item[key].name}</span>)
@@ -241,6 +252,16 @@ export default {
         }
         .icon-mv {
           color: $theme-color;
+          cursor: pointer;
+          position: absolute;
+          right: 0;
+          top: -2px;
+          &:hover {
+            filter: brightness(1.3);
+          }
+        }
+        .icon-vip{
+          color: #d15400;
           cursor: pointer;
           position: absolute;
           right: 0;

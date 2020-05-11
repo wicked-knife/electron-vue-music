@@ -102,7 +102,7 @@
 
 <script>
 import { getSongListDetail, getSongListSubscribers } from '@/API/songList.js'
-import {getSongURL} from '@/API/song.js'
+import {mapMutations, mapGetters} from 'vuex'
 import AppComment from '@/components/app-comment/app-comment.vue'
 import BaseInput from '@/base/input/base-input.vue'
 import BaseMusicTable from '@/base/music-table/base-music-table.vue'
@@ -150,14 +150,24 @@ export default {
     this.getSongListSubscribers()
   },
   methods: {
+    ...mapMutations({
+      setPlayType: 'setPlayType',
+      setPlaylist: 'setPlaylist'
+
+    }),
     __checkShouldExpand() {
       this.shouldShowExpand = this.$refs['desc'].offsetHeight !== 18
     },
-    handleSongDoubleClick(song){
-      getSongURL(song.id)
-        .then(data => {
-          console.log(data)
-        })
+    handleSongDoubleClick(song, songIndex, musicList){
+      if(this.playType === 'fm') {
+        this.setPlayType('normal')
+      }
+      this.setPlaylist(musicList)
+      this.player.setPlaylist(musicList)
+      this.player.seekMusic(songIndex)
+      if(!this.player.playingState) {
+        this.player.play()
+      }
     },
     getSongListSubscribers(){
       getSongListSubscribers({id: this.id, limit: 66, page: this.subscribersPage}).then(({subscribers}) => {
@@ -174,6 +184,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      player: 'player',
+      playType: 'playType'
+    }),
     __playCount() {
       return this.songList.playCount < 10000
         ? this.songList.playCount

@@ -6,13 +6,15 @@ import MusicPlayer from '@/common/player'
 const state = {
   player: new MusicPlayer(),
   playType: 'normal', // normal: 普通模式 fm: 私人fm
-  FMPlayList: []
+  FMPlayList: [],
+  playlist: []
 }
 
 const getters = {
   player: state => state.player,
   playType: state => state.playType,
-  FMPlayList: state => state.FMPlayList
+  FMPlayList: state => state.FMPlayList,
+  playlist: state => state.playlist
 }
 
 const mutations = {
@@ -23,8 +25,12 @@ const mutations = {
     state.playType = playType
   },
   // 设置FM播放列表
-  setFMPlayList: (state, playList) => {
-    state.FMPlayList = playList
+  setFMPlayList: (state, playlist) => {
+    state.FMPlayList = playlist
+  },
+  // 设置普通播放列表
+  setPlaylist: (state, playlist) => {
+    state.playlist = playlist
   }
 }
 

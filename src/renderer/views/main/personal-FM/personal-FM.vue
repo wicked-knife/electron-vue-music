@@ -63,7 +63,7 @@ export default {
         }
       })
       this.setFMPlayList(this.songQueue)
-      this.player.setPlayList(this.FMPlayList)
+      this.player.setPlaylist(this.FMPlayList)
       this.player.seekMusic(newVal.id)
     }
   },
