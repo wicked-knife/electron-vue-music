@@ -54,7 +54,6 @@ export default {
 <style lang="scss" scoped>
 .app-content{
   background-color: #16181c;
-  padding: 52px 0px 50px 200px !important;
 }
 .__fix-viewport{
   height: 100vh;
