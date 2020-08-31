@@ -14,7 +14,8 @@ function createLoginWindow (parent){
     parent,
     webPreferences: {
       nodeIntegration: true,
-      webSecurity: false
+      webSecurity: false,
+      enableRemoteModule: true
     }
   })
 

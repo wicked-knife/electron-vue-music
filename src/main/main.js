@@ -76,7 +76,8 @@ app.on('ready', () => {
     useContentSize: true,
     webPreferences: {
       nodeIntegration: true,
-      webSecurity: false
+      webSecurity: false,
+      enableRemoteModule: true
     }
   })
 
