@@ -53,7 +53,8 @@ module.exports = {
           options: {
             name: '[name]_[hash:5].[ext]',
             outputPath: 'images',
-            limit: 2048
+            limit: 2048,
+            esModule: false
           }
         }
       },
