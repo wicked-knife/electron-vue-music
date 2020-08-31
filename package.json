@@ -84,7 +84,7 @@
 		"postcss-scss": "^2.1.1",
 		"progress-bar-webpack-plugin": "^2.1.0",
 		"sass": "^1.26.10",
-		"sass-loader": "^8.0.0",
+		"sass-loader": "^10.0.1",
 		"style-loader": "^1.0.0",
 		"terser-webpack-plugin": "^4.1.0",
 		"url-loader": "^4.1.0",
