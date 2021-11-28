@@ -1,6 +1,6 @@
 import {getPersistUserInfo, clearPersistUserInfo} from '../persist/userInfo.js'
 import {getPersistDailySign, persistDailySign, clearPersistDailySign} from '../persist/dailySign.js'
-const { cookies } = require('electron').remote.session.defaultSession
+const { cookies } = require('@electron/remote').session.defaultSession
 
 
 const state = {

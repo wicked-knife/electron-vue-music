@@ -1,6 +1,11 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
+const Store = require('electron-store')
 const createLoginWindow = require('./loginWindow.js')
+const remote = require('@electron/remote/main')
 require('../../server/app')
+remote.initialize()
+
+Store.initRenderer()
 
 function registerMainWindowEvents(mainWindow) {
   mainWindow.on('ready-to-show', () => {
@@ -77,9 +82,12 @@ app.on('ready', () => {
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false,
-      enableRemoteModule: true
+      enableRemoteModule: true,
+      contextIsolation: false
     }
   })
+
+  remote.enable(mainWindow.webContents)
 
   //开发环境下打开本地的webpack-dev-server,
   //生产环境下则打开express的静态服务
