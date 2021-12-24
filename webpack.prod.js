@@ -22,6 +22,7 @@ module.exports = env => {
           test: /\.sass$/,
           use: [
             MiniCssExtractPlugin.loader,
+            'style-loader',
             {
               loader: 'css-loader',
               options: {
@@ -34,7 +35,6 @@ module.exports = env => {
               options: {
                 implementation: require('sass'),
                 sassOptions: {
-                  fiber: require('fibers'),
                   indentedSyntax: true // optional
                 },
               }
@@ -45,6 +45,7 @@ module.exports = env => {
           test: /\.s?css$/,
           use: [
             MiniCssExtractPlugin.loader,
+            'style-loader',
             {
               loader: 'css-loader',
               options: {
